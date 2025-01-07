@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>server login test</title>
+    <script>
+        function handleLogin(event) {
+            event.preventDefault(); // 폼 제출 기본 동작을 막음
+
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            // 로그인 요청을 보내고, 토큰을 localStorage에 저장
+            fetch('/loginProc', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username, password })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    const token = data.token; // 서버에서 받은 토큰
+                    localStorage.setItem('token', token); // localStorage에 토큰 저장
+                    alert('로그인 성공');
+                    // 로그인이 성공하면 다른 페이지로 이동할 수 있음
+                    window.location.href = '/home';
+                })
+                .catch(error => {
+                    console.error('로그인 실패:', error);
+                });
+        }
+    </script>
+</head>
+<body>
+<form onsubmit="handleLogin(event)">
+    <div>
+        <label for="username">ID</label>
+        <input type="email" id="username" name="username">
+    </div>
+
+    <div>
+        <label for="password">PASSWORD</label>
+        <input type="password" id="password" name="password">
+    </div>
+
+    <button type="submit">로그인</button>
+</form>
+</body>
+</html>

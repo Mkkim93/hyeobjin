@@ -7,10 +7,10 @@ import lombok.NoArgsConstructor;
 import static jakarta.persistence.GenerationType.*;
 
 @Entity
-@Table(name = "manufact")
+@Table(name = "manufacturer")
 @Getter
 @NoArgsConstructor
-public class Manufact {
+public class manufacturer {
 
     @Id @GeneratedValue(strategy = IDENTITY)
     private Long id;
