@@ -44,6 +44,7 @@ public class LoginService {
 
         jwtUserDetailsService.loadUserByUsername(findByUsername.getUsername());
         String token = jwtUtil.createJwt(findByUsername.getUsername(), findByUsername.getRole(), 60 * 60 * 10L);
+
         return token;
     }
 

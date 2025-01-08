@@ -64,11 +64,12 @@ public class SecurityConfig {
                         .anyRequest().authenticated());
 
         http
-                .addFilterBefore(new JwtFilter(jwtUtil), LoginFilter.class);
-
-        http
                 .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil),
                         UsernamePasswordAuthenticationFilter.class);
+
+        http
+                .addFilterBefore(new JwtFilter(jwtUtil), LoginFilter.class);
+
 
         http
                 .sessionManagement((session) -> session
@@ -83,11 +84,11 @@ public class SecurityConfig {
         configuration.setAllowedOrigins(Collections.singletonList("http://localhost:3000")); // 허용할 Origin
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "OPTIONS")); // 허용할 HTTP 메서드
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type")); // 허용할 헤더
+        configuration.setExposedHeaders(Arrays.asList("Authorization"));
         configuration.setAllowCredentials(true); // 쿠키 허용 여부
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration); // 모든 경로에 대해 CORS 설정 적용
         return source;
     }
-
 }

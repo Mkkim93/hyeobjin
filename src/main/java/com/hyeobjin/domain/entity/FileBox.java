@@ -1,6 +1,7 @@
 package com.hyeobjin.domain.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
@@ -40,4 +41,27 @@ public class FileBox {
     @CreatedDate
     @Column(name = "file_regdate")
     private LocalDateTime fileRegDate;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "item_id")  // 외래키 컬럼을 지정
+    private Item item;
+
+    /**
+     *
+     * @param fileName
+     * @param filePath
+     * @param fileType
+     */
+    @Builder
+    public FileBox(String fileOrgName, String fileName,
+                   String filePath, String fileType, Long fileSize, Long itemId) {
+        this.fileOrgName = fileOrgName;
+        this.fileName = fileName;
+        this.filePath = filePath;
+        this.fileSize = fileSize;
+        this.fileType = fileType;
+        this.item = Item.builder()
+                .itemId(itemId)
+                .build();
+    }
 }

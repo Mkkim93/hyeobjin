@@ -13,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.*;
+
 @Slf4j
 @DataJpaTest
 @Transactional
@@ -23,11 +25,11 @@ class UsersRepositoryTest {
     UsersRepository usersRepository;
     
     @Test
-    @DisplayName("UserRepository test")
+    @DisplayName("UserRepository connection test")
     void findByAllUsers() {
         List<Users> usersList = usersRepository.findAll();
         usersList.stream().forEach(System.out::println);
-        Assertions.assertThat(usersList).isNotNull();
+        assertThat(usersList).isNotNull();
     }
 
     @Test
@@ -43,12 +45,6 @@ class UsersRepositoryTest {
                 .registerData(registerDTO, registerDTO.getPassword());
         Users saveUsers = usersRepository.save(users);
 
-        Assertions.assertThat(users).isEqualTo(saveUsers);
-    }
-
-    @Test
-    void test1() {
-        Users users = new Users();
-
+        assertThat(users).isEqualTo(saveUsers);
     }
 }

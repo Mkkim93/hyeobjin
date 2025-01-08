@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import static org.assertj.core.api.Assertions.*;
 
 
 @SpringBootTest
@@ -25,6 +26,6 @@ class RegisterServiceTest {
         registerDTO.setName("테스터");
         registerDTO.setRole("ROLE_ADMIN");
         registerService.register(registerDTO);
-        Assertions.assertThat(registerDTO.getUsername()).isEqualTo("king00314@naver.com");
+        assertThat(registerDTO.getUsername()).isEqualTo("king00314@naver.com");
     }
 }

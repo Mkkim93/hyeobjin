@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -24,10 +26,10 @@ public class ApiLoginController {
 
     @PostMapping("/api/login")
     public ResponseEntity<?> loginApi(@RequestBody LoginDTO loginDTO,
-                                   HttpServletResponse response) {
+                                   HttpServletResponse response) throws IOException {
 
         String token = loginService.login(loginDTO);
-        response.setHeader("Authorization", "Bearer " + token);
-        return ResponseEntity.ok().body("login successful");
+        response.setHeader("Authorization", token);
+        return ResponseEntity.ok().body("login success");
     }
 }

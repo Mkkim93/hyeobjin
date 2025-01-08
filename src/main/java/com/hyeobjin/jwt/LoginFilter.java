@@ -5,7 +5,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,7 +21,6 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     private final JwtUtil jwtUtil;
     private final AuthenticationManager authenticationManager;
-
 
     public LoginFilter(AuthenticationManager authenticationManager, JwtUtil jwtUtil) {
         this.authenticationManager = authenticationManager;
@@ -51,9 +49,10 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
                                             HttpServletResponse response,
                                             FilterChain chain,
                                             Authentication authResult) throws IOException, ServletException {
+
         CustomUserDetails customUserDetails = (CustomUserDetails) authResult.getPrincipal();
         String username = customUserDetails.getUsername();
-        log.info("successfulusername={}", username);
+        log.info("successFull method username={}", username);
 
         Collection<? extends GrantedAuthority> authorities = authResult.getAuthorities();
         Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
@@ -63,7 +62,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         String token = jwtUtil.createJwt(username, role, 60 * 60 * 10L);
         log.info("successful token={}", token);
 
-        response.addHeader("Authorization", "Bearer " + token);
+        response.setHeader("Authorization", "Bearer " + token);
     }
 
     @Override

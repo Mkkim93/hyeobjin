@@ -23,7 +23,7 @@ class BoardRepositoryTest {
     @Autowired BoardRepository boardRepository;
 
     @Test
-    @DisplayName("BoardRepository Test")
+    @DisplayName("BoardRepository connection Test")
     void findAll() {
         List<Board> result = boardRepository.findAll();
         result.stream().forEach(System.out::println);

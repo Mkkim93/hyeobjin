@@ -27,9 +27,6 @@ public class CustomUserDetails implements UserDetails {
         });
         return collection;
     }
-    public String getRole() {
-        return users.getRole(); // 사용자 객체에서 role 값을 직접 반환
-    }
 
     @Override
     public String getUsername() {

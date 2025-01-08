@@ -3,7 +3,6 @@ package com.hyeobjin.domain.entity;
 import com.hyeobjin.application.dto.register.RegisterDTO;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

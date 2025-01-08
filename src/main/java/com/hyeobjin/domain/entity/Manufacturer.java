@@ -1,6 +1,7 @@
 package com.hyeobjin.domain.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -10,12 +11,17 @@ import static jakarta.persistence.GenerationType.*;
 @Table(name = "manufacturer")
 @Getter
 @NoArgsConstructor
-public class manufacturer {
+public class Manufacturer {
 
     @Id @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "item_id")
-    private Item item;
+    @Column(name = "manu_name")
+    private String manuName;
+
+    @Builder
+    public Manufacturer(Long manuId, String manuName) {
+        this.id = manuId;
+        this.manuName = manuName;
+    }
 }
