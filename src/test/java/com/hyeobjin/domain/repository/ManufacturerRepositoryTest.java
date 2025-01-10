@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -33,13 +34,12 @@ class ManufacturerRepositoryTest {
     @DisplayName("findByIdForManuName test")
     void findIdByManuName() {
         String manuName = "KCC";
-        Manufacturer resultManuNameEntity = manufacturerRepository.findManufacturerByManuName(manuName);
+        Long manufacturerByManuName = manufacturerRepository.findManufacturerByManuName(manuName);
 
-        log.info("findManuName={}", resultManuNameEntity.getManuName());
-        log.info("findManuId={}", resultManuNameEntity.getId());
+        log.info("findManuId={}", manufacturerByManuName);
 
-        assertThat(manuName).isEqualTo(resultManuNameEntity.getManuName());
-        assertThat(1L).isEqualTo(resultManuNameEntity.getId());
+
+        assertThat(1L).isEqualTo(manufacturerByManuName);
     }
 
     @Test
@@ -51,5 +51,29 @@ class ManufacturerRepositoryTest {
         Boolean exists = manufacturerRepository.existsByManuName(manufactureDTO.getManuName());
         log.info("exists={}", exists);
         assertThat(exists).isTrue();
+    }
+
+    @Test
+    @DisplayName("update manuName test")
+    void updateMenuName() {
+        ManufactureDTO manufactureDTO = new ManufactureDTO();
+
+        manufactureDTO.setManuId(1L);
+        manufactureDTO.setManuName("KCG");
+
+        Integer updateCount = manufacturerRepository.updateManuName(manufactureDTO.getManuId(), manufactureDTO.getManuName());
+
+        assertThat(updateCount).isEqualTo(1);
+    }
+
+    @Test
+    @DisplayName("delete manufacturer test (manuYN : N -> Y)")
+    void deleteManufacturer() {
+        ManufactureDTO manufactureDTO = new ManufactureDTO();
+        manufactureDTO.setManuId(1L);
+
+        Integer deleteCount = manufacturerRepository.deleteManufacturer(manufactureDTO.getManuId());
+
+        assertThat(deleteCount).isEqualTo(1);
     }
 }

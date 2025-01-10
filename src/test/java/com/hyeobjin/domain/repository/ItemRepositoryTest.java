@@ -1,6 +1,7 @@
 package com.hyeobjin.domain.repository;
 
 import com.hyeobjin.application.dto.item.CreateItemDTO;
+import com.hyeobjin.application.dto.item.FindByItemDTO;
 import com.hyeobjin.domain.entity.Item;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
@@ -21,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class ItemRepositoryTest {
 
     @Autowired ItemRepository itemRepository;
+    @Autowired ItemRepositoryImpl itemRepositoryImpl;
 
     @Test
     @DisplayName("ItemRepository connection test")
@@ -48,6 +50,19 @@ class ItemRepositoryTest {
         System.out.println("savedAfterItem.getItemDescription() = " + savedAfterItem.getItemDescription());
 
         assertThat(savedBeforeItem).isEqualTo(savedAfterItem);
+    }
+
+    @Test
+    @DisplayName("제품 소개 카테고리에서 품번으로 조회")
+    void findDetailItem() {
+
+        FindByItemDTO findByItemDTO = new FindByItemDTO();
+        findByItemDTO.setItemNum("K102");
+
+        FindByItemDTO findOneByItem = itemRepositoryImpl.findByItem(
+                findByItemDTO.getItemNum());
+
+        System.out.println("findOneByItem = " + findOneByItem);
     }
 
 }

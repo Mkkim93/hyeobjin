@@ -35,8 +35,8 @@ class FileBoxRepositoryTest {
     void save() {
         CreateFileBoxDTO createFileBoxDTO = new CreateFileBoxDTO();
         createFileBoxDTO.setItemId(Item.builder()
-                        .itemId(1L)
-                .build());
+                        .itemId(createFileBoxDTO.getItemId())
+                .build().getId());
         createFileBoxDTO.setFileName("test fileName 02");
         createFileBoxDTO.setFilePath("test filePath 02");
         createFileBoxDTO.setFileType("image/jpeg");
@@ -48,7 +48,7 @@ class FileBoxRepositoryTest {
                 .fileType(createFileBoxDTO.getFileType())
                 .fileOrgName(createFileBoxDTO.getFileOrgName())
                 .itemId(Item.builder()
-                        .itemId(createFileBoxDTO.getItemId().getId())
+                        .itemId(createFileBoxDTO.getItemId())
                         .build().getId())
                 .build();
         FileBox savedFile = fileBoxRepository.save(fileBuild);

@@ -1,5 +1,8 @@
 package com.hyeobjin.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -36,15 +39,16 @@ public class Item {
     private String itemDescription;
 
     @Column(name = "item_yn")
-    private Boolean itemYN;
+    private String itemYN;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "manu_id")
     private Manufacturer manufacturer;
 
     @Builder
-    public Item(Long itemId, String itemNum, String itemName, String itemUse,
-                String itemSpec, String itemType, String itemDescription, Boolean itemYN, Long manufacturerId) {
+    public Item(Long itemId, String itemNum, String itemName,
+                String itemUse, String itemSpec, String itemType,
+                String itemDescription, String itemYN, Long manufacturerId) {
         this.id = itemId;
         this.itemNum = itemNum;
         this.itemName = itemName;
@@ -59,8 +63,7 @@ public class Item {
     }
 
     public void setManufacturerByCreateItem(Long manufacturerId) {
-        this.manufacturer = Manufacturer
-                .builder()
+        this.manufacturer = Manufacturer.builder()
                 .manuId(manufacturerId)
                 .build();
     }

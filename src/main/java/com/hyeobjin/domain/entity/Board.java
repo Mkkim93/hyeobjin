@@ -29,7 +29,6 @@ public class Board {
     @Column(name = "board_title")
     private String boardTitle;
 
-    @Lob
     @Column(name = "board_content")
     private String boardContent;
 
