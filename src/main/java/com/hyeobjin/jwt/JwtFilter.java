@@ -1,6 +1,6 @@
 package com.hyeobjin.jwt;
 
-import com.hyeobjin.domain.entity.Users;
+import com.hyeobjin.domain.entity.users.Users;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

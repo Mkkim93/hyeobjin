@@ -1,6 +1,7 @@
-package com.hyeobjin.domain.repository;
+package com.hyeobjin.domain.repository.users;
 
-import com.hyeobjin.domain.entity.Users;
+
+import com.hyeobjin.domain.entity.users.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UsersRepository extends JpaRepository<Users, Long> {

@@ -1,8 +1,6 @@
-package com.hyeobjin.domain.entity;
+package com.hyeobjin.domain.entity.file;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.hyeobjin.domain.entity.item.Item;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,7 +11,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import java.time.LocalDateTime;
 
-import static jakarta.persistence.GenerationType.*;
+import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Table(name = "filebox")
@@ -45,7 +43,7 @@ public class FileBox {
     @Column(name = "file_regdate")
     private LocalDateTime fileRegDate;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, optional = true)
     @JoinColumn(name = "item_id")  // 외래키 컬럼을 지정
     private Item item;
 

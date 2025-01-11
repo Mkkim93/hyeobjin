@@ -1,7 +1,7 @@
 package com.hyeobjin.application.dto.item;
 
 import com.hyeobjin.application.dto.file.FileBoxItemDTO;
-import com.hyeobjin.domain.entity.Item;
+import com.hyeobjin.domain.entity.item.Item;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

@@ -1,7 +1,8 @@
 package com.hyeobjin.domain.repository;
 
 import com.hyeobjin.application.dto.manu.ManufactureDTO;
-import com.hyeobjin.domain.entity.Manufacturer;
+import com.hyeobjin.domain.entity.manufacturer.Manufacturer;
+import com.hyeobjin.domain.repository.manu.ManufacturerRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -17,7 +18,8 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class ManufacturerRepositoryTest {
 
-    @Autowired ManufacturerRepository manufacturerRepository;
+    @Autowired
+    ManufacturerRepository manufacturerRepository;
 
     @Test
     @DisplayName("save ManuName test")
@@ -34,12 +36,11 @@ class ManufacturerRepositoryTest {
     @DisplayName("findByIdForManuName test")
     void findIdByManuName() {
         String manuName = "KCC";
-        Long manufacturerByManuName = manufacturerRepository.findManufacturerByManuName(manuName);
+        Manufacturer manufacturerByManuName = manufacturerRepository.findManufacturerByManuName(manuName);
 
-        log.info("findManuId={}", manufacturerByManuName);
+        log.info("findManuId={}", manufacturerByManuName.getId());
 
-
-        assertThat(1L).isEqualTo(manufacturerByManuName);
+        assertThat(1L).isEqualTo(manufacturerByManuName.getId());
     }
 
     @Test

@@ -1,8 +1,9 @@
 package com.hyeobjin.domain.repository;
 
 import com.hyeobjin.application.dto.file.CreateFileBoxDTO;
-import com.hyeobjin.domain.entity.FileBox;
-import com.hyeobjin.domain.entity.Item;
+import com.hyeobjin.domain.entity.file.FileBox;
+import com.hyeobjin.domain.entity.item.Item;
+import com.hyeobjin.domain.repository.file.FileBoxRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -20,7 +21,8 @@ import static org.assertj.core.api.Assertions.*;
 @SpringBootTest
 class FileBoxRepositoryTest {
 
-    @Autowired FileBoxRepository fileBoxRepository;
+    @Autowired
+    FileBoxRepository fileBoxRepository;
 
     @Test
     @DisplayName("fileBox connection test")

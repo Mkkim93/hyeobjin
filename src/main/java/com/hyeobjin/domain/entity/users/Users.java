@@ -1,4 +1,4 @@
-package com.hyeobjin.domain.entity;
+package com.hyeobjin.domain.entity.users;
 
 import com.hyeobjin.application.dto.register.RegisterDTO;
 import jakarta.persistence.*;
@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import static jakarta.persistence.GenerationType.*;
+import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Table(name = "users")

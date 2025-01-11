@@ -1,6 +1,6 @@
 package com.hyeobjin.application.dto.manu;
 
-import com.hyeobjin.domain.entity.Manufacturer;
+import com.hyeobjin.domain.entity.manufacturer.Manufacturer;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;

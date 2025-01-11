@@ -1,16 +1,12 @@
 package com.hyeobjin.application.service.login;
 
 import com.hyeobjin.application.dto.login.LoginDTO;
-import com.hyeobjin.domain.entity.Users;
-import com.hyeobjin.domain.repository.UsersRepository;
-import com.hyeobjin.jwt.CustomUserDetails;
+import com.hyeobjin.domain.entity.users.Users;
+import com.hyeobjin.domain.repository.users.UsersRepository;
 import com.hyeobjin.jwt.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 

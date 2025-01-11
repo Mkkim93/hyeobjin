@@ -1,6 +1,7 @@
 package com.hyeobjin.application.service.manufacturer;
 
 import com.hyeobjin.application.dto.manu.ManufactureDTO;
+import com.hyeobjin.domain.entity.manufacturer.Manufacturer;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -21,10 +22,10 @@ class ManufacturerServiceTest {
     @DisplayName("findIdByManuName test")
     void findIdByManuName() {
         String manuName = "예림";
-        Long manuId = manufacturerService.findIdByManuName(manuName);
-        log.info("manuId={}", manuId);
-        log.info("manuName={}", manuName);
-        assertThat(manuId).isEqualTo(2L);
+        Manufacturer manufacturer = manufacturerService.findIdByManuName(manuName);
+        log.info("manuId={}", manufacturer.getId());
+        log.info("manuName={}", manufacturer.getManuName());
+        assertThat(manufacturer.getId()).isEqualTo(2L);
     }
 
     @Test

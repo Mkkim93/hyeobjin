@@ -1,4 +1,4 @@
-package com.hyeobjin.config;
+package com.hyeobjin.config.jpa;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;

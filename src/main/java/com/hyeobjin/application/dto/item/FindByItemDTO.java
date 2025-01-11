@@ -1,12 +1,9 @@
 package com.hyeobjin.application.dto.item;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.hyeobjin.application.dto.file.FindFileBoxDTO;
-import com.hyeobjin.domain.entity.FileBox;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import java.util.List;
 

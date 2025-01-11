@@ -1,4 +1,4 @@
-package com.hyeobjin.config;
+package com.hyeobjin.config.swagger;
 
 
 import io.swagger.v3.oas.models.Components;
@@ -18,7 +18,7 @@ public class SwaggerConfig {
     }
 
     private Info apiInfo() {
-        return new io.swagger.v3.oas.models.info.Info()
+        return new Info()
                 .title("Hyeobjin Company REST API Specifications")
                 .description("Specification")
                 .version("1.0.0");

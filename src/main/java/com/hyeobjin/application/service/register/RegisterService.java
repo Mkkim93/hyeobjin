@@ -1,8 +1,8 @@
 package com.hyeobjin.application.service.register;
 
 import com.hyeobjin.application.dto.register.RegisterDTO;
-import com.hyeobjin.domain.entity.Users;
-import com.hyeobjin.domain.repository.UsersRepository;
+import com.hyeobjin.domain.entity.users.Users;
+import com.hyeobjin.domain.repository.users.UsersRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

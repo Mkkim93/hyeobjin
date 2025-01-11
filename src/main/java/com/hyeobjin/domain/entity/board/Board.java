@@ -1,5 +1,7 @@
-package com.hyeobjin.domain.entity;
+package com.hyeobjin.domain.entity.board;
 
+import com.hyeobjin.domain.entity.file.FileBox;
+import com.hyeobjin.domain.entity.users.Users;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,7 +12,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import java.time.LocalDateTime;
 
-import static jakarta.persistence.GenerationType.*;
+import static jakarta.persistence.GenerationType.IDENTITY;
 
 @EntityListeners(AuditingEntityListener.class)
 @EnableJpaAuditing

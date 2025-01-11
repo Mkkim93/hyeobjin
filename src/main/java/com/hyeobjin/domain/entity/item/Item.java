@@ -1,14 +1,13 @@
-package com.hyeobjin.domain.entity;
+package com.hyeobjin.domain.entity.item;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.hyeobjin.application.dto.item.UpdateItemDTO;
+import com.hyeobjin.domain.entity.manufacturer.Manufacturer;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import static jakarta.persistence.GenerationType.*;
+import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Table(name = "item")
@@ -41,7 +40,7 @@ public class Item {
     @Column(name = "item_yn")
     private String itemYN;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "manu_id")
     private Manufacturer manufacturer;
 
@@ -66,5 +65,9 @@ public class Item {
         this.manufacturer = Manufacturer.builder()
                 .manuId(manufacturerId)
                 .build();
+    }
+
+    public void setItemIdFromDto(UpdateItemDTO updateItemDTO) {
+        this.id = updateItemDTO.getItemId();
     }
 }

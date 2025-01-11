@@ -1,17 +1,13 @@
 package com.hyeobjin.application.service.manufacturer;
 
-import com.hyeobjin.application.dto.item.CreateItemDTO;
 import com.hyeobjin.application.dto.manu.ManufactureDTO;
-import com.hyeobjin.domain.entity.Manufacturer;
-import com.hyeobjin.domain.repository.ManufacturerRepository;
+import com.hyeobjin.domain.entity.manufacturer.Manufacturer;
+import com.hyeobjin.domain.repository.manu.ManufacturerRepository;
 import com.hyeobjin.exception.DuplicateManufacturerException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import javax.management.monitor.StringMonitor;
 import java.util.List;
 
 @Slf4j
@@ -26,7 +22,7 @@ public class ManufacturerService {
      * 제조사명을 입력하여 해당 제조사의 pk 를 반환하여 제품등록 테이블에서 저장
      * @return menuEntity id(pk)
      */
-    public Long findIdByManuName(String menuName) {
+    public Manufacturer findIdByManuName(String menuName) {
         return manufacturerRepository.findManufacturerByManuName(menuName);
     }
 

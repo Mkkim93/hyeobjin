@@ -1,7 +1,7 @@
 package com.hyeobjin.application.service.login;
 
-import com.hyeobjin.domain.entity.Users;
-import com.hyeobjin.domain.repository.UsersRepository;
+import com.hyeobjin.domain.entity.users.Users;
+import com.hyeobjin.domain.repository.users.UsersRepository;
 import com.hyeobjin.jwt.CustomUserDetails;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
