@@ -18,9 +18,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -60,16 +58,18 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/login", "/**", "/register", "/loginProc").permitAll()
+                        .requestMatchers("/login").permitAll() // 중요!! : Spring Security 가 로그인 처리를 담당할 url, 프론트의 비동기 처리 할 url 과 매핑 (컨트롤러 필요없음)
+
+                        .requestMatchers("/**", "/register").permitAll()
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated());
 
         http
-                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil),
-                        UsernamePasswordAuthenticationFilter.class);
+                .addFilterAt(new JwtFilter(jwtUtil), LoginFilter.class);
 
         http
-                .addFilterBefore(new JwtFilter(jwtUtil), LoginFilter.class);
-
+                .addFilterBefore(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil),
+                        UsernamePasswordAuthenticationFilter.class);
 
         http
                 .sessionManagement((session) -> session

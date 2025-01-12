@@ -23,7 +23,12 @@ public class ManufacturerService {
      * @return menuEntity id(pk)
      */
     public Manufacturer findIdByManuName(String menuName) {
-        return manufacturerRepository.findManufacturerByManuName(menuName);
+        Manufacturer findManuFact = manufacturerRepository.findManufacturerByManuName(menuName);
+        if (findManuFact == null) {
+            log.info("존재하지 않는 제조사 입니다.");
+            throw new RuntimeException("존재하지 않는 제조사"); // TODO CustomException 정의
+        }
+        return findManuFact;
     }
 
     /**

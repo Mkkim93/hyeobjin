@@ -33,8 +33,7 @@ public class Item {
     @Column(name = "item_type")
     private String itemType;
 
-    @Lob
-    @Column(name = "item_description")
+    @Column(name = "item_description", columnDefinition = "text")
     private String itemDescription;
 
     @Column(name = "item_yn")

@@ -21,6 +21,7 @@ public class UpdateItemDTO {
 
     private Long manuId;
     private String manuName;
+
     private List<FileBoxItemDTO> updateFiles;
 
     public UpdateItemDTO(Long itemId, String itemNum, String itemName,

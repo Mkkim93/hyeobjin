@@ -79,4 +79,21 @@ public class ItemService {
             fileBoxService.saveFilesForItem(updateItem, files);
         }
     }
+
+    /**
+     * 제품 삭제
+     * - 삭제할 제품의 객체를 id 로 조회하고 조회한 객체가 존재하면 itemYN 값을 N -> Y 로 변경하여 사용자가 볼 수 없도록 한다.
+     */
+    public void delete(UpdateItemDTO updateItemDTO) {
+        Item item = itemRepository.findById(updateItemDTO.getItemId())
+                .orElseThrow(() -> new EntityNotFoundException("해당 제품의 정보를 불러오는데 실패하였습니다."));
+
+        Integer deleteCount = itemRepository.updateItemYN(item.getId());
+
+        if (deleteCount != 1) {
+            throw new RuntimeException("제품 삭제에 실패하였습니다");
+        }
+
+        log.info("제품이 성공적으로 삭제 되었습니다.");
+    }
 }

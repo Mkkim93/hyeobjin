@@ -40,7 +40,7 @@ public class CreateItemDTO {
                 .itemSpec(createItemDTO.getItemSpec())
                 .itemType(createItemDTO.getItemType())
                 .itemDescription(createItemDTO.getItemDescription())
-                .itemYN(createItemDTO.getItemYN())
+                .itemYN("N")
                 .build();
     }
 }

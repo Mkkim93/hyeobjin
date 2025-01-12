@@ -50,6 +50,7 @@ public class FileBoxService {
     @PostConstruct
     public void ensureDirectoryExists() {
         File directory = new File(fileDir);
+        log.info("fileDir ={}", fileDir);
         if (!directory.exists()) {
             try {
                 directory.mkdirs();
@@ -132,5 +133,9 @@ public class FileBoxService {
             }
         }
         fileBoxRepository.delete(fileBox);
+    }
+
+    public void saveFileOnly(Long itemId, List<MultipartFile> files) throws IOException {
+        fileSave(new CreateFileBoxDTO(itemId), files);
     }
 }

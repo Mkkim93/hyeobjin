@@ -1,5 +1,7 @@
 package com.hyeobjin.jwt;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hyeobjin.application.dto.login.LoginDTO;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,17 +33,27 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     public Authentication attemptAuthentication(HttpServletRequest request,
                                                 HttpServletResponse response) throws AuthenticationException {
 
-        String username = obtainUsername(request);
-        String password = obtainPassword(request);
 
-        log.info("username={}", username);
-        log.info("password={}", password);
+        try {
+            // JSON 데이터에서 username과 password 추출
+            // 클라이언트에서 넘어온 데이터 (JSON -> JAVA)
+            ObjectMapper objectMapper = new ObjectMapper();
+            LoginDTO loginRequest = objectMapper.readValue(request.getInputStream(), LoginDTO.class);
 
-        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password, null);
+            String username = loginRequest.getUsername();
+            String password = loginRequest.getPassword();
 
-        log.info("authToken={}", authToken);
+            log.info("username={}", username);
+            log.info("password={}", password);
 
-        return authenticationManager.authenticate(authToken);
+            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password, null);
+
+            log.info("authToken={}", authToken);
+
+            return authenticationManager.authenticate(authToken);
+        } catch (IOException e) {
+            throw new AuthenticationException("Invalid authentication data") {};
+        }
     }
 
     @Override

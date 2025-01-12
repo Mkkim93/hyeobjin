@@ -48,4 +48,13 @@ class UsersRepositoryTest {
 
         assertThat(users).isEqualTo(saveUsers);
     }
+
+    @Test
+    @DisplayName("회원의 아이디를 통해 해당 회원 엔티티 객체 조회")
+    void findById() {
+        String username = "alsrb362@daum.net";
+        Users users = usersRepository.findByUsername(username);
+        System.out.println("users.getUsername() = " + users.getUsername());
+        System.out.println("users.getPassword() = " + users.getPassword());
+    }
 }

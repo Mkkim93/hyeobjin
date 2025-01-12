@@ -25,4 +25,7 @@ public class CreateFileBoxDTO {
 
     private Long itemId;
 
+    public CreateFileBoxDTO(Long itemId) {
+        this.itemId = itemId;
+    }
 }

@@ -79,8 +79,10 @@ public class ItemApiController {
      * 제품 삭제
      * swagger : X
      */
-    public ResponseEntity<String> deleteItem() {
-
-        return null;
+    @Operation(summary = "제품 삭제", description = "관리자가 제품의 정보를 폼에서 삭제하고 제품의 정보는 데이터베이스에 유지 하는 API 입니다.")
+    @PostMapping("/delete")
+    public ResponseEntity<String> deleteItem(@ModelAttribute UpdateItemDTO updateItemDTO) {
+        itemService.delete(updateItemDTO);
+        return ResponseEntity.ok("item delete success");
     }
 }

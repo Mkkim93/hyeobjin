@@ -30,7 +30,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
         if (authorization == null || !authorization.startsWith("Bearer ")) {
 
-            log.info("token status : token null");
+            log.info("token status={}", authorization);
             filterChain.doFilter(request, response);
             return;
         }

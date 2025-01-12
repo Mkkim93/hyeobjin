@@ -1,5 +1,6 @@
 package com.hyeobjin.domain.entity.file;
 
+import com.hyeobjin.domain.entity.board.Board;
 import com.hyeobjin.domain.entity.item.Item;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -11,6 +12,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import java.time.LocalDateTime;
 
+import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
@@ -43,9 +45,13 @@ public class FileBox {
     @Column(name = "file_regdate")
     private LocalDateTime fileRegDate;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, optional = true)
+    @ManyToOne(fetch = LAZY, cascade = CascadeType.REMOVE, optional = true)
     @JoinColumn(name = "item_id")  // 외래키 컬럼을 지정
     private Item item;
+
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "board_id")
+    private Board board;
 
     /**
      *

@@ -1,5 +1,6 @@
 package com.hyeobjin.domain.entity.board;
 
+import com.hyeobjin.application.dto.board.CreateBoardDTO;
 import com.hyeobjin.domain.entity.file.FileBox;
 import com.hyeobjin.domain.entity.users.Users;
 import jakarta.persistence.*;
@@ -11,6 +12,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
@@ -31,7 +33,7 @@ public class Board {
     @Column(name = "board_title")
     private String boardTitle;
 
-    @Column(name = "board_content")
+    @Column(name = "board_content", columnDefinition = "text")
     private String boardContent;
 
     @Column(name = "board_viewcount")
@@ -49,13 +51,24 @@ public class Board {
     private LocalDateTime boardUpdate;
 
     @Column(name = "board_yn")
-    private Boolean boardYN;
+    private String boardYN;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "users_id")
     private Users users;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "filebox_id")
-    private FileBox fileBox;
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "board")
+    private List<FileBox> fileBox;
+
+    public Board saveToEntity(CreateBoardDTO createBoardDTO) {
+        this.id = createBoardDTO.getBoardId();
+        this.boardTitle = createBoardDTO.getBoardTitle();
+        this.boardContent = createBoardDTO.getBoardContent();
+        this.boardYN = "N";
+        this.boardViewCount = 0L;
+        this.users = Users.builder()
+                .userId(createBoardDTO.getUsersId())
+                .build();
+        return this;
+    }
 }

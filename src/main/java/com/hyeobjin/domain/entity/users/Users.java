@@ -3,6 +3,7 @@ package com.hyeobjin.domain.entity.users;
 import com.hyeobjin.application.dto.register.RegisterDTO;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -25,7 +26,6 @@ public class Users {
     @Column(name = "password")
     private String password;
 
-    @NotEmpty
     @Column(name = "name")
     private String name;
 
@@ -37,6 +37,11 @@ public class Users {
 
     @Column(name = "user_mail")
     private String userMail;
+
+    @Builder
+    public Users(Long userId) {
+        this.id = userId;
+    }
 
     public void setCreateJwtData(String username, String password, String role) {
         this.username = username;

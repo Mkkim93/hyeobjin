@@ -89,7 +89,7 @@ public class ManuApiController {
     }
 
     /**
-     * # 제조사 정보 복수
+     * # 제조사 정보 복구
      * # swagger : O
      * - 관리자가 삭제한 제조사 정보를 다시 복구한다.
      */
