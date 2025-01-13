@@ -1,31 +1,29 @@
 package com.hyeobjin.application.dto.board;
 
-
-import com.hyeobjin.domain.entity.board.Board;
-import com.hyeobjin.domain.entity.file.FileBox;
-import com.hyeobjin.domain.entity.users.Users;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.domain.Page;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
+/**
+ * 게시글 목록 조회 DTO
+ */
 @Data
 @NoArgsConstructor
-public class FindBoardDTO {
+public class BoardListDTO {
 
     private Long boardId;
     private String boardTitle;
     private Long boardViewCount;
     private LocalDateTime boardRegDate;
-    private String username;
+    private String writer; // Users = name
 
-    public FindBoardDTO (Long boardId, String boardTitle, Long boardViewCount, LocalDateTime boardRegDate, String username) {
+    public BoardListDTO(Long boardId, String boardTitle, Long boardViewCount,
+                        LocalDateTime boardRegDate, String writer) {
         this.boardId = boardId;
         this.boardTitle = boardTitle;
         this.boardViewCount = boardViewCount;
         this.boardRegDate = boardRegDate;
-        this.username = username;
+        this.writer = writer;
     }
 }

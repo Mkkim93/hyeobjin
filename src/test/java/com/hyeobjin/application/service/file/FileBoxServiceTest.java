@@ -40,11 +40,6 @@ class FileBoxServiceTest {
     @InjectMocks
     private FileBoxService fileBoxService;
 
-//    @BeforeEach
-//    void setup() {
-//        fileBoxService.ensureDirectoryExists();
-//    }
-
     @Test
     @DisplayName("file & Item save test")
     void save() throws IOException {

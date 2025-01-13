@@ -12,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,7 +23,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @Slf4j
-@Tag(name = "FileBox", description = "파일 관련 API")
+@Tag(name = "ItemFileBox", description = "제품 파일 관련 API")
 @RestController
 @RequestMapping("/files")
 @RequiredArgsConstructor
@@ -43,7 +42,7 @@ public class FileApiController {
 
         fileBoxService.saveFileOnly(itemId, files);
 
-        return ResponseEntity.ok("file save success");
+        return ResponseEntity.ok("item file save success");
     }
 
     /**
@@ -98,5 +97,4 @@ public class FileApiController {
                 .header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition)
                 .body(urlResource);
     }
-
 }

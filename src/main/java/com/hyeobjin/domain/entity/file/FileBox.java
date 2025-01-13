@@ -12,6 +12,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import java.time.LocalDateTime;
 
+import static jakarta.persistence.FetchType.EAGER;
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
@@ -49,7 +50,7 @@ public class FileBox {
     @JoinColumn(name = "item_id")  // 외래키 컬럼을 지정
     private Item item;
 
-    @ManyToOne(fetch = LAZY)
+    @ManyToOne(fetch = LAZY, cascade = CascadeType.REMOVE, optional = true)
     @JoinColumn(name = "board_id")
     private Board board;
 
@@ -61,14 +62,14 @@ public class FileBox {
      */
     @Builder
     public FileBox(String fileOrgName, String fileName,
-                   String filePath, String fileType, Long fileSize, Long itemId) {
+                   String filePath, String fileType, Long fileSize, Item itemId, Board boardId) {
         this.fileOrgName = fileOrgName;
         this.fileName = fileName;
         this.filePath = filePath;
         this.fileSize = fileSize;
         this.fileType = fileType;
-        this.item = Item.builder()
-                .itemId(itemId)
-                .build();
+
+        this.item = itemId;
+        this.board = boardId;
     }
 }

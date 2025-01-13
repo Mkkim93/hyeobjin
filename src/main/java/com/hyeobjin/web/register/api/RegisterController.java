@@ -19,13 +19,6 @@ public class RegisterController {
 
     private final RegisterService registerService;
 
-    // TODO 지워도 될듯
-    @GetMapping
-    public ResponseEntity<String> register() {
-
-        return ResponseEntity.ok("회원가입 페이지 이동");
-    }
-
     @Operation(summary = "관리자 등록", description = "관리자를 등록하는 API 입니다.")
     @PostMapping
     public ResponseEntity<String> registerProc(@RequestBody RegisterDTO registerDTO) {

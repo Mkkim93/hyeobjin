@@ -38,14 +38,14 @@ public class ItemApiController {
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> save(@ModelAttribute CreateItemDTO createItemDTO,
-                                  @RequestPart("files") List<MultipartFile> files) throws IOException {
+                                  @RequestPart(value = "files", required = false) List<MultipartFile> files) throws IOException {
         itemService.saveItem(createItemDTO, files);
         return ResponseEntity.ok("제품이 성공적으로 등록 되었습니다.");
     }
 
     /**
      * 제품 소개 페이지에서 네비게이션바를 누르면 해당 품번의 제품의 모든 정보를 조회
-     * swagger : 0
+     * swagger : O
      * @param itemNum
      * @return
      */

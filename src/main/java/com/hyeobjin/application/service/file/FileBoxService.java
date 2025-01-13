@@ -23,7 +23,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class FileBoxService {
 
-    @Value("${file.dir}")
+    @Value("${file.item.dir}")
     private String fileDir;
     private final FileBoxRepository fileBoxRepository;
 
@@ -50,12 +50,12 @@ public class FileBoxService {
     @PostConstruct
     public void ensureDirectoryExists() {
         File directory = new File(fileDir);
-        log.info("fileDir ={}", fileDir);
+        log.info("item fileDir ={}", fileDir);
         if (!directory.exists()) {
             try {
                 directory.mkdirs();
             } catch (SecurityException e) {
-                throw new IllegalStateException("파일 저장 디렉토리를 생성할 수 없습니다.");
+                throw new IllegalStateException("제품 파일 저장 디렉토리를 생성할 수 없습니다.");
             }
         }
     }
@@ -81,7 +81,7 @@ public class FileBoxService {
      * @return
      * @throws IOException
      */
-    public List<FileBox> fileSave(CreateFileBoxDTO createFileBoxDTO, List<MultipartFile> files) throws IOException {
+    public void fileSave(CreateFileBoxDTO createFileBoxDTO, List<MultipartFile> files) throws IOException {
 
         List<FileBox> fileBoxes = new ArrayList<>();
 
@@ -103,14 +103,25 @@ public class FileBoxService {
                     .filePath(filePath + fileName)
                     .fileSize(file.getSize())
                     .fileType(file.getContentType())
-                    .itemId(createFileBoxDTO.getItemId())
+                    .itemId(Item.builder()
+                            .itemId(createFileBoxDTO.getItemId())
+                            .build())
                     .build();
 
             fileBoxes.add(savedFiles);
 
             fileBoxRepository.save(savedFiles);
         }
-        return fileBoxes;
+    }
+
+    /**
+     * 현재 제품번호를 조회하고 제품이 존재하면 새로운 파일을 추가
+     * @param itemId 제품 번호
+     * @param files 파일 데이터
+     * @throws IOException
+     */
+    public void saveFileOnly(Long itemId, List<MultipartFile> files) throws IOException {
+        fileSave(new CreateFileBoxDTO(itemId), files);
     }
 
     /**
@@ -135,7 +146,5 @@ public class FileBoxService {
         fileBoxRepository.delete(fileBox);
     }
 
-    public void saveFileOnly(Long itemId, List<MultipartFile> files) throws IOException {
-        fileSave(new CreateFileBoxDTO(itemId), files);
-    }
+
 }

@@ -1,9 +1,9 @@
 package com.hyeobjin.domain.entity.board;
 
 import com.hyeobjin.application.dto.board.CreateBoardDTO;
-import com.hyeobjin.domain.entity.file.FileBox;
 import com.hyeobjin.domain.entity.users.Users;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
@@ -12,16 +12,16 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
-@EntityListeners(AuditingEntityListener.class)
-@EnableJpaAuditing
+
 @Entity
 @Table(name = "board")
 @Getter
 @NoArgsConstructor
+@EnableJpaAuditing
+@EntityListeners(AuditingEntityListener.class)
 public class Board {
 
     @Id @GeneratedValue(strategy = IDENTITY)
@@ -57,9 +57,6 @@ public class Board {
     @JoinColumn(name = "users_id")
     private Users users;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "board")
-    private List<FileBox> fileBox;
-
     public Board saveToEntity(CreateBoardDTO createBoardDTO) {
         this.id = createBoardDTO.getBoardId();
         this.boardTitle = createBoardDTO.getBoardTitle();
@@ -70,5 +67,16 @@ public class Board {
                 .userId(createBoardDTO.getUsersId())
                 .build();
         return this;
+    }
+
+    @Builder
+    public Board(Long boardId, String boardTitle,
+                 String boardContent, Long userId) {
+        this.id = boardId;
+        this.boardTitle = boardTitle;
+        this.boardContent = boardContent;
+        this.users = Users.builder()
+                .userId(userId)
+                .build();
     }
 }

@@ -9,15 +9,17 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+/**
+ *
+ *  TODO 비밀번호 검증 로직
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class JwtUserDetailsService implements UserDetailsService {
 
-    private final BCryptPasswordEncoder encoder;
     private final UsersRepository usersRepository;
 
     @Override

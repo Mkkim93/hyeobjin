@@ -51,9 +51,22 @@ class FileBoxRepositoryTest {
                 .fileOrgName(createFileBoxDTO.getFileOrgName())
                 .itemId(Item.builder()
                         .itemId(createFileBoxDTO.getItemId())
-                        .build().getId())
+                        .build())
                 .build();
         FileBox savedFile = fileBoxRepository.save(fileBuild);
         assertThat(fileBuild).isEqualTo(savedFile);
+    }
+
+    @Test
+    @DisplayName("파일 테이블에서 게시글 번호 존재 유무 확인")
+    void existBoardId() {
+
+        Long existsBoardId = 16L;
+        Long notExistBoardId = 1L;
+        Boolean exists = fileBoxRepository.existsByBoardId(existsBoardId);
+        Boolean notExists = fileBoxRepository.existsByBoardId(notExistBoardId);
+
+        assertThat(exists).isTrue();
+        assertThat(notExists).isFalse();
     }
 }
