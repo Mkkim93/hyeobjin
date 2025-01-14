@@ -59,8 +59,14 @@ public class ItemRepositoryImpl extends QuerydslRepositorySupport implements Ite
         return new FindByItemDTO(
                 selectItem.getId(),
                 selectItem.getItemName(),
-                fileBoxes,
-                selectItem.getItemNum());
+                selectItem.getItemNum(),
+                selectItem.getItemUse(),
+                selectItem.getItemSpec(),
+                selectItem.getItemDescription(),
+                selectItem.getItemType(),
+                selectItem.getManufacturer().getManuName(),
+                fileBoxes
+                );
     }
 
     @Override

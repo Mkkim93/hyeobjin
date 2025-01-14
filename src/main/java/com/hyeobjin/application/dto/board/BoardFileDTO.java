@@ -21,7 +21,11 @@ public class BoardFileDTO {
     private String filePath;
     private LocalDateTime fileRegDate;
 
+    private String boardTitle;
+    private String boardContent;
+
     private Long boardId;
+    private Long userId;
 
     @QueryProjection
     public BoardFileDTO(Long fileBoxId, String fileOrgName,

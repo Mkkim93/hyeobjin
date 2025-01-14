@@ -75,6 +75,7 @@ public class FileApiController {
     })
     @PostMapping("/download/{fileBoxId}")
     public ResponseEntity<Resource> download(@PathVariable("fileBoxId") Long fileBoxId) throws MalformedURLException {
+
         FileBox fileBox = fileBoxService.findById(fileBoxId);
 
         if (fileBox == null) {

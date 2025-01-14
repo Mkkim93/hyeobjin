@@ -6,13 +6,13 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import java.time.LocalDateTime;
 
-import static jakarta.persistence.FetchType.EAGER;
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
@@ -22,6 +22,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 @EnableJpaAuditing
+@ToString(exclude = {"board", "item"})
 public class FileBox {
 
     @Id @GeneratedValue(strategy = IDENTITY)
@@ -46,20 +47,14 @@ public class FileBox {
     @Column(name = "file_regdate")
     private LocalDateTime fileRegDate;
 
-    @ManyToOne(fetch = LAZY, cascade = CascadeType.REMOVE, optional = true)
+    @ManyToOne(fetch = LAZY, cascade = CascadeType.REMOVE, optional = false)
     @JoinColumn(name = "item_id")  // 외래키 컬럼을 지정
     private Item item;
 
-    @ManyToOne(fetch = LAZY, cascade = CascadeType.REMOVE, optional = true)
+    @ManyToOne(fetch = LAZY, cascade = CascadeType.MERGE, optional = false)
     @JoinColumn(name = "board_id")
     private Board board;
 
-    /**
-     *
-     * @param fileName
-     * @param filePath
-     * @param fileType
-     */
     @Builder
     public FileBox(String fileOrgName, String fileName,
                    String filePath, String fileType, Long fileSize, Item itemId, Board boardId) {

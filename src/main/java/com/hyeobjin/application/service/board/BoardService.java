@@ -1,12 +1,10 @@
 package com.hyeobjin.application.service.board;
 
-import com.hyeobjin.application.dto.board.BoardDetailDTO;
-import com.hyeobjin.application.dto.board.CreateBoardDTO;
-import com.hyeobjin.application.dto.board.BoardListDTO;
-import com.hyeobjin.application.dto.board.UpdateBoardDTO;
+import com.hyeobjin.application.dto.board.*;
 import com.hyeobjin.domain.entity.board.Board;
 import com.hyeobjin.domain.repository.board.BoardRepository;
 import com.hyeobjin.domain.repository.board.BoardRepositoryImpl;
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +31,7 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final BoardRepositoryImpl boardRepositoryImpl;
     private final BoardFileService boardFileService;
+    private final EntityManager entityManager;
 
     public Board existById(Long boardId) {
         boolean exists = boardRepository.existsById(boardId);
@@ -72,9 +71,13 @@ public class BoardService {
      */
     public BoardDetailDTO findDetail(Long boardId) {
 
-        boardRepository.findById(boardId)
+        Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new EntityNotFoundException("해당 게시글번호가 존재하지 않습니다."));
 
+        // TODO 게시글의 작성자(관리자)가 아니면 해당 게시글 조회수 증가
+        /*if (board.getUsers().getId() != 1L) {
+        }*/
+        
         return boardRepositoryImpl.findByBoardDetail(boardId);
 
     }
@@ -84,13 +87,13 @@ public class BoardService {
      * # test code : O
      * @param createBoardDTO
      */
-    public void save(CreateBoardDTO createBoardDTO, List<MultipartFile> files) throws IOException {
+    public void save(BoardFileDTO createBoardDTO, List<MultipartFile> files) throws IOException {
 
         Board saved = boardRepository.save(new Board().saveToEntity(createBoardDTO));
 
         if (files != null && !files.isEmpty()) {
-            log.info("files is board save");
             boardFileService.saveFilesForBoard(saved, files);
+            log.info("files is board save");
         }
     }
 

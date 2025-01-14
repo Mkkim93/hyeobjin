@@ -43,9 +43,8 @@ public class Users {
         this.id = userId;
     }
 
-    public void setCreateJwtData(String username, String password, String role) {
+    public void setCreateJwtData(String username, String role) {
         this.username = username;
-        this.password = password;
         this.role = role;
     }
 
@@ -53,7 +52,7 @@ public class Users {
         this.username = registerDTO.getUsername();
         this.password = password;
         this.name = registerDTO.getName();
-        this.role = registerDTO.getRole();
+        this.role = "ROLE_ADMIN";
         return this;
     }
 }

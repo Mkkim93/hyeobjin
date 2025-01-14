@@ -7,4 +7,8 @@ public interface FileBoxRepository extends JpaRepository<FileBox, Long> {
 
     Boolean existsByBoardId(Long boardId);
 
+    void deleteById(Long fileBoxId);
+
+    FileBox findByBoardIdAndId(Long boardId, Long id);
+
 }

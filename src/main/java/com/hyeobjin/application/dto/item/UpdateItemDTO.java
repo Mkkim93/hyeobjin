@@ -1,7 +1,6 @@
 package com.hyeobjin.application.dto.item;
 
 import com.hyeobjin.application.dto.board.FileBoxBoardDTO;
-import com.hyeobjin.application.dto.file.FileBoxItemDTO;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

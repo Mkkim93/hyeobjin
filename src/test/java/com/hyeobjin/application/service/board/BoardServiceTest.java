@@ -1,5 +1,6 @@
 package com.hyeobjin.application.service.board;
 
+import com.hyeobjin.application.dto.board.BoardFileDTO;
 import com.hyeobjin.application.dto.board.BoardListDTO;
 import com.hyeobjin.application.dto.board.CreateBoardDTO;
 import com.hyeobjin.application.dto.board.UpdateBoardDTO;
@@ -47,10 +48,10 @@ class BoardServiceTest {
     @DisplayName("게시글 저장")
     void save() throws IOException {
 
-        CreateBoardDTO createBoardDTO = new CreateBoardDTO();
+        BoardFileDTO createBoardDTO = new BoardFileDTO();
         createBoardDTO.setBoardTitle("게시글 제목 테스트06");
         createBoardDTO.setBoardContent("게시글 내용 테스트06");
-        createBoardDTO.setUsersId(3L);
+        createBoardDTO.setUserId(3L);
 
         boardService.save(createBoardDTO, null);
 

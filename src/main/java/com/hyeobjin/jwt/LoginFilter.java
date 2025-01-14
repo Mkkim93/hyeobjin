@@ -4,9 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hyeobjin.application.dto.login.LoginDTO;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -33,22 +35,24 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     public Authentication attemptAuthentication(HttpServletRequest request,
                                                 HttpServletResponse response) throws AuthenticationException {
 
-
         try {
             // JSON 데이터에서 username과 password 추출
             // 클라이언트에서 넘어온 데이터 (JSON -> JAVA)
             ObjectMapper objectMapper = new ObjectMapper();
-            LoginDTO loginRequest = objectMapper.readValue(request.getInputStream(), LoginDTO.class);
 
-            String username = loginRequest.getUsername();
-            String password = loginRequest.getPassword();
+            LoginDTO LoginDTO = objectMapper.readValue(
+                    request.getInputStream(), LoginDTO.class);
+
+            String username = LoginDTO.getUsername();
+            String password = LoginDTO.getPassword();
 
             log.info("username={}", username);
             log.info("password={}", password);
 
-            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password, null);
+            UsernamePasswordAuthenticationToken authToken =
+                    new UsernamePasswordAuthenticationToken(username, password, null);
 
-            log.info("authToken={}", authToken);
+            log.info("AuthToken={}", authToken);
 
             return authenticationManager.authenticate(authToken);
         } catch (IOException e) {
@@ -60,21 +64,35 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     protected void successfulAuthentication(HttpServletRequest request,
                                             HttpServletResponse response,
                                             FilterChain chain,
-                                            Authentication authResult) throws IOException, ServletException {
+                                            Authentication authentication) throws IOException, ServletException {
 
-        CustomUserDetails customUserDetails = (CustomUserDetails) authResult.getPrincipal();
-        String username = customUserDetails.getUsername();
-        log.info("successFull method username={}", username);
+        String username = authentication.getName();
 
-        Collection<? extends GrantedAuthority> authorities = authResult.getAuthorities();
+        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
         GrantedAuthority auth = iterator.next();
-
         String role = auth.getAuthority();
-        String token = jwtUtil.createJwt(username, role, 60 * 60 * 10L);
-        log.info("successful token={}", token);
 
-        response.setHeader("Authorization", "Bearer " + token);
+        // access 토큰 생성
+        String access = jwtUtil.createJwt("access", username, role, 60000L);// 10 min
+
+        // refresh 토큰 생성
+        String refresh = jwtUtil.createJwt("refresh", username, role, 86400000L);// 24 hours
+
+        // 응답 설정
+        response.setHeader("Authorization", access);
+        response.addCookie(createCookie("refresh", refresh));
+        response.setStatus(HttpStatus.OK.value());
+
+    }
+
+    private Cookie createCookie(String key, String value) {
+        Cookie cookie = new Cookie(key, value);
+        cookie.setMaxAge(24 * 60 * 60);
+//        cookie.setSecure(true);
+//        cookie.setPath("/");
+        cookie.setHttpOnly(true);
+        return cookie;
     }
 
     @Override

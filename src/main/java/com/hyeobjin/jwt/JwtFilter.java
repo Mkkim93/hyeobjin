@@ -1,6 +1,7 @@
 package com.hyeobjin.jwt;
 
 import com.hyeobjin.domain.entity.users.Users;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,6 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 @Slf4j
 public class JwtFilter extends OncePerRequestFilter {
@@ -21,44 +23,101 @@ public class JwtFilter extends OncePerRequestFilter {
         this.jwtUtil = jwtUtil;
     }
 
+    /**
+     *
+     * @param request
+     * @param response
+     * @param filterChain
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 
-        String authorization = request.getHeader("Authorization");
+        // 헤더에서 access 키에 담긴 토큰을 꺼냄
+        String accessToken = request.getHeader("access");
 
-        if (authorization == null || !authorization.startsWith("Bearer ")) {
+        // 토큰이 없다면 다음 필터로 넘김
+        if (accessToken == null) {
 
-            log.info("token status={}", authorization);
             filterChain.doFilter(request, response);
+
             return;
         }
 
-        log.info("auth : authorization now");
+        // 토큰 만료 여부 확인, 만료 시 다음 필터로 넘기지 않음
+        try {
+            jwtUtil.isExpired(accessToken);
+        } catch (ExpiredJwtException e) {
 
-        String token = authorization.split(" ")[1];
+            PrintWriter writer = response.getWriter();
+            writer.print("access token expired");
 
-        if (jwtUtil.isExpired(token)) {
-            System.out.println("token Expired");
-            log.info("log token Expired");
-            filterChain.doFilter(request, response);
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
 
-        String username = jwtUtil.getUsername(token);
-        String role = jwtUtil.getRole(token);
+        // 토큰이 access 인지 refresh 인지 체크 (발급 시 페이로드에 명시)
+        // writer.print("") : 서버에서 보내는 문자열의 응답 코드를 클라이언트에서 읽어야 한다.
+        String category = jwtUtil.getCategory(accessToken);
+        if (!category.equals("access")) {
 
+            PrintWriter writer = response.getWriter();
+            writer.print("invalid access token");
+
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return;
+        }
+
+        String username = jwtUtil.getUsername(accessToken);
+        String role = jwtUtil.getRole(accessToken);
         Users users = new Users();
-        users.setCreateJwtData(username, "temppassword", role);
+        users.setCreateJwtData(username, role);
 
         CustomUserDetails customUserDetails = new CustomUserDetails(users);
-
-        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                customUserDetails, null, customUserDetails.getAuthorities());
+        UsernamePasswordAuthenticationToken authToken =
+                new UsernamePasswordAuthenticationToken(
+                        customUserDetails, null, customUserDetails.getAuthorities());
 
         SecurityContextHolder.getContext().setAuthentication(authToken);
 
         filterChain.doFilter(request, response);
+
+//        String authorization = request.getHeader("Authorization");
+//
+//        if (authorization == null || !authorization.startsWith("Bearer ")) {
+//
+//            log.info("token status={}", authorization);
+//            filterChain.doFilter(request, response);
+//            return;
+//        }
+//
+//        log.info("auth : authorization now");
+//
+//        String token = authorization.split(" ")[1];
+//
+//        if (jwtUtil.isExpired(token)) {
+//            System.out.println("token Expired");
+//            log.info("log token Expired");
+//            filterChain.doFilter(request, response);
+//            return;
+//        }
+//
+//        String username = jwtUtil.getUsername(token);
+//        String role = jwtUtil.getRole(token);
+//
+//        Users users = new Users();
+//        users.setCreateJwtData(username, "temppassword", role);
+//
+//        CustomUserDetails customUserDetails = new CustomUserDetails(users);
+//
+//        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+//                customUserDetails, null, customUserDetails.getAuthorities());
+//
+//        SecurityContextHolder.getContext().setAuthentication(authToken);
+//
+//        filterChain.doFilter(request, response);
     }
 }

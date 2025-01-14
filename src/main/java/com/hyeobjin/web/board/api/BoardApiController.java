@@ -1,9 +1,6 @@
 package com.hyeobjin.web.board.api;
 
-import com.hyeobjin.application.dto.board.BoardDetailDTO;
-import com.hyeobjin.application.dto.board.BoardListDTO;
-import com.hyeobjin.application.dto.board.CreateBoardDTO;
-import com.hyeobjin.application.dto.board.UpdateBoardDTO;
+import com.hyeobjin.application.dto.board.*;
 import com.hyeobjin.application.service.board.BoardReplyService;
 import com.hyeobjin.application.service.board.BoardService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,7 +11,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -33,17 +29,17 @@ public class BoardApiController {
 
     /**
      * # 게시글을 파일 데이터와 저장
-     * postman api : X
+     * postman api : O
      * @param createBoardDTO 게시글 객체
      * @param files 파일 객체
      * @return
      * @throws IOException
      */
     @Operation(summary = "게시글 저장", description = "게시글 & 파일 저장을 위한 API 입니다.")
-    @PostMapping(value = "/save",
+    @PostMapping(
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> save(@ModelAttribute CreateBoardDTO createBoardDTO,
+    public ResponseEntity<String> save(@ModelAttribute BoardFileDTO createBoardDTO,
                                        @RequestPart(value = "files", required = false) List<MultipartFile> files) throws IOException {
 
         boardService.save(createBoardDTO, files);
@@ -79,7 +75,7 @@ public class BoardApiController {
 
     /**
      * 일반 사용자가 자신이 작성한 게시글을 삭제 (관리자용은 별도로 admin package 구성)
-     * # swagger : X
+     * # swagger : O
      * @param boardId 게시글 번호를 기준으로 자신의 게시글을 삭제한다
      *                DB 데이터가 삭제되는 것이 아니라 특정 컬럼의 값을 업데이트하여 게시글이 조회되지 않도록 함
      * @return
@@ -93,7 +89,7 @@ public class BoardApiController {
 
     /**
      * 게시글 번호를 기준으로 게시글 제목을 클릭하면 상세 조회로 모든 상세 내용을 조회.
-     * # swagger : X
+     * # swagger : O
      * @param boardId 게시글 번호
      * @return
      */
@@ -107,7 +103,7 @@ public class BoardApiController {
      * 자신이 작성한 게시물을 수정할 수 있다
      * @param updateBoardDTO 클라이언트가 해당 객체를 통해 수정된 제목과 내용을 서버로 전송한다.
      *                       파일 데이터의 수정은 별도의 api 로 파일 수정 기능 구현
-     *  # swagger : X
+     *  # swagger : O
      * @return
      */
     @Operation(summary = "게시글 수정", description = "게시글 수정을 위한 API 입니다.")

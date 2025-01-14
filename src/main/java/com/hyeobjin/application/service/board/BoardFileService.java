@@ -1,7 +1,6 @@
 package com.hyeobjin.application.service.board;
 
 import com.hyeobjin.application.dto.board.BoardFileDTO;
-import com.hyeobjin.application.dto.board.CreateBoardDTO;
 import com.hyeobjin.domain.entity.board.Board;
 import com.hyeobjin.domain.entity.file.FileBox;
 import com.hyeobjin.domain.repository.file.FileBoxRepository;
@@ -125,7 +124,8 @@ public class BoardFileService {
      * 파일 삭제 (정적경로의 파일 우선 삭제 후 DB 메타데이터 삭제)
      * RuntimeException : 정적 파일 삭제 실패 시, 런타임 예외 발생 메타데이터 삭제 로직이 실행 되지 않도록 한다.
      * test code : O
-     * @param fileBoxId
+     * @param fileBoxId 삭제할 파일 번호
+     * @param boardId 삭제할 파일을 가진 게시글 번호
      */
     public void delete(Long fileBoxId, Long boardId) {
 
@@ -135,18 +135,21 @@ public class BoardFileService {
             throw new RuntimeException("삭제하려는 파일을 참조하는 게시글이 존재하지 않습니다.");
         }
 
-        FileBox fileBox = fileBoxRepository.findById(fileBoxId)
-                .orElseThrow(() -> new EntityNotFoundException("해당 파일이 존재하지 않습니다."));
+        FileBox fileBox = fileBoxRepository.findByBoardIdAndId(boardId, fileBoxId);
 
         File file = new File(fileBox.getFilePath());
 
         if (file.exists()) {
             boolean fileDeleted = file.delete();
             if (!fileDeleted) {
-                throw new RuntimeException("게시글 파일 삭제 오류");
+                throw new RuntimeException("정적 파일 삭제 오류");
             }
         }
         fileBoxRepository.delete(fileBox);
         log.info("게시글의 파일이 성공적으로 삭제 되었습니다.");
+    }
+
+    public FileBox findById(Long fileBoxId) {
+        return fileBoxRepository.findById(fileBoxId).orElseThrow(() -> new EntityNotFoundException("해당 파일이 존재하지 않습니다."));
     }
 }

@@ -1,5 +1,6 @@
 package com.hyeobjin.domain.entity.board;
 
+import com.hyeobjin.application.dto.board.BoardFileDTO;
 import com.hyeobjin.application.dto.board.CreateBoardDTO;
 import com.hyeobjin.domain.entity.users.Users;
 import jakarta.persistence.*;
@@ -57,14 +58,14 @@ public class Board {
     @JoinColumn(name = "users_id")
     private Users users;
 
-    public Board saveToEntity(CreateBoardDTO createBoardDTO) {
+    public Board saveToEntity(BoardFileDTO createBoardDTO) {
         this.id = createBoardDTO.getBoardId();
         this.boardTitle = createBoardDTO.getBoardTitle();
         this.boardContent = createBoardDTO.getBoardContent();
         this.boardYN = "N";
         this.boardViewCount = 0L;
         this.users = Users.builder()
-                .userId(createBoardDTO.getUsersId())
+                .userId(createBoardDTO.getUserId())
                 .build();
         return this;
     }

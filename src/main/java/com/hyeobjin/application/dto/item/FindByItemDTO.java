@@ -13,16 +13,28 @@ public class FindByItemDTO {
 
     private Long itemId;
     private String itemName;
-    private List<FindFileBoxDTO> fileBoxes;
     private String itemNum;
+    private String itemUse;
+    private String itemSpec;
+    private String itemDescription;
+    private String itemType;
+    private String manuName;
+    private List<FindFileBoxDTO> fileBoxes;
+
 
     @QueryProjection
-    public FindByItemDTO(Long itemId, String itemName,
-                         List<FindFileBoxDTO> fileBoxes, String itemNum) {
+    public FindByItemDTO(Long itemId, String itemName, String itemNum, String itemUse,
+                         String itemSpec, String itemDescription, String itemType,
+                         String manuName, List<FindFileBoxDTO> fileBoxes) {
         this.itemId = itemId;
         this.itemName = itemName;
-        this.fileBoxes = fileBoxes;
         this.itemNum = itemNum;
+        this.itemUse = itemUse;
+        this.itemSpec = itemSpec;
+        this.itemDescription = itemDescription;
+        this.itemType = itemType;
+        this.manuName = manuName;
+        this.fileBoxes = fileBoxes;
     }
 
     @Override
@@ -31,7 +43,11 @@ public class FindByItemDTO {
                 "itemId=" + itemId +
                 ", itemName='" + itemName + '\'' +
                 ", itemNum='" + itemNum + '\'' +
-                ", fileBoxes=" + (fileBoxes != null ? fileBoxes.size() + " items" : "null") +
+                ", itemUse='" + itemUse + '\'' +
+                ", itemSpec='" + itemSpec + '\'' +
+                ", itemDescription='" + itemDescription + '\'' +
+                ", itemType='" + itemType + '\'' +
+                ", fileBoxes=" + fileBoxes +
                 '}';
     }
 }

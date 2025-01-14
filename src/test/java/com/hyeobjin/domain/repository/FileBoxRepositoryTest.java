@@ -58,7 +58,7 @@ class FileBoxRepositoryTest {
     }
 
     @Test
-    @DisplayName("파일 테이블에서 게시글 번호 존재 유무 확인")
+    @DisplayName("파일 테이블에서 게시글 번호 유무 확인")
     void existBoardId() {
 
         Long existsBoardId = 16L;
@@ -68,5 +68,15 @@ class FileBoxRepositoryTest {
 
         assertThat(exists).isTrue();
         assertThat(notExists).isFalse();
+    }
+
+    @Test
+    @DisplayName("게시글에서 삭제할 파일 조회 (게시글 ID : boardId, 파일 ID : fileboxId 로 filebox 엔티티 조회)")
+    void findByDeleteFileBoxEntity() {
+        Long fileBoxId = 43L;
+        Long boardId = 42L;
+        FileBox fileBox = fileBoxRepository.findByBoardIdAndId(boardId, fileBoxId);
+
+        System.out.println("fileBox = " + fileBox);
     }
 }
