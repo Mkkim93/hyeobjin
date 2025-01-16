@@ -15,6 +15,9 @@ public class UpdateItemDTO {
     private String itemName;
     private String itemUse;
     private String itemSpec;
+    private String itemInColor;
+    private String itemOutColor;
+    private String itemFrameWidth;
     private String itemType;
     private String itemDescription;
     private String itemYN;
@@ -25,7 +28,7 @@ public class UpdateItemDTO {
     private List<FileBoxBoardDTO> updateFiles;
 
     public UpdateItemDTO(Long itemId, String itemNum, String itemName,
-                         String itemUse, String itemSpec,
+                         String itemUse, String itemSpec, String itemInColor, String itemOutColor, String itemFrameWidth,
                          String itemType, String itemDescription,
                          String itemYN, Long manuId, String manuName) {
         this.itemId = itemId;
@@ -33,6 +36,9 @@ public class UpdateItemDTO {
         this.itemName = itemName;
         this.itemUse = itemUse;
         this.itemSpec = itemSpec;
+        this.itemInColor = itemInColor;
+        this.itemOutColor = itemOutColor;
+        this.itemFrameWidth = itemFrameWidth;
         this.itemType = itemType;
         this.itemDescription = itemDescription;
         this.itemYN = itemYN;

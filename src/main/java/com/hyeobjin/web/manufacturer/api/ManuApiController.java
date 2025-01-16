@@ -16,7 +16,7 @@ import java.util.List;
 @Slf4j
 @Tag(name = "Manufacturer", description = "제조사 관련 API")
 @RestController
-@RequestMapping("/manufacturer")
+@RequestMapping("/manufacturers")
 @RequiredArgsConstructor
 public class ManuApiController {
 

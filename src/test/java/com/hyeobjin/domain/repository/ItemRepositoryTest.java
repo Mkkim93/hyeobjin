@@ -14,7 +14,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 @Slf4j
 @SpringBootTest
@@ -60,10 +59,16 @@ class ItemRepositoryTest {
         FindByItemDTO findByItemDTO = new FindByItemDTO();
         findByItemDTO.setItemNum("K102");
 
-        FindByItemDTO findOneByItem = itemRepositoryImpl.findByItem(
-                findByItemDTO.getItemNum());
+        FindByItemDTO findOneByItem = itemRepositoryImpl.findByItem(findByItemDTO.getManuId(),
+                findByItemDTO.getItemId());
 
         System.out.println("findOneByItem = " + findOneByItem);
+    }
+
+    @Test
+    @DisplayName("제품의 모든 품번을 조회")
+    void findAllItemId() {
+        itemRepository.findAllItemId().stream().forEach(System.out::println);
     }
 
 }

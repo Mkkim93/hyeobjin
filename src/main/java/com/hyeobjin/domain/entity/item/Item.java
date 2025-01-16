@@ -30,6 +30,15 @@ public class Item {
     @Column(name = "item_spec")
     private String itemSpec;
 
+    @Column(name = "item_in_color")
+    private String itemInColor;
+
+    @Column(name = "item_out_color")
+    private String itemOutColor;
+
+    @Column(name = "item_frame_width")
+    private String itemFrameWidth;
+
     @Column(name = "item_type")
     private String itemType;
 
@@ -45,13 +54,16 @@ public class Item {
 
     @Builder
     public Item(Long itemId, String itemNum, String itemName,
-                String itemUse, String itemSpec, String itemType,
-                String itemDescription, String itemYN, Long manufacturerId) {
+                String itemUse, String itemSpec, String itemInColor, String itemOutColor, String itemFrameWidth,
+                String itemType, String itemDescription, String itemYN, Long manufacturerId) {
         this.id = itemId;
         this.itemNum = itemNum;
         this.itemName = itemName;
         this.itemUse = itemUse;
         this.itemSpec = itemSpec;
+        this.itemInColor = itemInColor;
+        this.itemOutColor = itemOutColor;
+        this.itemFrameWidth = itemFrameWidth;
         this.itemType = itemType;
         this.itemDescription = itemDescription;
         this.itemYN = itemYN;

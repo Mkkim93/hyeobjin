@@ -21,6 +21,9 @@ public class CreateItemDTO {
     private String itemName;
     private String itemUse;
     private String itemSpec;
+    private String itemInColor;
+    private String itemOutColor;
+    private String itemFrameWidth;
     private String itemDescription;
     private String itemType;
     private String itemYN;
@@ -38,6 +41,9 @@ public class CreateItemDTO {
                 .itemName(createItemDTO.getItemName())
                 .itemUse(createItemDTO.getItemUse())
                 .itemSpec(createItemDTO.getItemSpec())
+                .itemInColor(createItemDTO.getItemInColor())
+                .itemOutColor(createItemDTO.getItemOutColor())
+                .itemFrameWidth(createItemDTO.getItemFrameWidth())
                 .itemType(createItemDTO.getItemType())
                 .itemDescription(createItemDTO.getItemDescription())
                 .itemYN("N")

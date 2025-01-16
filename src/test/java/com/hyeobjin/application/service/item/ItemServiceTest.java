@@ -92,4 +92,10 @@ class ItemServiceTest {
         assertThat("up01 itemSpec").isEqualTo(item.getItemSpec());
         assertThat("up01 itemUse").isEqualTo(item.getItemUse());
     }
+
+    @Test
+    @DisplayName("제품의 모든 pk & itemNum 조회")
+    void findPKAndItemNumList() {
+        itemService.findAllItemNumList().stream().forEach(System.out::println);
+    }
 }

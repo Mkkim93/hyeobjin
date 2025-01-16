@@ -32,7 +32,7 @@ public class ItemRepositoryImpl extends QuerydslRepositorySupport implements Ite
     }
 
     @Override
-    public FindByItemDTO findByItem(String itemNum) {
+    public FindByItemDTO findByItem(Long manuId, Long itemId) {
 
         QItem item = QItem.item;
         QFileBox fileBox = QFileBox.fileBox;
@@ -42,7 +42,8 @@ public class ItemRepositoryImpl extends QuerydslRepositorySupport implements Ite
                 .leftJoin(fileBox.item, item).fetchJoin()
                 .leftJoin(item.manufacturer, QManufacturer.manufacturer).fetchJoin()
                 .where(
-                        item.itemNum.eq(itemNum)
+                        item.id.eq(itemId)
+                                .and(item.manufacturer.id.eq(manuId))
                                 .and(item.itemYN.eq("N"))
                 )
                 .fetch()
@@ -53,7 +54,7 @@ public class ItemRepositoryImpl extends QuerydslRepositorySupport implements Ite
         Item selectItem = jpaQueryFactory
                 .selectFrom(item)
                 .leftJoin(item.manufacturer, QManufacturer.manufacturer)
-                .where(item.itemNum.eq(itemNum))
+                .where(item.id.eq(itemId))
                 .fetchOne();
 
         return new FindByItemDTO(
@@ -62,8 +63,12 @@ public class ItemRepositoryImpl extends QuerydslRepositorySupport implements Ite
                 selectItem.getItemNum(),
                 selectItem.getItemUse(),
                 selectItem.getItemSpec(),
+                selectItem.getItemInColor(),
+                selectItem.getItemOutColor(),
+                selectItem.getItemFrameWidth(),
                 selectItem.getItemDescription(),
                 selectItem.getItemType(),
+                selectItem.getManufacturer().getId(),
                 selectItem.getManufacturer().getManuName(),
                 fileBoxes
                 );
@@ -90,6 +95,15 @@ public class ItemRepositoryImpl extends QuerydslRepositorySupport implements Ite
         if (updateItemDTO.getItemSpec() != null) {
             updateClause.set(item.itemSpec, updateItemDTO.getItemSpec());
         }
+        if (updateItemDTO.getItemInColor() != null) {
+            updateClause.set(item.itemInColor, updateItemDTO.getItemInColor());
+        }
+        if (updateItemDTO.getItemOutColor() != null) {
+            updateClause.set(item.itemOutColor, updateItemDTO.getItemOutColor());
+        }
+        if (updateItemDTO.getItemFrameWidth() != null) {
+            updateClause.set(item.itemFrameWidth, updateItemDTO.getItemFrameWidth());
+        }
         if (updateItemDTO.getItemDescription() != null) {
             updateClause.set(item.itemDescription, updateItemDTO.getItemDescription());
         }
@@ -114,6 +128,9 @@ public class ItemRepositoryImpl extends QuerydslRepositorySupport implements Ite
                     updateItemDTO.getItemName(),
                     updateItemDTO.getItemUse(),
                     updateItemDTO.getItemSpec(),
+                    updateItemDTO.getItemInColor(),
+                    updateItemDTO.getItemOutColor(),
+                    updateItemDTO.getItemFrameWidth(),
                     updateItemDTO.getItemType(),
                     updateItemDTO.getItemDescription(),
                     updateItemDTO.getItemYN(),

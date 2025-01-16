@@ -1,5 +1,6 @@
 package com.hyeobjin.web.item.api;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.hyeobjin.application.dto.item.CreateItemDTO;
 import com.hyeobjin.application.dto.item.FindByItemDTO;
 import com.hyeobjin.application.dto.item.UpdateItemDTO;
@@ -8,6 +9,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.annotations.processing.Find;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -46,15 +48,27 @@ public class ItemApiController {
     /**
      * 제품 소개 페이지에서 네비게이션바를 누르면 해당 품번의 제품의 모든 정보를 조회
      * swagger : O
-     * @param itemNum
+     * @param itemId
      * @return
      */
     @Operation(summary = "제품 조회 (품번)", description = "품번으로 제품 조회하는 API 입니다.")
     @GetMapping
-    public ResponseEntity<FindByItemDTO> findOne(@RequestParam("itemNum") String itemNum) {
+    public ResponseEntity<FindByItemDTO> findOne( @RequestParam("manuId") Long manuId,
+                                                  @RequestParam("itemId") Long itemId
+                                                ) {
+        log.info("itemNum log : ", itemId);
+        System.out.println("itemId = " + itemId);
         FindByItemDTO findByItemDTO = new FindByItemDTO();
-        findByItemDTO.setItemNum(itemNum);
+        findByItemDTO.setItemId(itemId);
+        findByItemDTO.setManuId(manuId);
         return ResponseEntity.ok(itemService.findByItemOne(findByItemDTO));
+    }
+
+    @JsonView(FindByItemDTO.SummaryView.class)
+    @GetMapping("/numbers")
+    @Operation(summary = "제품의 모든 pk 조회", description = "제품 품번을 모두 조회하는 API 입니다.")
+    public ResponseEntity<List<FindByItemDTO>> findAllItemNum(@RequestParam("manuId") Long manuId) {
+        return ResponseEntity.ok(itemService.findAllItemNumList(manuId));
     }
 
     /**
@@ -80,9 +94,9 @@ public class ItemApiController {
      * swagger : X
      */
     @Operation(summary = "제품 삭제", description = "관리자가 제품의 정보를 폼에서 삭제하고 제품의 정보는 데이터베이스에 유지 하는 API 입니다.")
-    @PostMapping("/delete")
-    public ResponseEntity<String> deleteItem(@ModelAttribute UpdateItemDTO updateItemDTO) {
-        itemService.delete(updateItemDTO);
+    @PostMapping("/delete") // TODO 제품의 PK 로 조회하지 않고 DTO 나 itemNum 으로 조회 후 삭제 업데이트 ?
+    public ResponseEntity<String> deleteItem(@RequestParam("itemId") Long itemId) {
+        itemService.delete(itemId);
         return ResponseEntity.ok("item delete success");
     }
 }

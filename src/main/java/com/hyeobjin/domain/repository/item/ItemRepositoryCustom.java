@@ -5,7 +5,7 @@ import com.hyeobjin.application.dto.item.UpdateItemDTO;
 
 public interface ItemRepositoryCustom {
 
-    FindByItemDTO findByItem(String itemNum);
+    FindByItemDTO findByItem(Long manuId, Long itemId);
 
     UpdateItemDTO updateItem(UpdateItemDTO updateItemDTO);
 }

@@ -18,6 +18,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Slf4j
 @Service
@@ -55,7 +57,7 @@ public class ItemService {
     public FindByItemDTO findByItemOne(FindByItemDTO findByItemDTO) {
         FindByItemDTO result = new FindByItemDTO();
         try {
-            result = itemRepositoryImpl.findByItem(findByItemDTO.getItemNum());
+            result = itemRepositoryImpl.findByItem(findByItemDTO.getManuId() ,findByItemDTO.getItemId());
         } catch (TypeNotPresentException e) {
             e.getMessage();
         }
@@ -84,8 +86,8 @@ public class ItemService {
      * 제품 삭제
      * - 삭제할 제품의 객체를 id 로 조회하고 조회한 객체가 존재하면 itemYN 값을 N -> Y 로 변경하여 사용자가 볼 수 없도록 한다.
      */
-    public void delete(UpdateItemDTO updateItemDTO) {
-        Item item = itemRepository.findById(updateItemDTO.getItemId())
+    public void delete(Long itemId) {
+        Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new EntityNotFoundException("해당 제품의 정보를 불러오는데 실패하였습니다."));
 
         Integer deleteCount = itemRepository.updateItemYN(item.getId());
@@ -95,5 +97,13 @@ public class ItemService {
         }
 
         log.info("제품이 성공적으로 삭제 되었습니다.");
+    }
+
+    /**
+     * 제품의 모든 품번을 조회
+     * - 제품별 품번으로 해당 제품의 List Collection 을 조회하기 위해 먼저 현재 존재하는 모든 제품의 품번을 조회한다.
+     */
+    public List<FindByItemDTO> findAllItemNumList(Long manuId) {
+        return itemRepository.findAllItemId(manuId);
     }
 }
