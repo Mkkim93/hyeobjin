@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -74,12 +75,20 @@ public class BoardService {
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new EntityNotFoundException("해당 게시글번호가 존재하지 않습니다."));
 
+        updateViewCount(board.getId());
+        String name = SecurityContextHolder.getContext().getAuthentication().getName();
+        log.info("name={}", name); // 현재 로그인한 사용자의 정보 호출
+        System.out.println("name = " + name);
+
         // TODO 게시글의 작성자(관리자)가 아니면 해당 게시글 조회수 증가
-        /*if (board.getUsers().getId() != 1L) {
-        }*/
-        
+//        if (board.getUsers().getId() != ) {
+//        }
+
         return boardRepositoryImpl.findByBoardDetail(boardId);
 
+    }
+
+    private void updateViewCount(Long id) {
     }
 
     /**
@@ -87,13 +96,14 @@ public class BoardService {
      * # test code : O
      * @param createBoardDTO
      */
-    public void save(BoardFileDTO createBoardDTO, List<MultipartFile> files) throws IOException {
+    public void saveBoard(CreateBoardDTO createBoardDTO, List<MultipartFile> files) throws IOException {
 
-        Board saved = boardRepository.save(new Board().saveToEntity(createBoardDTO));
+        Board board = createBoardDTO.toEntity(createBoardDTO);
+
+        boardRepository.save(board);
 
         if (files != null && !files.isEmpty()) {
-            boardFileService.saveFilesForBoard(saved, files);
-            log.info("files is board save");
+            boardFileService.saveFilesForBoard(board, files);
         }
     }
 

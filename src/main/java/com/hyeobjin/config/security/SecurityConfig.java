@@ -61,11 +61,13 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/login", "/register", "/auth","/items", "/notice", "/**", "/swagger-ui").permitAll() // 중요!! : Spring Security 가 로그인 처리를 담당할 url, 프론트의 비동기 처리 할 url 과 매핑 (컨트롤러 필요없음)
+                        .requestMatchers("/login", "/register", "/auth","/items",
+                                "/notice", "/**", "/swagger-ui").permitAll() // 중요!! : Spring Security 가 로그인 처리를 담당할 url, 프론트의 비동기 처리 할 url 과 매핑 (컨트롤러 필요없음)
 
                         .requestMatchers("/admin/**").hasAuthority("ADMIN")
                         .anyRequest().authenticated());
 
+        // TODO JwtFilter 로직 실행 안됨 나중에 확인
         http
                 .addFilterAt(new JwtFilter(jwtUtil), LoginFilter.class);
 

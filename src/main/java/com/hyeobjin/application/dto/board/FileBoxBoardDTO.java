@@ -15,4 +15,10 @@ public class FileBoxBoardDTO {
     private Long fileSize;
     private String fileType;
     private String filePath;
+
+    private Long boardId;
+
+    public FileBoxBoardDTO(Long boardId) {
+        this.boardId = boardId;
+    }
 }

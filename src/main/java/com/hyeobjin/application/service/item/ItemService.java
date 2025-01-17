@@ -41,6 +41,7 @@ public class ItemService {
     public void saveItem(CreateItemDTO createItemDTO, List<MultipartFile> files) throws IOException {
 
         Manufacturer manufacturer = manufacturerService.findIdByManuName(createItemDTO.getMenuName());
+
         Item item = createItemDTO.toEntity(createItemDTO);
         item.setManufacturerByCreateItem(manufacturer.getId());
 

@@ -8,14 +8,12 @@ import com.hyeobjin.domain.entity.board.Board;
 import com.hyeobjin.domain.repository.board.BoardRepository;
 import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 
@@ -46,14 +44,14 @@ class BoardServiceTest {
 
     @Test
     @DisplayName("게시글 저장")
-    void save() throws IOException {
+    void saveBoard() throws IOException {
 
-        BoardFileDTO createBoardDTO = new BoardFileDTO();
+        CreateBoardDTO createBoardDTO = new CreateBoardDTO();
         createBoardDTO.setBoardTitle("게시글 제목 테스트06");
         createBoardDTO.setBoardContent("게시글 내용 테스트06");
-        createBoardDTO.setUserId(3L);
+        createBoardDTO.setUsersId(3L);
 
-        boardService.save(createBoardDTO, null);
+        boardService.saveBoard(createBoardDTO, null);
 
         Board savedBoard = boardRepository.findByBoardTitle("게시글 제목 테스트06");
 

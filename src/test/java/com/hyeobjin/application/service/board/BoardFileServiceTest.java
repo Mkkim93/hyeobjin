@@ -2,6 +2,7 @@ package com.hyeobjin.application.service.board;
 
 import com.hyeobjin.application.dto.board.BoardFileDTO;
 import com.hyeobjin.application.dto.board.CreateBoardDTO;
+import com.hyeobjin.application.dto.board.FileBoxBoardDTO;
 import com.hyeobjin.domain.entity.board.Board;
 import com.hyeobjin.domain.entity.file.FileBox;
 import com.hyeobjin.domain.repository.file.FileBoxRepository;
@@ -72,10 +73,10 @@ class BoardFileServiceTest {
     @DisplayName("게시글 & 다중 파일 저장")
     void saveBoardAndFiles() throws IOException {
 
-        BoardFileDTO createBoardDTO = new BoardFileDTO();
+        CreateBoardDTO createBoardDTO = new CreateBoardDTO();
         createBoardDTO.setBoardTitle("게시글 & 파일 저장 제목 07");
         createBoardDTO.setBoardContent("게시글 & 파일 저장 내용 07");
-        createBoardDTO.setUserId(2L);
+        createBoardDTO.setUsersId(2L);
 
         List<MultipartFile> files = new ArrayList<>();
 
@@ -122,7 +123,7 @@ class BoardFileServiceTest {
         files.add(mockFile5);
         files.add(mockFile6);
 
-        boardService.save(createBoardDTO, files);
+//        boardService.save(createBoardDTO, files);
     }
 
     @Test

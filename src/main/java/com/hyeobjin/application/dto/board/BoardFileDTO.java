@@ -1,6 +1,7 @@
 package com.hyeobjin.application.dto.board;
 
 import com.querydsl.core.annotations.QueryProjection;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,6 +11,7 @@ import java.time.LocalDateTime;
  * 게시글 파일 등록 DTO
  */
 @Data
+@AllArgsConstructor
 @NoArgsConstructor
 public class BoardFileDTO {
 
@@ -20,9 +22,6 @@ public class BoardFileDTO {
     private String fileType;
     private String filePath;
     private LocalDateTime fileRegDate;
-
-    private String boardTitle;
-    private String boardContent;
 
     private Long boardId;
     private Long userId;

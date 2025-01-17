@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,21 +29,21 @@ public class BoardApiController {
     private final BoardReplyService boardReplyService;
 
     /**
-     * # 게시글을 파일 데이터와 저장
+     * # 게시글작성 api (게시글 내용 & 파일)
      * postman api : O
      * @param createBoardDTO 게시글 객체
      * @param files 파일 객체
      * @return
      * @throws IOException
      */
-    @Operation(summary = "게시글 저장", description = "게시글 & 파일 저장을 위한 API 입니다.")
+    @Operation(summary = "게시글 작성", description = "게시글 & 파일 저장을 위한 API 입니다.")
     @PostMapping(
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> save(@ModelAttribute BoardFileDTO createBoardDTO,
+    public ResponseEntity<String> save(@ModelAttribute CreateBoardDTO createBoardDTO,
                                        @RequestPart(value = "files", required = false) List<MultipartFile> files) throws IOException {
 
-        boardService.save(createBoardDTO, files);
+        boardService.saveBoard(createBoardDTO, files);
         return ResponseEntity.ok("board save success");
     }
 
@@ -63,14 +64,14 @@ public class BoardApiController {
                                                       @RequestParam(value = "searchKeyword", required = false) String searchKeyword) {
         PageRequest pageRequest = PageRequest.of(page, size);
 
-        Page<BoardListDTO> list = null;
+        Page<BoardListDTO> boardList = null;
 
         if (searchKeyword != null) {
-            list = boardReplyService.searchKeywordList(searchKeyword, pageRequest);
+            boardList = boardReplyService.searchKeywordList(searchKeyword, pageRequest);
         } else {
-            list = boardService.findAll(pageRequest);
+            boardList = boardService.findAll(pageRequest);
         }
-        return ResponseEntity.ok(list);
+        return ResponseEntity.ok(boardList);
     }
 
     /**
@@ -96,6 +97,7 @@ public class BoardApiController {
     @Operation(summary = "게시글 상세 조회", description = "게시글 상세 조회를 위한 API 입니다.")
     @GetMapping("/detail")
     public ResponseEntity<BoardDetailDTO> detail(@RequestParam("boardId") Long boardId) {
+
         return ResponseEntity.ok(boardService.findDetail(boardId));
     }
 

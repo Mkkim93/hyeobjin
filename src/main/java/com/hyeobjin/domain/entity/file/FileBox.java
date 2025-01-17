@@ -51,7 +51,7 @@ public class FileBox {
     @JoinColumn(name = "item_id")  // 외래키 컬럼을 지정
     private Item item;
 
-    @ManyToOne(fetch = LAZY, cascade = CascadeType.MERGE, optional = false)
+    @ManyToOne(fetch = LAZY, cascade = CascadeType.REMOVE, optional = false)
     @JoinColumn(name = "board_id")
     private Board board;
 

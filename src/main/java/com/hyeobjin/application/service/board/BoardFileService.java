@@ -1,6 +1,7 @@
 package com.hyeobjin.application.service.board;
 
 import com.hyeobjin.application.dto.board.BoardFileDTO;
+import com.hyeobjin.application.dto.board.FileBoxBoardDTO;
 import com.hyeobjin.domain.entity.board.Board;
 import com.hyeobjin.domain.entity.file.FileBox;
 import com.hyeobjin.domain.repository.file.FileBoxRepository;
@@ -53,15 +54,15 @@ public class BoardFileService {
         }
     }
 
-    // 최종 파일 저장 fileSave() 이전에 해당 파일의 예외 가능성을 확인하는 메서드
+    // 최종 파일 저장 fileSave() 이전에 해당 파일의 예외 가능성을 확인하 는 메서드
     public void saveFilesForBoard(Board board, List<MultipartFile> files) throws IOException {
 
-        BoardFileDTO boardFileDTO = new BoardFileDTO();
-        boardFileDTO.setBoardId(board.getId());
+        FileBoxBoardDTO fileBoxBoardDTO = new FileBoxBoardDTO();
+        fileBoxBoardDTO.setBoardId(board.getId());
 
         try {
 
-            fileSave(boardFileDTO, files);
+            fileSave(fileBoxBoardDTO, files);
 
         } catch (IOException e) {
             log.info("파일 저장 중 오류 발생 : {}", e.getMessage(), e);
@@ -72,11 +73,11 @@ public class BoardFileService {
     /**
      * 파일을 정적 파일 경로에 저장하고, 메타데이터를 DTO 객체를 통해 가지고와서 엔티티로 변환 후 DB에 저장한다.
      * test code : O
-     * @param boardFileDTO 파일 메타데이터 DTO
+     * @param fileBoxBoardDTO 파일 메타데이터 DTO
      * @param files 정적파일에 저장할 file 객체
      * @throws IOException
      */
-    public void fileSave(BoardFileDTO boardFileDTO, List<MultipartFile> files) throws IOException {
+    public void fileSave(FileBoxBoardDTO fileBoxBoardDTO, List<MultipartFile> files) throws IOException {
 
         List<FileBox> fileBoxes = new ArrayList<>();
 
@@ -99,7 +100,7 @@ public class BoardFileService {
                     .fileSize(file.getSize())
                     .fileType(file.getContentType())
                     .boardId(Board.builder()
-                            .boardId(boardFileDTO.getBoardId())
+                            .boardId(fileBoxBoardDTO.getBoardId())
                             .build())
                     .build();
 
@@ -117,7 +118,7 @@ public class BoardFileService {
      * @throws IOException
      */
     public void saveFileOnly(Long boardId, List<MultipartFile> files) throws IOException {
-        fileSave(new BoardFileDTO(boardId), files);
+        fileSave(new FileBoxBoardDTO(boardId), files);
     }
 
     /**

@@ -58,24 +58,26 @@ public class Board {
     @JoinColumn(name = "users_id")
     private Users users;
 
-    public Board saveToEntity(BoardFileDTO createBoardDTO) {
-        this.id = createBoardDTO.getBoardId();
-        this.boardTitle = createBoardDTO.getBoardTitle();
-        this.boardContent = createBoardDTO.getBoardContent();
-        this.boardYN = "N";
-        this.boardViewCount = 0L;
-        this.users = Users.builder()
-                .userId(createBoardDTO.getUserId())
-                .build();
-        return this;
-    }
+//    public Board saveToEntity(CreateBoardDTO createBoardDTO) {
+//        this.id = createBoardDTO.getBoardId();
+//        this.boardTitle = createBoardDTO.getBoardTitle();
+//        this.boardContent = createBoardDTO.getBoardContent();
+//        this.boardYN = "N";
+//        this.boardViewCount = 0L;
+//        this.users = Users.builder()
+//                .userId(createBoardDTO.getUsersId())
+//                .build();
+//        return this;
+//    }
 
     @Builder
     public Board(Long boardId, String boardTitle,
-                 String boardContent, Long userId) {
+                 String boardContent, String boardYN, Long boardViewCount, Long userId) {
         this.id = boardId;
         this.boardTitle = boardTitle;
         this.boardContent = boardContent;
+        this.boardYN = "N";
+        this.boardViewCount = 0L;
         this.users = Users.builder()
                 .userId(userId)
                 .build();
