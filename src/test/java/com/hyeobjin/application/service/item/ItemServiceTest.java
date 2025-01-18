@@ -96,6 +96,7 @@ class ItemServiceTest {
     @Test
     @DisplayName("제품의 모든 pk & itemNum 조회")
     void findPKAndItemNumList() {
-        itemService.findAllItemNumList().stream().forEach(System.out::println);
+        Long manuId = 1L;
+        itemService.findAllItemNumList(manuId).stream().forEach(System.out::println);
     }
 }

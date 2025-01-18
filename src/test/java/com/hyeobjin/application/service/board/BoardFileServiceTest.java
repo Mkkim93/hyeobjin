@@ -46,15 +46,15 @@ class BoardFileServiceTest {
     @Test
     @DisplayName("게시판 파일 경로 파일 저장 테스트")
     void saveFilesOnly() throws IOException {
-        BoardFileDTO boardFileDTO = new BoardFileDTO();
-        boardFileDTO.setBoardId(1L);
+        FileBoxBoardDTO fileBoxBoardDTO = new FileBoxBoardDTO();
+        fileBoxBoardDTO.setBoardId(1L);
 
         List<MultipartFile> files = new ArrayList<>();
 
-        boardFileDTO.setFileName("test board fileName 01");
-        boardFileDTO.setFileType("jpeg/image");
-        boardFileDTO.setFileSize(123L);
-        boardFileDTO.setFileOrgName("test board fileOrgName");
+        fileBoxBoardDTO.setFileName("test board fileName 01");
+        fileBoxBoardDTO.setFileType("jpeg/image");
+        fileBoxBoardDTO.setFileSize(123L);
+        fileBoxBoardDTO.setFileOrgName("test board fileOrgName");
 
         MockMultipartFile mockFile = new MockMultipartFile(
                 "file",
@@ -64,7 +64,7 @@ class BoardFileServiceTest {
 
         files.add(mockFile);
 
-        boardFileService.fileSave(boardFileDTO, files);
+        boardFileService.fileSave(fileBoxBoardDTO, files);
 
         assertFalse(files.isEmpty());
     }

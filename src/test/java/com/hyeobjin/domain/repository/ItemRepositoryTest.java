@@ -66,9 +66,10 @@ class ItemRepositoryTest {
     }
 
     @Test
-    @DisplayName("제품의 모든 품번을 조회")
+    @DisplayName("특정 제조사번호를 입력 후, 제품의 모든 품번을 조회")
     void findAllItemId() {
-        itemRepository.findAllItemId().stream().forEach(System.out::println);
+        Long manuId = 1L;
+        itemRepository.findAllItemId(manuId).stream().forEach(System.out::println);
     }
 
 }

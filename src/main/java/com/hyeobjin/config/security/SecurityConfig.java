@@ -1,10 +1,12 @@
 package com.hyeobjin.config.security;
 
+import com.hyeobjin.application.service.redis.RedisService;
 import com.hyeobjin.jwt.JwtFilter;
 import com.hyeobjin.jwt.JwtUtil;
 import com.hyeobjin.jwt.LoginFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -27,12 +29,14 @@ import java.util.Collections;
 @EnableWebSecurity
 public class SecurityConfig {
 
+    private final RedisService redisService;
     private final JwtUtil jwtUtil;
     private final AuthenticationConfiguration authenticationConfiguration;
 
-    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JwtUtil jwtUtil) {
+    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JwtUtil jwtUtil, RedisService redisService) {
         this.authenticationConfiguration = authenticationConfiguration;
         this.jwtUtil = jwtUtil;
+        this.redisService = redisService;
     }
 
     @Bean
@@ -64,7 +68,7 @@ public class SecurityConfig {
                         .requestMatchers("/login", "/register", "/auth","/items",
                                 "/notice", "/**", "/swagger-ui").permitAll() // 중요!! : Spring Security 가 로그인 처리를 담당할 url, 프론트의 비동기 처리 할 url 과 매핑 (컨트롤러 필요없음)
 
-                        .requestMatchers("/admin/**").hasAuthority("ADMIN")
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated());
 
         // TODO JwtFilter 로직 실행 안됨 나중에 확인
@@ -72,7 +76,7 @@ public class SecurityConfig {
                 .addFilterAt(new JwtFilter(jwtUtil), LoginFilter.class);
 
         http
-                .addFilterBefore(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil),
+                .addFilterBefore(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, redisService),
                         UsernamePasswordAuthenticationFilter.class);
 
         http
