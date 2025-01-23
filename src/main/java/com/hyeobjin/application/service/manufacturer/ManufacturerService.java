@@ -1,9 +1,13 @@
 package com.hyeobjin.application.service.manufacturer;
 
+import com.hyeobjin.application.admin.dto.manu.FindManufacturerDTO;
 import com.hyeobjin.application.dto.manu.ManufactureDTO;
+import com.hyeobjin.application.service.item.ItemService;
 import com.hyeobjin.domain.entity.manufacturer.Manufacturer;
+import com.hyeobjin.domain.repository.manu.ManuFactJpaRepository;
 import com.hyeobjin.domain.repository.manu.ManufacturerRepository;
 import com.hyeobjin.exception.DuplicateManufacturerException;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -16,6 +20,15 @@ import java.util.List;
 public class ManufacturerService {
 
     private final ManufacturerRepository manufacturerRepository;
+    private final ManuFactJpaRepository manuFactJpaRepository;
+
+    /**
+     * 관리자 목록을 조회할 때 해당 제조사에 등록된 제품의 개수를 카운팅하여 조회
+     * @return
+     */
+    public List<FindManufacturerDTO> findManuCountAll() {
+        return manuFactJpaRepository.findAll();
+    }
 
     /**
      * @param menuName
@@ -45,6 +58,7 @@ public class ManufacturerService {
         }
             Manufacturer manufacturer = Manufacturer.builder()
                     .manuName(manufactureDTO.getManuName())
+                    .manuYN(manufactureDTO.getManuYN())
                     .build();
 
             manufacturerRepository.save(manufacturer);
@@ -53,7 +67,7 @@ public class ManufacturerService {
 
     /**
      * 모든 제조사 조회 (user view)
-     * # 관리자가 삭제한 제조사 (manuYN = Y) 제외
+     * # 관리자가 삭제한 제조사 (manuYN = N) 제외
      */
     public List<ManufactureDTO> findAll() {
 
@@ -64,34 +78,33 @@ public class ManufacturerService {
                         manufacturer.getId(),
                         manufacturer.getManuName(),
                         manufacturer.getManuYN()))
-                .filter(manufactureDTO -> "N".equals(manufactureDTO.getManuYN()))
+                .filter(manufactureDTO -> "Y".equals(manufactureDTO.getManuYN()))
                 .toList();
     }
 
     /**
      *
      * @param manufactureDTO
-     * # 관리자가 기존 제조사명 변경
+     * # 관리자가 기존 제조사와 등록/미등록 수정
      * @return
      */
-    public Integer update(ManufactureDTO manufactureDTO) {
+    public void update(ManufactureDTO manufactureDTO) {
+        Manufacturer manufacturer = manufacturerRepository
+                .findById(manufactureDTO.getManuId())
+                .orElseThrow(() -> new EntityNotFoundException("해당 제조사가 존재하지 않습니다."));
 
-        return manufacturerRepository.updateManuName(
-                manufactureDTO.getManuId(),
-                manufactureDTO.getManuName());
+        if (manufactureDTO.getManuName() != null) {
+            manufacturer.adminUpdateManuName(manufactureDTO.getManuName());
+        }
+        if (manufactureDTO.getManuYN() != null) {
+            manufacturer.adminUpdateManuYN(manufactureDTO.getManuYN());
+        }
+
+        manufacturerRepository.save(manufacturer);
+
     }
 
-    /**
-     *
-     * @param manufactureDTO
-     * # 관리자가 제조사를 삭제 (manuYN : N -> Y)
-     * @return
-     */
-    public Integer delete(ManufactureDTO manufactureDTO) {
 
-        return manufacturerRepository.deleteManufacturer(
-                manufactureDTO.getManuId());
-    }
 
     /**
      * # 관리자가 삭제했던 제조사 복구 (manuYN : Y -> N)

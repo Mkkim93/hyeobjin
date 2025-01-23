@@ -10,6 +10,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -76,5 +78,13 @@ class ManufacturerRepositoryTest {
         Integer deleteCount = manufacturerRepository.deleteManufacturer(manufactureDTO.getManuId());
 
         assertThat(deleteCount).isEqualTo(1);
+    }
+
+    @Test
+    @DisplayName("현재 제조사에 존재하는 제품(Item)의 모든 PK 조회")
+    void findByItemIds() {
+        List<Long> byItemIds = manufacturerRepository.findByItemIds(3L);
+
+        System.out.println("byItemIds = " + byItemIds);
     }
 }

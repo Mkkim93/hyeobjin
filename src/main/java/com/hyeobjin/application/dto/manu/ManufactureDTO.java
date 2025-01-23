@@ -28,8 +28,11 @@ public class ManufactureDTO {
         return manuId = manufacturer.getId();
     }
 
-    public ManufactureDTO(Long manuId, String manuName) {
-        this.manuId = manuId;
-        this.manuName = manuName;
+    public Manufacturer toEntity(ManufactureDTO manufactureDTO) {
+        return Manufacturer.builder()
+                .manuId(manufactureDTO.getManuId())
+                .manuName(manufactureDTO.getManuName())
+                .manuYN(manufactureDTO.getManuYN())
+                .build();
     }
 }

@@ -51,11 +51,12 @@ class ManufacturerServiceTest {
     }
 
     @Test
-    @DisplayName("delete manufacturer test")
-    void delete() {
+    @DisplayName("update manufacturer test")
+    void updateManufacturer() {
         ManufactureDTO manufactureDTO = new ManufactureDTO();
-        manufactureDTO.setManuId(2L);
-        Integer deleteCount = manufacturerService.delete(manufactureDTO);
-        assertThat(deleteCount).isEqualTo(1);
+        manufactureDTO.setManuId(3L);
+        manufactureDTO.setManuName("휴그린");
+//        manufactureDTO.setManuYN("Y");
+        manufacturerService.update(manufactureDTO);
     }
 }

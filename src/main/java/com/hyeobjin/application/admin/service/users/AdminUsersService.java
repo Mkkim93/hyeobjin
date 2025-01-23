@@ -1,23 +1,37 @@
-package com.hyeobjin.application.service.register;
+package com.hyeobjin.application.admin.service.users;
 
+import com.hyeobjin.application.admin.dto.users.FindUsersDTO;
 import com.hyeobjin.application.dto.register.RegisterDTO;
 import com.hyeobjin.domain.entity.users.Users;
 import com.hyeobjin.domain.repository.users.UsersRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-/**
- * 회원 가입 로직 (현재는 관리자 등록)
- */
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class RegisterService {
+public class AdminUsersService {
 
     private final UsersRepository usersRepository;
     private final BCryptPasswordEncoder passwordEncoder;
+
+    public Page<FindUsersDTO> findAll(Pageable pageable) {
+
+        Page<Users> usersList = usersRepository.findAll(pageable);
+
+        return usersList.map(users -> new FindUsersDTO(
+                users.getId(),
+                users.getUsername(),
+                users.getName(),
+                users.getRole(),
+                users.getUserTel(),
+                users.getUserMail()
+        ));
+    }
 
     public Boolean register(RegisterDTO registerDTO) {
         String username = registerDTO.getUsername();

@@ -1,5 +1,7 @@
 package com.hyeobjin.domain.repository.item;
 
+import com.hyeobjin.application.admin.dto.item.FindAdminItemDTO;
+import com.hyeobjin.application.admin.dto.item.QFindAdminItemDTO;
 import com.hyeobjin.application.dto.file.FindFileBoxDTO;
 import com.hyeobjin.application.dto.item.FindByItemDTO;
 import com.hyeobjin.application.dto.item.UpdateItemDTO;
@@ -7,11 +9,17 @@ import com.hyeobjin.domain.entity.file.QFileBox;
 import com.hyeobjin.domain.entity.item.QItem;
 import com.hyeobjin.domain.entity.manufacturer.QManufacturer;
 import com.hyeobjin.domain.entity.item.Item;
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.querydsl.jpa.impl.JPAUpdateClause;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +27,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.hyeobjin.domain.entity.item.QItem.item;
+import static com.hyeobjin.domain.entity.manufacturer.QManufacturer.manufacturer;
+
 
 @Repository
 @Transactional
@@ -26,9 +36,38 @@ public class ItemRepositoryImpl extends QuerydslRepositorySupport implements Ite
 
     private final JPAQueryFactory jpaQueryFactory;
 
+
     public ItemRepositoryImpl(EntityManager em) {
         super(Item.class);
         jpaQueryFactory = new JPAQueryFactory(em);
+    }
+
+    @Override
+    public Page<FindAdminItemDTO> findItemList(Pageable pageable, String manuName) {
+
+        BooleanBuilder builder = new BooleanBuilder();
+
+        if (manuName != null && !manuName.isEmpty()) {
+            builder.and(manufacturer.manuName.eq(manuName));
+        }
+
+        List<FindAdminItemDTO> results = jpaQueryFactory.select(new QFindAdminItemDTO(
+                        item.id, item.itemNum, item.itemName, item.itemType,
+                        item.itemRegDate, item.itemUpdate, item.itemYN,
+                        manufacturer.id, manufacturer.manuName))
+                .from(item)
+                .leftJoin(item.manufacturer, manufacturer)
+                .where(builder)
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize()).fetch();
+
+        JPAQuery<Long> count = jpaQueryFactory.select(item.count())
+                .from(item)
+                .leftJoin(item.manufacturer, manufacturer)
+                .where(builder);
+
+        return PageableExecutionUtils.getPage(results, pageable, () -> count.fetchCount());
+
     }
 
     @Override
@@ -40,7 +79,7 @@ public class ItemRepositoryImpl extends QuerydslRepositorySupport implements Ite
         List<FindFileBoxDTO> fileBoxes = jpaQueryFactory
                 .selectFrom(fileBox)
                 .leftJoin(fileBox.item, item).fetchJoin()
-                .leftJoin(item.manufacturer, QManufacturer.manufacturer).fetchJoin()
+                .leftJoin(item.manufacturer, manufacturer).fetchJoin()
                 .where(
                         item.id.eq(itemId)
                                 .and(item.manufacturer.id.eq(manuId))
@@ -53,7 +92,7 @@ public class ItemRepositoryImpl extends QuerydslRepositorySupport implements Ite
 
         Item selectItem = jpaQueryFactory
                 .selectFrom(item)
-                .leftJoin(item.manufacturer, QManufacturer.manufacturer)
+                .leftJoin(item.manufacturer, manufacturer)
                 .where(item.id.eq(itemId))
                 .fetchOne();
 
@@ -141,4 +180,5 @@ public class ItemRepositoryImpl extends QuerydslRepositorySupport implements Ite
             throw new EntityNotFoundException("해당 제품을 찾을 수 없습니다.");
         }
     }
+
 }

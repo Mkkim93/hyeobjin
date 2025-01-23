@@ -12,7 +12,6 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Table(name = "manufacturer")
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
 public class Manufacturer {
 
     @Id @GeneratedValue(strategy = IDENTITY)
@@ -30,9 +29,17 @@ public class Manufacturer {
      * @param manuName
      */
     @Builder
-    public Manufacturer(Long manuId, String manuName) {
+    public Manufacturer(Long manuId, String manuName, String manuYN) {
         this.id = manuId;
         this.manuName = manuName;
-        this.manuYN = "N";
+        this.manuYN = manuYN;
+    }
+
+    public void adminUpdateManuName(String manuName) {
+        this.manuName = manuName;
+    }
+
+    public void adminUpdateManuYN(String manuYN) {
+        this.manuYN = manuYN;
     }
 }

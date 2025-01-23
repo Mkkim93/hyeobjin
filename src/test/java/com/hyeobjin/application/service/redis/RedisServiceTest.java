@@ -21,7 +21,7 @@ class RedisServiceTest {
         String key = "testKey";
         String value = "testValue";
 
-        redisService.save(key, value);
+        redisService.save(key, value, 100L);
         assertThat(redisService.find(key)).isEqualTo(value);
 
         redisService.delete(key);

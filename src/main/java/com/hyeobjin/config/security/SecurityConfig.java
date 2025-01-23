@@ -65,7 +65,7 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/login", "/register", "/auth","/items",
+                        .requestMatchers("/login", "/users", "/auth","/items",
                                 "/notice", "/**", "/swagger-ui").permitAll() // 중요!! : Spring Security 가 로그인 처리를 담당할 url, 프론트의 비동기 처리 할 url 과 매핑 (컨트롤러 필요없음)
 
                         .requestMatchers("/admin/**").hasRole("ADMIN")
@@ -89,8 +89,8 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Collections.singletonList("http://localhost:3000")); // 허용할 Origin
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "OPTIONS")); // 허용할 HTTP 메서드
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000")); // 허용할 Origin
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "DELETE", "OPTIONS")); // 허용할 HTTP 메서드
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type")); // 허용할 헤더
         configuration.setExposedHeaders(Arrays.asList("Authorization"));
         configuration.setAllowCredentials(true); // 쿠키 허용 여부

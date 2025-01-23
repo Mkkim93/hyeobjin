@@ -60,6 +60,7 @@ public class FileBoxService {
         }
     }
 
+    // MultipartFile 의 메타데이터 저장 : file -> dto
     public void saveFilesForItem(Item item, List<MultipartFile> files) throws IOException {
 
         CreateFileBoxDTO createFileBoxDTO = new CreateFileBoxDTO();

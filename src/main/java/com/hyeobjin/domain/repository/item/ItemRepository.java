@@ -20,4 +20,7 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
 
     @Query("select new com.hyeobjin.application.dto.item.FindByItemDTO(i.id, i.itemNum, i.manufacturer.id) from Item i where i.manufacturer.id = :manuId")
     List<FindByItemDTO> findAllItemId(@Param("manuId") Long manuId);
+
+    @Transactional
+    void deleteAllByIdIn(List<Long> list);
 }

@@ -6,12 +6,20 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+
+import java.time.LocalDateTime;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Table(name = "item")
 @Getter
+@EnableJpaAuditing
+@EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor
 public class Item {
 
@@ -47,6 +55,14 @@ public class Item {
 
     @Column(name = "item_yn")
     private String itemYN;
+
+    @CreatedDate
+    @Column(name = "item_regdate")
+    private LocalDateTime itemRegDate;
+
+    @LastModifiedDate
+    @Column(name = "item_update")
+    private LocalDateTime itemUpdate;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "manu_id")

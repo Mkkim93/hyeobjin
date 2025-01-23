@@ -19,7 +19,7 @@ public class JwtApiController {
 
     private final JwtUtil jwtUtil;
 
-    // TODO 아래의 로직의 데이터를 내부 서비스로 숨김
+    // TODO 아래의 로직의 데이터를 내부 서비스로 숨겨야 함 현재 리플래시 토큰 만료 관련 로직 미구현
     @PostMapping
     public ResponseEntity<?> tokenRefresh(HttpServletRequest request, HttpServletResponse response) {
 

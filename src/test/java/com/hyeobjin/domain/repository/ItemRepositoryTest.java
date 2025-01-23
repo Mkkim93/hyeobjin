@@ -10,6 +10,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
 
@@ -70,6 +71,15 @@ class ItemRepositoryTest {
     void findAllItemId() {
         Long manuId = 1L;
         itemRepository.findAllItemId(manuId).stream().forEach(System.out::println);
+    }
+
+    @Test
+    @DisplayName("관리자 제품 조회 (페이징)")
+    void findItemAllPage() {
+        PageRequest pageRequest = PageRequest.of(0, 5);
+
+
+        itemRepositoryImpl.findItemList(pageRequest, "KCC");
     }
 
 }
