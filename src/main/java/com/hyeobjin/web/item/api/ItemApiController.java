@@ -1,10 +1,10 @@
 package com.hyeobjin.web.item.api;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import com.hyeobjin.application.dto.item.CreateItemDTO;
-import com.hyeobjin.application.dto.item.FindByItemDTO;
-import com.hyeobjin.application.dto.item.UpdateItemDTO;
-import com.hyeobjin.application.service.item.ItemService;
+import com.hyeobjin.application.common.dto.item.CreateItemDTO;
+import com.hyeobjin.application.common.dto.item.FindByItemDTO;
+import com.hyeobjin.application.common.dto.item.UpdateItemDTO;
+import com.hyeobjin.application.common.service.item.ItemService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -35,9 +35,7 @@ public class ItemApiController {
      * @throws IOException
      */
     @Operation(summary = "제품 등록", description = "제품의 모든 정보 등록하는 API 입니다.")
-    @PostMapping(
-            consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> save(@ModelAttribute CreateItemDTO createItemDTO,
                                   @RequestPart(value = "files", required = false) List<MultipartFile> files) throws IOException {
         itemService.saveItem(createItemDTO, files);

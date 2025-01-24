@@ -1,6 +1,6 @@
 package com.hyeobjin.web.board.api;
 
-import com.hyeobjin.application.service.board.BoardFileService;
+import com.hyeobjin.application.common.service.board.BoardFileService;
 import com.hyeobjin.domain.entity.file.FileBox;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;

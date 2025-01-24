@@ -1,7 +1,7 @@
 package com.hyeobjin.domain.repository.board;
 
-import com.hyeobjin.application.dto.board.BoardDetailDTO;
-import com.hyeobjin.application.dto.board.UpdateBoardDTO;
+import com.hyeobjin.application.common.dto.board.BoardDetailDTO;
+import com.hyeobjin.application.common.dto.board.UpdateBoardDTO;
 
 public interface BoardRepositoryCustom {
 

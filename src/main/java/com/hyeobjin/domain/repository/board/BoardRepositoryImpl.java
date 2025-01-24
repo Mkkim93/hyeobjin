@@ -1,7 +1,10 @@
 package com.hyeobjin.domain.repository.board;
 
 
-import com.hyeobjin.application.dto.board.*;
+import com.hyeobjin.application.common.dto.board.BoardDetailDTO;
+import com.hyeobjin.application.common.dto.board.BoardFileDTO;
+import com.hyeobjin.application.common.dto.board.QBoardFileDTO;
+import com.hyeobjin.application.common.dto.board.UpdateBoardDTO;
 import com.hyeobjin.domain.entity.board.Board;
 import com.hyeobjin.domain.entity.board.QBoard;
 import com.hyeobjin.domain.entity.file.QFileBox;

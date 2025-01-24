@@ -1,7 +1,7 @@
 package com.hyeobjin.web.admin.main.api;
 
 import com.hyeobjin.application.admin.service.users.AdminUsersService;
-import com.hyeobjin.application.dto.register.RegisterDTO;
+import com.hyeobjin.application.common.dto.register.RegisterDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

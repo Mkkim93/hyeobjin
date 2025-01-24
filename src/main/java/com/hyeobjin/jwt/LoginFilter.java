@@ -1,16 +1,14 @@
 package com.hyeobjin.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hyeobjin.application.dto.login.LoginDTO;
-import com.hyeobjin.application.service.redis.RedisService;
+import com.hyeobjin.application.common.dto.login.LoginDTO;
+import com.hyeobjin.application.common.service.redis.RedisService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -99,8 +97,8 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     private Cookie createCookie(String key, String value) {
         Cookie cookie = new Cookie(key, value);
         cookie.setMaxAge(24 * 60 * 60);
-        cookie.setSecure(true);
-        cookie.setPath("/");
+//        cookie.setSecure(true);
+//        cookie.setPath("/");
         cookie.setHttpOnly(true);
         return cookie;
     }

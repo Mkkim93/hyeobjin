@@ -2,14 +2,13 @@ package com.hyeobjin.web.manufacturer.api;
 
 import com.hyeobjin.application.admin.dto.manu.FindManufacturerDTO;
 import com.hyeobjin.application.admin.service.manu.AdminManuService;
-import com.hyeobjin.application.dto.manu.ManufactureDTO;
-import com.hyeobjin.application.service.manufacturer.ManufacturerService;
+import com.hyeobjin.application.common.dto.manu.ManufactureDTO;
+import com.hyeobjin.application.common.service.manufacturer.ManufacturerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -100,7 +99,6 @@ public class ManuApiController {
     @Operation(summary = "제조업체 완전 삭제", description = "제조업체를 DB 에서 영구적으로 삭제하는 API 입니다.")
     @DeleteMapping
     public ResponseEntity<String> delete(@RequestParam("manuId") Long manuId) {
-
             // 제조업체 삭제
             adminManuService.delete(manuId);
             return ResponseEntity.ok("삭제 성공");

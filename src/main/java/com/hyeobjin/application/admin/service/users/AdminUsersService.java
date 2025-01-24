@@ -1,7 +1,7 @@
 package com.hyeobjin.application.admin.service.users;
 
 import com.hyeobjin.application.admin.dto.users.FindUsersDTO;
-import com.hyeobjin.application.dto.register.RegisterDTO;
+import com.hyeobjin.application.common.dto.register.RegisterDTO;
 import com.hyeobjin.domain.entity.users.Users;
 import com.hyeobjin.domain.repository.users.UsersRepository;
 import lombok.RequiredArgsConstructor;

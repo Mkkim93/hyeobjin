@@ -1,6 +1,6 @@
 package com.hyeobjin.web.file.api;
 
-import com.hyeobjin.application.service.file.FileBoxService;
+import com.hyeobjin.application.common.service.file.FileBoxService;
 import com.hyeobjin.domain.entity.file.FileBox;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;

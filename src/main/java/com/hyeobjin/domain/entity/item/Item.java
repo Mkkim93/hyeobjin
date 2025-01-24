@@ -1,6 +1,6 @@
 package com.hyeobjin.domain.entity.item;
 
-import com.hyeobjin.application.dto.item.UpdateItemDTO;
+import com.hyeobjin.application.common.dto.item.UpdateItemDTO;
 import com.hyeobjin.domain.entity.manufacturer.Manufacturer;
 import jakarta.persistence.*;
 import lombok.Builder;

@@ -2,7 +2,7 @@ package com.hyeobjin.web.admin.register.api;
 
 import com.hyeobjin.application.admin.dto.users.FindUsersDTO;
 import com.hyeobjin.application.admin.service.users.AdminUsersService;
-import com.hyeobjin.application.dto.register.RegisterDTO;
+import com.hyeobjin.application.common.dto.register.RegisterDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

@@ -1,6 +1,6 @@
 package com.hyeobjin.domain.repository;
 
-import com.hyeobjin.application.dto.file.CreateFileBoxDTO;
+import com.hyeobjin.application.common.dto.file.CreateFileBoxDTO;
 import com.hyeobjin.domain.entity.file.FileBox;
 import com.hyeobjin.domain.entity.item.Item;
 import com.hyeobjin.domain.repository.file.FileBoxRepository;

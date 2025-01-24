@@ -1,8 +1,8 @@
 package com.hyeobjin.domain.repository.item;
 
 import com.hyeobjin.application.admin.dto.item.FindAdminItemDTO;
-import com.hyeobjin.application.dto.item.FindByItemDTO;
-import com.hyeobjin.application.dto.item.UpdateItemDTO;
+import com.hyeobjin.application.common.dto.item.FindByItemDTO;
+import com.hyeobjin.application.common.dto.item.UpdateItemDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

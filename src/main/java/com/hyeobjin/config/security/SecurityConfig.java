@@ -1,12 +1,11 @@
 package com.hyeobjin.config.security;
 
-import com.hyeobjin.application.service.redis.RedisService;
+import com.hyeobjin.application.common.service.redis.RedisService;
 import com.hyeobjin.jwt.JwtFilter;
 import com.hyeobjin.jwt.JwtUtil;
 import com.hyeobjin.jwt.LoginFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -20,7 +19,6 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
-import java.util.Collections;
 
 /**
  * Security & cors Config
@@ -89,13 +87,15 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000")); // 허용할 Origin
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "DELETE", "OPTIONS")); // 허용할 HTTP 메서드
+        configuration.setAllowedOrigins(Arrays.asList(
+                "http://localhost:3000",
+                "https://d92b-118-217-209-89.ngrok-free.app" // ngrok 임시 활성화
+        ));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type")); // 허용할 헤더
         configuration.setExposedHeaders(Arrays.asList("Authorization"));
         configuration.setAllowCredentials(true); // 쿠키 허용 여부
         configuration.setMaxAge(3600L);
-
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "DELETE", "OPTIONS"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**",  configuration); // 모든 경로에 대해 CORS 설정 적용
         return source;

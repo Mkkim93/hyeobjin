@@ -1,6 +1,6 @@
 package com.hyeobjin.domain.entity.users;
 
-import com.hyeobjin.application.dto.register.RegisterDTO;
+import com.hyeobjin.application.common.dto.register.RegisterDTO;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Builder;

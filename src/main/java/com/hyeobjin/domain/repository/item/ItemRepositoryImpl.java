@@ -2,9 +2,9 @@ package com.hyeobjin.domain.repository.item;
 
 import com.hyeobjin.application.admin.dto.item.FindAdminItemDTO;
 import com.hyeobjin.application.admin.dto.item.QFindAdminItemDTO;
-import com.hyeobjin.application.dto.file.FindFileBoxDTO;
-import com.hyeobjin.application.dto.item.FindByItemDTO;
-import com.hyeobjin.application.dto.item.UpdateItemDTO;
+import com.hyeobjin.application.common.dto.file.FindFileBoxDTO;
+import com.hyeobjin.application.common.dto.item.FindByItemDTO;
+import com.hyeobjin.application.common.dto.item.UpdateItemDTO;
 import com.hyeobjin.domain.entity.file.QFileBox;
 import com.hyeobjin.domain.entity.item.QItem;
 import com.hyeobjin.domain.entity.manufacturer.QManufacturer;
@@ -78,12 +78,12 @@ public class ItemRepositoryImpl extends QuerydslRepositorySupport implements Ite
 
         List<FindFileBoxDTO> fileBoxes = jpaQueryFactory
                 .selectFrom(fileBox)
-                .leftJoin(fileBox.item, item).fetchJoin()
-                .leftJoin(item.manufacturer, manufacturer).fetchJoin()
+                .join(fileBox.item, item).fetchJoin()
+                .join(item.manufacturer, manufacturer).fetchJoin()
                 .where(
                         item.id.eq(itemId)
                                 .and(item.manufacturer.id.eq(manuId))
-                                .and(item.itemYN.eq("N"))
+                                .and(item.itemYN.eq("Y"))
                 )
                 .fetch()
                 // TODO 파일과 함께 조회 시 불필요한 데이터 제거
@@ -92,7 +92,7 @@ public class ItemRepositoryImpl extends QuerydslRepositorySupport implements Ite
 
         Item selectItem = jpaQueryFactory
                 .selectFrom(item)
-                .leftJoin(item.manufacturer, manufacturer)
+                .join(item.manufacturer, manufacturer)
                 .where(item.id.eq(itemId))
                 .fetchOne();
 

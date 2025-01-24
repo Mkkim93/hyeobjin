@@ -1,6 +1,6 @@
 package com.hyeobjin.domain.repository;
 
-import com.hyeobjin.application.dto.board.BoardDetailDTO;
+import com.hyeobjin.application.common.dto.board.BoardDetailDTO;
 import com.hyeobjin.domain.entity.board.Board;
 import com.hyeobjin.domain.repository.board.BoardRepository;
 import com.hyeobjin.domain.repository.board.BoardRepositoryImpl;
@@ -34,15 +34,5 @@ class BoardRepositoryTest {
         result.stream().forEach(System.out::println);
         org.assertj.core.api.Assertions.assertThat(result).isNull();
 
-    }
-
-    @Test
-    @DisplayName("queryDsl findDetail board content Only")
-    void findOneBoardOnly() {
-        Long boardId = 16L;
-
-        BoardDetailDTO byBoardDetail = boardRepositoryImpl.findByBoardDetail(boardId);
-
-        System.out.println("byBoardDetail = " + byBoardDetail);
     }
 }

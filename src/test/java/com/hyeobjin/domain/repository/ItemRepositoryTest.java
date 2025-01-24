@@ -1,7 +1,7 @@
 package com.hyeobjin.domain.repository;
 
-import com.hyeobjin.application.dto.item.CreateItemDTO;
-import com.hyeobjin.application.dto.item.FindByItemDTO;
+import com.hyeobjin.application.common.dto.item.CreateItemDTO;
+import com.hyeobjin.application.common.dto.item.FindByItemDTO;
 import com.hyeobjin.domain.entity.item.Item;
 import com.hyeobjin.domain.repository.item.ItemRepository;
 import com.hyeobjin.domain.repository.item.ItemRepositoryImpl;
@@ -60,17 +60,17 @@ class ItemRepositoryTest {
         FindByItemDTO findByItemDTO = new FindByItemDTO();
         findByItemDTO.setItemNum("K102");
 
-        FindByItemDTO findOneByItem = itemRepositoryImpl.findByItem(findByItemDTO.getManuId(),
+        FindByItemDTO byItem = (FindByItemDTO) itemRepositoryImpl.findByItem(findByItemDTO.getManuId(),
                 findByItemDTO.getItemId());
 
-        System.out.println("findOneByItem = " + findOneByItem);
+        System.out.println("findOneByItem = " + byItem);
     }
 
     @Test
     @DisplayName("특정 제조사번호를 입력 후, 제품의 모든 품번을 조회")
     void findAllItemId() {
         Long manuId = 1L;
-        itemRepository.findAllItemId(manuId).stream().forEach(System.out::println);
+//        itemRepository.findAllItemId(manuId).stream().forEach(System.out::println);
     }
 
     @Test
