@@ -4,7 +4,7 @@ import com.hyeobjin.application.common.dto.board.BoardDetailDTO;
 import com.hyeobjin.application.common.dto.board.BoardListDTO;
 import com.hyeobjin.application.common.dto.board.CreateBoardDTO;
 import com.hyeobjin.application.common.dto.board.UpdateBoardDTO;
-import com.hyeobjin.application.dto.board.*;
+import com.hyeobjin.application.common.dto.board.*;
 import com.hyeobjin.application.common.service.board.BoardReplyService;
 import com.hyeobjin.application.common.service.board.BoardService;
 import io.swagger.v3.oas.annotations.Operation;

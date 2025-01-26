@@ -2,6 +2,7 @@ package com.hyeobjin.web.admin.item.api;
 
 import com.hyeobjin.application.admin.dto.item.FindAdminItemDTO;
 import com.hyeobjin.application.admin.service.item.AdminItemService;
+import com.hyeobjin.application.common.dto.item.FindByItemDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 
 @Slf4j
 @Tag(name = "AdminItem", description = "관리자 제품 관련 API")
@@ -35,6 +35,28 @@ public class AdminItemApiController {
         Page<FindAdminItemDTO> adminItemPages = adminItemService.findAdminItemPages(pageRequest, manuName);
 
         return ResponseEntity.ok(adminItemPages);
+    }
+
+    @Operation(summary = "관리자 제품 상세 조회", description = "관리자가 제품을 상세 조회하기 위한 API 입니다.")
+    @GetMapping("/detail")
+    public ResponseEntity<FindByItemDTO> findItemDetail(@RequestParam("manuId") Long manuId,
+                                                        @RequestParam("itemId") Long itemId
+                                                        ) {
+        FindByItemDTO findAdminItemDTO = new FindByItemDTO();
+        findAdminItemDTO.setItemId(itemId);
+        findAdminItemDTO.setManuId(manuId);
+        return ResponseEntity.ok(adminItemService.findByItemDetail(findAdminItemDTO));
+    }
+
+    @Operation(summary = "관리자 제품 상세 조회 (수정)", description = "관리자가 제품 pk 를 기준으로 상세조회 하기 위한 API 입니다.")
+    @GetMapping("/modify")
+    public ResponseEntity<?> findItemModify(@RequestParam("itemId") Long itemId) {
+
+        FindByItemDTO findByItemDTO = new FindByItemDTO();
+        findByItemDTO.setItemId(itemId);
+        
+        return ResponseEntity.ok(adminItemService.findByItemId(itemId));
+
     }
 
 }

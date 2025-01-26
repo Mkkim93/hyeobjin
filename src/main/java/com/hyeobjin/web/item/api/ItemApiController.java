@@ -50,8 +50,8 @@ public class ItemApiController {
      */
     @Operation(summary = "제품 조회 (품번)", description = "품번으로 제품 조회하는 API 입니다.")
     @GetMapping
-    public ResponseEntity<FindByItemDTO> findOne( @RequestParam("manuId") Long manuId,
-                                                  @RequestParam("itemId") Long itemId
+    public ResponseEntity<FindByItemDTO> findOne(@RequestParam("manuId") Long manuId,
+                                                 @RequestParam("itemId") Long itemId
                                                 ) {
         log.info("itemNum log : ", itemId);
         System.out.println("itemId = " + itemId);
@@ -77,11 +77,9 @@ public class ItemApiController {
      * @throws IOException
      */
     @Operation(summary = "제품 수정", description = "제품의 모든 정보(manufacturer, file, item)를 수정하는 API 입니다.")
-    @PostMapping(value = "/update",
-            consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/update", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> findOneDetail(@ModelAttribute UpdateItemDTO updateItemDTO,
-                                                @RequestPart("files") List<MultipartFile> files) throws IOException {
+                                                @RequestPart(value = "files", required = false) List<MultipartFile> files) throws IOException {
         itemService.update(updateItemDTO, files);
         return ResponseEntity.ok("file update success");
     }

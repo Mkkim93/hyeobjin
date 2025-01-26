@@ -61,4 +61,13 @@ public class FindByItemDTO {
         this.itemNum = itemNum;
         this.manuId = manuId;
     }
+
+    public FindByItemDTO(Long manuId, Long itemId) {
+        this.manuId = manuId;
+        this.itemId = itemId;
+    }
+
+    public FindByItemDTO(Long itemId) {
+        this.itemId = itemId;
+    }
 }

@@ -44,6 +44,5 @@ public class UpdateItemDTO {
         this.itemYN = itemYN;
         this.manuId = manuId;
         this.manuName = manuName;
-
     }
 }

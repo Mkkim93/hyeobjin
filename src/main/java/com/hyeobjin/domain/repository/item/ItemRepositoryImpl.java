@@ -29,13 +29,11 @@ import java.util.stream.Collectors;
 import static com.hyeobjin.domain.entity.item.QItem.item;
 import static com.hyeobjin.domain.entity.manufacturer.QManufacturer.manufacturer;
 
-
 @Repository
 @Transactional
 public class ItemRepositoryImpl extends QuerydslRepositorySupport implements ItemRepositoryCustom {
 
     private final JPAQueryFactory jpaQueryFactory;
-
 
     public ItemRepositoryImpl(EntityManager em) {
         super(Item.class);
@@ -67,7 +65,6 @@ public class ItemRepositoryImpl extends QuerydslRepositorySupport implements Ite
                 .where(builder);
 
         return PageableExecutionUtils.getPage(results, pageable, () -> count.fetchCount());
-
     }
 
     @Override
@@ -78,8 +75,8 @@ public class ItemRepositoryImpl extends QuerydslRepositorySupport implements Ite
 
         List<FindFileBoxDTO> fileBoxes = jpaQueryFactory
                 .selectFrom(fileBox)
-                .join(fileBox.item, item).fetchJoin()
-                .join(item.manufacturer, manufacturer).fetchJoin()
+                .leftJoin(fileBox.item, item).fetchJoin()
+                .leftJoin(item.manufacturer, manufacturer).fetchJoin()
                 .where(
                         item.id.eq(itemId)
                                 .and(item.manufacturer.id.eq(manuId))
@@ -92,7 +89,7 @@ public class ItemRepositoryImpl extends QuerydslRepositorySupport implements Ite
 
         Item selectItem = jpaQueryFactory
                 .selectFrom(item)
-                .join(item.manufacturer, manufacturer)
+                .leftJoin(item.manufacturer, manufacturer)
                 .where(item.id.eq(itemId))
                 .fetchOne();
 
@@ -149,12 +146,12 @@ public class ItemRepositoryImpl extends QuerydslRepositorySupport implements Ite
         if (updateItemDTO.getItemYN() != null) {
             updateClause.set(item.itemYN, updateItemDTO.getItemYN());
         }
-        if (updateItemDTO.getManuId() != null) {
-            updateClause.set(item.manufacturer.id, updateItemDTO.getManuId());
-        }
-        if (updateItemDTO.getManuName() != null) {
-            updateClause.set(item.manufacturer.manuName, updateItemDTO.getManuName());
-        }
+//        if (updateItemDTO.getManuId() != null) {
+//            updateClause.set(item.manufacturer.id, updateItemDTO.getManuId());
+//        }
+//        if (updateItemDTO.getManuName() != null) {
+//            updateClause.set(item.manufacturer.manuName, updateItemDTO.getManuName());
+//        }
         updateClause.where(item.id.eq(updateItemDTO.getItemId()));
 
         long updateCount = updateClause.execute();
