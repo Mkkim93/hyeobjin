@@ -1,5 +1,6 @@
 package com.hyeobjin.application.service.redis;
 
+import com.hyeobjin.application.common.service.redis.RedisService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

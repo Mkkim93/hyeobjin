@@ -1,11 +1,13 @@
 package com.hyeobjin.domain.repository;
 
+import com.hyeobjin.application.admin.dto.item.FindAdminDetailDTO;
 import com.hyeobjin.application.common.dto.item.CreateItemDTO;
 import com.hyeobjin.application.common.dto.item.FindByItemDTO;
 import com.hyeobjin.domain.entity.item.Item;
 import com.hyeobjin.domain.repository.item.ItemRepository;
 import com.hyeobjin.domain.repository.item.ItemRepositoryImpl;
 import lombok.extern.slf4j.Slf4j;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,5 +83,15 @@ class ItemRepositoryTest {
 
         itemRepositoryImpl.findItemList(pageRequest, "KCC");
     }
+
+    @Test
+    @DisplayName("관리자 페이지 상세 조회")
+    void findByItemDetail() {
+
+        FindAdminDetailDTO itemDetail = itemRepositoryImpl.findItemDetail(1L, 1L);
+        System.out.println("itemDetail = " + itemDetail);
+    }
+
+
 
 }

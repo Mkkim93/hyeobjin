@@ -1,8 +1,10 @@
 package com.hyeobjin.application.service.board;
 
-import com.hyeobjin.application.dto.board.BoardFileDTO;
-import com.hyeobjin.application.dto.board.CreateBoardDTO;
-import com.hyeobjin.application.dto.board.FileBoxBoardDTO;
+import com.hyeobjin.application.common.dto.board.BoardFileDTO;
+import com.hyeobjin.application.common.dto.board.CreateBoardDTO;
+import com.hyeobjin.application.common.dto.board.FileBoxBoardDTO;
+import com.hyeobjin.application.common.service.board.BoardFileService;
+import com.hyeobjin.application.common.service.board.BoardService;
 import com.hyeobjin.domain.entity.board.Board;
 import com.hyeobjin.domain.entity.file.FileBox;
 import com.hyeobjin.domain.repository.file.FileBoxRepository;

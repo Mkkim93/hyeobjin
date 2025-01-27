@@ -1,9 +1,10 @@
 package com.hyeobjin.application.service.board;
 
-import com.hyeobjin.application.dto.board.BoardFileDTO;
-import com.hyeobjin.application.dto.board.BoardListDTO;
-import com.hyeobjin.application.dto.board.CreateBoardDTO;
-import com.hyeobjin.application.dto.board.UpdateBoardDTO;
+import com.hyeobjin.application.common.dto.board.BoardFileDTO;
+import com.hyeobjin.application.common.dto.board.BoardListDTO;
+import com.hyeobjin.application.common.dto.board.CreateBoardDTO;
+import com.hyeobjin.application.common.dto.board.UpdateBoardDTO;
+import com.hyeobjin.application.common.service.board.BoardService;
 import com.hyeobjin.domain.entity.board.Board;
 import com.hyeobjin.domain.repository.board.BoardRepository;
 import jakarta.persistence.EntityManager;

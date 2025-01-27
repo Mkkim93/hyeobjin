@@ -1,5 +1,7 @@
 package com.hyeobjin.domain.repository.item;
 
+import com.hyeobjin.application.admin.dto.file.FindAdminFileBoxDTO;
+import com.hyeobjin.application.admin.dto.item.FindAdminDetailDTO;
 import com.hyeobjin.application.admin.dto.item.FindAdminItemDTO;
 import com.hyeobjin.application.admin.dto.item.QFindAdminItemDTO;
 import com.hyeobjin.application.common.dto.file.FindFileBoxDTO;
@@ -23,6 +25,8 @@ import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,6 +42,51 @@ public class ItemRepositoryImpl extends QuerydslRepositorySupport implements Ite
     public ItemRepositoryImpl(EntityManager em) {
         super(Item.class);
         jpaQueryFactory = new JPAQueryFactory(em);
+    }
+
+    @Override
+    public FindAdminDetailDTO findItemDetail(Long manuId, Long itemId) {
+
+        QItem item = QItem.item;
+        QFileBox fileBox = QFileBox.fileBox;
+
+        List<FindAdminFileBoxDTO> fileBoxes = jpaQueryFactory
+                .selectFrom(fileBox)
+                .join(fileBox.item, item).fetchJoin()
+                .join(item.manufacturer, manufacturer).fetchJoin()
+                .where(
+                        item.id.eq(itemId)
+                                .and(item.manufacturer.id.eq(manuId))
+                )
+                .fetch()
+                // TODO 파일과 함께 조회 시 불필요한 데이터 제거
+                .stream().map(FindAdminFileBoxDTO::new)
+                .collect(Collectors.toList());
+
+        Item selectItem = jpaQueryFactory
+                .selectFrom(item)
+                .join(item.manufacturer, manufacturer)
+                .where(item.id.eq(itemId))
+                .fetchOne();
+
+        return new FindAdminDetailDTO(
+                selectItem.getId(),
+                selectItem.getItemName(),
+                selectItem.getItemNum(),
+                selectItem.getItemSpec(),
+                selectItem.getItemUse(),
+                selectItem.getItemInColor(),
+                selectItem.getItemOutColor(),
+                selectItem.getItemFrameWidth(),
+                selectItem.getItemDescription(),
+                selectItem.getItemType(),
+                selectItem.getItemRegDate(),
+                selectItem.getItemUpdate(),
+                selectItem.getItemYN(),
+                selectItem.getManufacturer().getId(),
+                selectItem.getManufacturer().getManuName(),
+                fileBoxes
+        );
     }
 
     @Override
@@ -75,8 +124,8 @@ public class ItemRepositoryImpl extends QuerydslRepositorySupport implements Ite
 
         List<FindFileBoxDTO> fileBoxes = jpaQueryFactory
                 .selectFrom(fileBox)
-                .leftJoin(fileBox.item, item).fetchJoin()
-                .leftJoin(item.manufacturer, manufacturer).fetchJoin()
+                .join(fileBox.item, item).fetchJoin()
+                .join(item.manufacturer, manufacturer).fetchJoin()
                 .where(
                         item.id.eq(itemId)
                                 .and(item.manufacturer.id.eq(manuId))
@@ -89,7 +138,7 @@ public class ItemRepositoryImpl extends QuerydslRepositorySupport implements Ite
 
         Item selectItem = jpaQueryFactory
                 .selectFrom(item)
-                .leftJoin(item.manufacturer, manufacturer)
+                .join(item.manufacturer, manufacturer)
                 .where(item.id.eq(itemId))
                 .fetchOne();
 
@@ -146,9 +195,8 @@ public class ItemRepositoryImpl extends QuerydslRepositorySupport implements Ite
         if (updateItemDTO.getItemYN() != null) {
             updateClause.set(item.itemYN, updateItemDTO.getItemYN());
         }
-//        if (updateItemDTO.getManuId() != null) {
-//            updateClause.set(item.manufacturer.id, updateItemDTO.getManuId());
-//        }
+            updateClause.set(item.itemUpdate, LocalDateTime.now());
+
 //        if (updateItemDTO.getManuName() != null) {
 //            updateClause.set(item.manufacturer.manuName, updateItemDTO.getManuName());
 //        }
@@ -162,6 +210,7 @@ public class ItemRepositoryImpl extends QuerydslRepositorySupport implements Ite
                     updateItemDTO.getItemId(),
                     updateItemDTO.getItemNum(),
                     updateItemDTO.getItemName(),
+                    updateItemDTO.getIsMain(),
                     updateItemDTO.getItemUse(),
                     updateItemDTO.getItemSpec(),
                     updateItemDTO.getItemInColor(),
@@ -170,6 +219,7 @@ public class ItemRepositoryImpl extends QuerydslRepositorySupport implements Ite
                     updateItemDTO.getItemType(),
                     updateItemDTO.getItemDescription(),
                     updateItemDTO.getItemYN(),
+                    updateItemDTO.getItemUpdate(),
                     updateItemDTO.getManuId(),
                     updateItemDTO.getManuName()
                     );

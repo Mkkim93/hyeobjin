@@ -11,8 +11,8 @@ import java.time.LocalDateTime;
 public class FindAdminItemDTO {
 
     private Long itemId;
-    private String itemNum;
     private String itemName;
+    private String itemNum;
     private String itemType; // 중요
     private LocalDateTime itemRegDate;
     private LocalDateTime itemUpdate;

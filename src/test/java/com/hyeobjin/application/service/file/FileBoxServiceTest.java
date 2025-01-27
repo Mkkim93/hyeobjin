@@ -1,22 +1,19 @@
 package com.hyeobjin.application.service.file;
 
-import com.hyeobjin.application.dto.file.CreateFileBoxDTO;
+import com.hyeobjin.application.common.dto.file.UpdateItemDTO;
+import com.hyeobjin.application.common.service.file.FileBoxService;
 import com.hyeobjin.domain.entity.file.FileBox;
 import com.hyeobjin.domain.entity.item.Item;
 import com.hyeobjin.domain.repository.file.FileBoxRepository;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
@@ -43,7 +40,7 @@ class FileBoxServiceTest {
     @Test
     @DisplayName("file & Item save test")
     void save() throws IOException {
-        CreateFileBoxDTO createFileBoxDTO = new CreateFileBoxDTO();
+        UpdateItemDTO createFileBoxDTO = new UpdateItemDTO();
 
         List<MultipartFile> files = new ArrayList<>();
         createFileBoxDTO.setItemId(Item.builder()
@@ -73,7 +70,7 @@ class FileBoxServiceTest {
     @DisplayName("file only save test")
     void fileOnlySave() throws IOException {
         Long itemId = 1L;
-        CreateFileBoxDTO createFileBoxDTO = new CreateFileBoxDTO();
+        UpdateItemDTO createFileBoxDTO = new UpdateItemDTO();
         createFileBoxDTO.setFileName("test fileName03");
         createFileBoxDTO.setFileType("jpeg/image");
         createFileBoxDTO.setFileSize(1234L);

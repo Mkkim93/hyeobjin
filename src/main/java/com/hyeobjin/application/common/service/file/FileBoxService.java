@@ -1,6 +1,6 @@
 package com.hyeobjin.application.common.service.file;
 
-import com.hyeobjin.application.common.dto.file.CreateFileBoxDTO;
+import com.hyeobjin.application.common.dto.file.UpdateItemDTO;
 import com.hyeobjin.domain.entity.file.FileBox;
 import com.hyeobjin.domain.entity.item.Item;
 import com.hyeobjin.domain.repository.file.FileBoxRepository;
@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -61,17 +62,54 @@ public class FileBoxService {
     }
 
     // MultipartFile 의 메타데이터 저장 : file -> dto
-    public void saveFilesForItem(Item item, List<MultipartFile> files) throws IOException {
+    public void saveFilesForItem(Item item, List<MultipartFile> files, Boolean isMain) throws IOException {
 
-        CreateFileBoxDTO createFileBoxDTO = new CreateFileBoxDTO();
+        UpdateItemDTO createFileBoxDTO = new UpdateItemDTO();
         createFileBoxDTO.setItemId(item.getId());
+        createFileBoxDTO.setIsMain(isMain);
+
+//        Boolean exist = fileBoxRepository.existsByIsMain(createFileBoxDTO.getItemId());
+//        if (exist) {
+//            // TODO
+//            Long deleteById = fileBoxRepository.findByDeleteFileBoxId(item.getId());
+//            deleteFile(deleteById);
+//            return;
+//        }
 
         try {
             fileSave(createFileBoxDTO, files);
 
+            } catch (IOException e) {
+                log.info("파일 저장 중 오류 발생: {}", e.getMessage(), e);
+                throw e;
+        }
+    }
+
+    @Transactional
+    public void updateFilesForItem(Item updateItem, List<MultipartFile> files, Boolean isMain) {
+
+        UpdateItemDTO updateItemDTO = new UpdateItemDTO();
+        updateItemDTO.setItemId(updateItem.getId());
+        updateItemDTO.setIsMain(isMain);
+
+        // 기존 파일 삭제 조건 없이 무조건 파일을 저장합니다.
+        try {
+            // 파일이 존재하는 경우 먼저 삭제 로직
+            if (files != null && !files.isEmpty()) {
+                // 파일을 저장하기 전에 기존 파일을 삭제합니다 (필요한 경우)
+                Long deleteById = fileBoxRepository.findByDeleteFileBoxId(updateItem.getId());
+                if (deleteById != null) {
+                    deleteFile(deleteById); // 기존 파일 삭제
+                }
+
+                // 새로운 파일을 저장
+                fileSave(updateItemDTO, files);
+            } else {
+                log.info("파일이 제공되지 않았습니다. 기존 파일을 유지합니다.");
+            }
         } catch (IOException e) {
             log.info("파일 저장 중 오류 발생: {}", e.getMessage(), e);
-            throw e;
+            throw new RuntimeException("오류");
         }
     }
 
@@ -82,7 +120,7 @@ public class FileBoxService {
      * @return
      * @throws IOException
      */
-    public void fileSave(CreateFileBoxDTO createFileBoxDTO, List<MultipartFile> files) throws IOException {
+    public void fileSave(UpdateItemDTO createFileBoxDTO, List<MultipartFile> files) throws IOException {
 
         List<FileBox> fileBoxes = new ArrayList<>();
 
@@ -104,6 +142,7 @@ public class FileBoxService {
                     .filePath(filePath + fileName)
                     .fileSize(file.getSize())
                     .fileType(file.getContentType())
+                    .isMain(createFileBoxDTO.getIsMain())
                     .itemId(Item.builder()
                             .itemId(createFileBoxDTO.getItemId())
                             .build())
@@ -122,7 +161,7 @@ public class FileBoxService {
      * @throws IOException
      */
     public void saveFileOnly(Long itemId, List<MultipartFile> files) throws IOException {
-        fileSave(new CreateFileBoxDTO(itemId), files);
+        fileSave(new UpdateItemDTO(itemId), files);
     }
 
     /**
@@ -146,6 +185,7 @@ public class FileBoxService {
         }
         fileBoxRepository.delete(fileBox);
     }
+
 
 
 }

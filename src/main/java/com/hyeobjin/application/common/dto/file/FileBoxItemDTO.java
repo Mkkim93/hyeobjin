@@ -15,4 +15,5 @@ public class FileBoxItemDTO {
     private Long fileSize;
     private String fileType;
     private String filePath;
+    private Boolean isMain;
 }

@@ -1,6 +1,9 @@
 package com.hyeobjin.application.service.manufacturer;
 
-import com.hyeobjin.application.dto.manu.ManufactureDTO;
+import com.hyeobjin.application.admin.service.fix.AdminItemManuService;
+import com.hyeobjin.application.admin.service.manu.AdminManuService;
+import com.hyeobjin.application.common.dto.manu.ManufactureDTO;
+import com.hyeobjin.application.common.service.manufacturer.ManufacturerService;
 import com.hyeobjin.domain.entity.manufacturer.Manufacturer;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
@@ -16,13 +19,20 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class ManufacturerServiceTest {
 
-    @Autowired ManufacturerService manufacturerService;
+    @Autowired
+    ManufacturerService manufacturerService;
+
+    @Autowired
+    AdminManuService adminManuService;
+
+    @Autowired
+    AdminItemManuService adminItemManuService;
 
     @Test
     @DisplayName("findIdByManuName test")
     void findIdByManuName() {
         String manuName = "예림";
-        Manufacturer manufacturer = manufacturerService.findIdByManuName(manuName);
+        Manufacturer manufacturer = adminItemManuService.findIdByManuName(manuName);
         log.info("manuId={}", manufacturer.getId());
         log.info("manuName={}", manufacturer.getManuName());
         assertThat(manufacturer.getId()).isEqualTo(2L);
@@ -33,7 +43,7 @@ class ManufacturerServiceTest {
     void saveFail() {
         ManufactureDTO manufactureDTO = new ManufactureDTO();
         manufactureDTO.setManuName("KCC");
-        manufacturerService.saveManu(manufactureDTO); // 등록된 제조사 (중복)
+        adminManuService.saveManu(manufactureDTO); // 등록된 제조사 (중복)
     }
 
     @Test
@@ -41,7 +51,7 @@ class ManufacturerServiceTest {
     void saveSuccess() {
         ManufactureDTO manufactureDTO = new ManufactureDTO();
         manufactureDTO.setManuName("휴그린");
-        manufacturerService.saveManu(manufactureDTO); // 새로운 제조사
+        adminManuService.saveManu(manufactureDTO); // 새로운 제조사
     }
 
     @Test
@@ -57,6 +67,6 @@ class ManufacturerServiceTest {
         manufactureDTO.setManuId(3L);
         manufactureDTO.setManuName("휴그린");
 //        manufactureDTO.setManuYN("Y");
-        manufacturerService.update(manufactureDTO);
+        adminManuService.update(manufactureDTO);
     }
 }

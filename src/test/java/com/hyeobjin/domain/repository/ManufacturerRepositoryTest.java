@@ -1,6 +1,6 @@
 package com.hyeobjin.domain.repository;
 
-import com.hyeobjin.application.dto.manu.ManufactureDTO;
+import com.hyeobjin.application.common.dto.manu.ManufactureDTO;
 import com.hyeobjin.domain.entity.manufacturer.Manufacturer;
 import com.hyeobjin.domain.repository.manu.ManufacturerRepository;
 import lombok.extern.slf4j.Slf4j;

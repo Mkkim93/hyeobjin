@@ -1,6 +1,6 @@
 package com.hyeobjin.domain.repository;
 
-import com.hyeobjin.application.dto.register.RegisterDTO;
+import com.hyeobjin.application.common.dto.register.RegisterDTO;
 import com.hyeobjin.domain.entity.users.Users;
 import com.hyeobjin.domain.repository.users.UsersRepository;
 import lombok.extern.slf4j.Slf4j;

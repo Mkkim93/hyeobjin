@@ -2,6 +2,7 @@ package com.hyeobjin.domain.repository.item;
 
 import com.hyeobjin.application.common.dto.item.FindByItemDTO;
 import com.hyeobjin.domain.entity.item.Item;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -18,7 +19,7 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
     @Query("update Item i set i.itemYN = 'Y' where i.id = :itemId")
     Integer updateItemYN(@Param("itemId") Long itemId);
 
-    @Query("select new com.hyeobjin.application.common.dto.item.FindByItemDTO(i.id, i.itemNum, i.manufacturer.id) from Item i where i.manufacturer.id = :manuId")
+    @Query("select new com.hyeobjin.application.common.dto.item.FindByItemDTO(i.id, i.itemNum, i.manufacturer.id) from Item i where i.manufacturer.id = :manuId and i.itemYN = 'Y'")
     List<FindByItemDTO> findAllItemId(@Param("manuId") Long manuId);
 
     @Transactional

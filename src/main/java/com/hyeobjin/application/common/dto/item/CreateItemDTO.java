@@ -32,6 +32,7 @@ public class CreateItemDTO {
     private Long manuId;
 
     private List<FileBoxItemDTO> itemFiles;
+    private Boolean isMain;
 
     public Item toEntity(CreateItemDTO createItemDTO) {
 

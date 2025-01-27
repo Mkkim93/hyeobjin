@@ -57,7 +57,7 @@ public class Item {
     private String itemYN;
 
     @CreatedDate
-    @Column(name = "item_regdate")
+    @Column(name = "item_regdate", updatable = false)
     private LocalDateTime itemRegDate;
 
     @LastModifiedDate
@@ -71,7 +71,9 @@ public class Item {
     @Builder
     public Item(Long itemId, String itemNum, String itemName,
                 String itemUse, String itemSpec, String itemInColor, String itemOutColor, String itemFrameWidth,
-                String itemType, String itemDescription, String itemYN, Long manufacturerId) {
+                String itemType, String itemDescription, String itemYN,
+                LocalDateTime itemRegDate, LocalDateTime itemUpdate,
+                Long manufacturerId) {
         this.id = itemId;
         this.itemNum = itemNum;
         this.itemName = itemName;
@@ -83,6 +85,8 @@ public class Item {
         this.itemType = itemType;
         this.itemDescription = itemDescription;
         this.itemYN = itemYN;
+        this.itemRegDate = itemRegDate;
+        this.itemUpdate = itemUpdate;
         this.manufacturer = Manufacturer.builder()
                 .manuId(manufacturerId)
                 .build();

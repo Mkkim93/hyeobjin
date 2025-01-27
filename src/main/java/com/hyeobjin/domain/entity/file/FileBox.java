@@ -47,23 +47,27 @@ public class FileBox {
     @Column(name = "file_regdate")
     private LocalDateTime fileRegDate;
 
-    @ManyToOne(fetch = LAZY, cascade = CascadeType.REMOVE, optional = false)
+    @Column(name = "is_main") // 제품의 파일의 메인 사진 구분을 위한 컬럼 추가 (01/26)
+    private Boolean isMain;
+
+    @ManyToOne(fetch = LAZY, optional = false)
     @JoinColumn(name = "item_id")  // 외래키 컬럼을 지정
     private Item item;
 
-    @ManyToOne(fetch = LAZY, cascade = CascadeType.REMOVE, optional = false)
+    @ManyToOne(fetch = LAZY, optional = false)
     @JoinColumn(name = "board_id")
     private Board board;
 
     @Builder
     public FileBox(String fileOrgName, String fileName,
-                   String filePath, String fileType, Long fileSize, Item itemId, Board boardId) {
+                   String filePath, String fileType, Long fileSize, Boolean isMain,
+                   Item itemId, Board boardId) {
         this.fileOrgName = fileOrgName;
         this.fileName = fileName;
         this.filePath = filePath;
         this.fileSize = fileSize;
         this.fileType = fileType;
-
+        this.isMain = isMain;
         this.item = itemId;
         this.board = boardId;
     }

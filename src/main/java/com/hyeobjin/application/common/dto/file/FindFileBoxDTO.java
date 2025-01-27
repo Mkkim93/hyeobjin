@@ -16,6 +16,7 @@ public class FindFileBoxDTO {
     private Long fileSize;
     private String fileType;
     private String filePath;
+    private Boolean isMain;
 
     public FindFileBoxDTO(FileBox fileBox) {
         this.fileBoxId = fileBox.getId();
@@ -24,5 +25,6 @@ public class FindFileBoxDTO {
         this.fileSize = fileBox.getFileSize();
         this.fileType = fileBox.getFileType();
         this.filePath = fileBox.getFilePath();
+        this.isMain = fileBox.getIsMain();
     }
 }

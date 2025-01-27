@@ -4,6 +4,7 @@ import com.hyeobjin.application.common.dto.board.FileBoxBoardDTO;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -21,19 +22,24 @@ public class UpdateItemDTO {
     private String itemType;
     private String itemDescription;
     private String itemYN;
+    private LocalDateTime itemUpdate;
+
+    private Boolean isMain;
 
     private Long manuId;
     private String manuName;
 
     private List<FileBoxBoardDTO> updateFiles;
 
-    public UpdateItemDTO(Long itemId, String itemNum, String itemName,
+    public UpdateItemDTO(Long itemId, String itemNum, String itemName, Boolean isMain,
                          String itemUse, String itemSpec, String itemInColor, String itemOutColor, String itemFrameWidth,
                          String itemType, String itemDescription,
-                         String itemYN, Long manuId, String manuName) {
+                         String itemYN, LocalDateTime itemUpdate,
+                         Long manuId, String manuName) {
         this.itemId = itemId;
         this.itemNum = itemNum;
         this.itemName = itemName;
+        this.isMain = isMain;
         this.itemUse = itemUse;
         this.itemSpec = itemSpec;
         this.itemInColor = itemInColor;
@@ -42,6 +48,7 @@ public class UpdateItemDTO {
         this.itemType = itemType;
         this.itemDescription = itemDescription;
         this.itemYN = itemYN;
+        this.itemUpdate = itemUpdate;
         this.manuId = manuId;
         this.manuName = manuName;
     }
