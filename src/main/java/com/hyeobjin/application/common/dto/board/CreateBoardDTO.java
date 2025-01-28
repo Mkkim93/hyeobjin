@@ -25,17 +25,19 @@ public class CreateBoardDTO {
     private LocalDateTime boardUpdate;
     private String boardYN;
 
+    private String authToken;
+
     private Long usersId;
 
     private List<FileBoxBoardDTO> boardFiles;
 
-    public Board toEntity(CreateBoardDTO createBoardDTO) {
+    public Board toEntity(CreateBoardDTO createBoardDTO, Long userId) {
 
         return Board.builder()
                 .boardId(createBoardDTO.getBoardId())
                 .boardTitle(createBoardDTO.getBoardTitle())
                 .boardContent(createBoardDTO.getBoardContent())
-                .userId(createBoardDTO.getUsersId())
+                .userId(userId)
                 .build();
     }
 }

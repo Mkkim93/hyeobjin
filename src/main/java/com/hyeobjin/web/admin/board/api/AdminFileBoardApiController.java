@@ -21,7 +21,6 @@ import java.util.List;
 public class AdminFileBoardApiController {
 
     private final BoardFileService boardFileService;
-    private final AdminBoardService adminBoardService;
 
     /**
      * 파일데이터만 추가됩니다

@@ -1,5 +1,6 @@
 package com.hyeobjin.application.service.board;
 
+import com.hyeobjin.application.admin.service.board.AdminBoardService;
 import com.hyeobjin.application.common.dto.board.BoardFileDTO;
 import com.hyeobjin.application.common.dto.board.BoardListDTO;
 import com.hyeobjin.application.common.dto.board.CreateBoardDTO;
@@ -29,6 +30,9 @@ class BoardServiceTest {
     private BoardService boardService;
 
     @Autowired
+    private AdminBoardService adminBoardService;
+
+    @Autowired
     private BoardRepository boardRepository;
 
     @Autowired
@@ -52,7 +56,7 @@ class BoardServiceTest {
         createBoardDTO.setBoardContent("게시글 내용 테스트06");
         createBoardDTO.setUsersId(3L);
 
-        boardService.saveBoard(createBoardDTO, null);
+        adminBoardService.saveBoard(createBoardDTO, null);
 
         Board savedBoard = boardRepository.findByBoardTitle("게시글 제목 테스트06");
 
@@ -81,7 +85,7 @@ class BoardServiceTest {
         updateBoardDTO.setBoardId(19L);
         updateBoardDTO.setBoardTitle("19 게시글 제목 수정");
 
-        boardService.update(updateBoardDTO);
+        adminBoardService.update(updateBoardDTO);
 
         Board board = boardRepository.findById(19L).get();
 
@@ -96,7 +100,7 @@ class BoardServiceTest {
         updateBoardDTO.setBoardId(19L);
         updateBoardDTO.setContent("19 게시글 내용 수정");
 
-        boardService.update(updateBoardDTO);
+        adminBoardService.update(updateBoardDTO);
 
         Board board = boardRepository.findById(19L).get();
 

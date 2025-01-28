@@ -57,4 +57,12 @@ class UsersRepositoryTest {
         System.out.println("users.getUsername() = " + users.getUsername());
         System.out.println("users.getPassword() = " + users.getPassword());
     }
+
+    @Test
+    @DisplayName("회원의 아이디를 입력하여 해당 회원의 pk 를 조회")
+    void findByIdUsername() {
+
+        Long usersId = usersRepository.findByIdByUsername("king00314@naver.com");
+        assertThat(usersId).isEqualTo(1L);
+    }
 }

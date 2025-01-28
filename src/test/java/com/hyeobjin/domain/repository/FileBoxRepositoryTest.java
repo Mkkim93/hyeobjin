@@ -5,12 +5,14 @@ import com.hyeobjin.domain.entity.file.FileBox;
 import com.hyeobjin.domain.entity.item.Item;
 import com.hyeobjin.domain.repository.file.FileBoxRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
@@ -80,7 +82,7 @@ class FileBoxRepositoryTest {
     }
 
     @Test
-    void findByDeleteFileBoxId() {
+    void findByDeleteFileBoxIdForItemId() {
         Long id = fileBoxRepository.findByDeleteFileBoxId(15L);
         System.out.println("id = " + id); // 10
     }
@@ -89,6 +91,22 @@ class FileBoxRepositoryTest {
     void exist() {
         Boolean exists = fileBoxRepository.existsByIsMain(3L);
         System.out.println("exists = " + exists);
+    }
+
+    @Test
+    @DisplayName("현재 게시글 id 를 기준으로 파일 pk를 list 로 모두 조회")
+    void findByDeleteFileBoxIdForBoardId() {
+        List<Long> boardIds = new ArrayList<>();
+
+        boardIds.add(9L); // file size = 1
+        boardIds.add(10L); // file size = 1
+        boardIds.add(11L); // file size = 1
+        boardIds.add(12L); // file size = 4
+        // total size = 7
+
+        List<Long> deletedFileBoxIds = fileBoxRepository.findFileBoxIdsByBoardIdIn(boardIds);
+
+        assertThat(deletedFileBoxIds.size()).isEqualTo(7);
     }
 
 }

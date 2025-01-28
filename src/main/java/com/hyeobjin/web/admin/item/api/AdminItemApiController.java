@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -62,13 +63,22 @@ public class AdminItemApiController {
         return ResponseEntity.ok(adminItemService.findByItemId(itemId));
     }
 
+    /**
+     * 관리자가 제품을 삭제하면 해당 제품과 연관된 파일 데이터도 함께 영구적으로 삭제됩니다.
+     * @param itemId 관리자가 제품을 영구적으로 삭제하기 위해 클라이언트 체크박스로 제품의 PK 를 리스트 형태로 요청합니다.
+     * @return
+     */
     @Operation(summary = "관리자 제품 삭제 (영구삭제)", description = "관리자가 제품의 데이터를 모두 영구적으로 삭제하는 API 입니다.")
-    @PostMapping("/delete")
+    @DeleteMapping
     public ResponseEntity<String> deleteItem(@RequestBody List<Long> itemId) {
-
-        adminItemService.deleteItemIds(itemId);
-
-        return ResponseEntity.ok("delete success");
+        try {
+            adminItemService.deleteItemIds(itemId);
+            return ResponseEntity.ok().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(null);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
 
     /**

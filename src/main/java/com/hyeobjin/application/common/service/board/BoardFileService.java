@@ -60,7 +60,6 @@ public class BoardFileService {
         fileBoxBoardDTO.setBoardId(board.getId());
 
         try {
-
             fileSave(fileBoxBoardDTO, files);
 
         } catch (IOException e) {

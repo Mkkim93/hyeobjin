@@ -28,4 +28,7 @@ public interface FileBoxRepository extends JpaRepository<FileBox, Long> {
 
     @Query("SELECT f.id FROM FileBox f WHERE f.item.id IN :itemIds")
     List<Long> findFileBoxIdsByItemIdIn(@Param("itemIds") List<Long> itemIds);
+
+    @Query("select f.id from FileBox f where f.board.id in :boardIds")
+    List<Long> findFileBoxIdsByBoardIdIn(@Param("boardIds") List<Long> boardIds);
 }

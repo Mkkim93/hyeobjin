@@ -37,6 +37,7 @@ public class AdminItemService {
     private final ItemRepositoryImpl itemRepositoryImpl;
 
     public void deleteItemIds(List<Long> itemIds) {
+
         try {
             List<Item> itemsToDelete = itemRepository.findAllById(itemIds);
             if (itemsToDelete.isEmpty()) {

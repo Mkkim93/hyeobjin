@@ -1,6 +1,9 @@
 package com.hyeobjin.domain.repository.board;
 
 
+import com.hyeobjin.application.admin.dto.board.DetailAdminBoardDTO;
+import com.hyeobjin.application.admin.dto.file.AdminBoardFileDTO;
+import com.hyeobjin.application.admin.dto.file.QAdminBoardFileDTO;
 import com.hyeobjin.application.common.dto.board.BoardDetailDTO;
 import com.hyeobjin.application.common.dto.board.BoardFileDTO;
 import com.hyeobjin.application.common.dto.board.QBoardFileDTO;
@@ -109,5 +112,52 @@ public class BoardRepositoryImpl extends QuerydslRepositorySupport implements Bo
         } else {
             throw new EntityNotFoundException("해당 게시글이 존재하지 않습니다.");
         }
+    }
+
+    @Override
+    public DetailAdminBoardDTO findByBoardDetailAdmin(Long boardId) {
+
+        QBoard board = QBoard.board;
+        QFileBox fileBox = QFileBox.fileBox;
+        QUsers users = QUsers.users;
+
+        Board boardEntity = jpaQueryFactory
+                .selectFrom(board)
+                .leftJoin(board.users, users).fetchJoin()
+                .where(board.id.eq(boardId))
+                .fetchOne();
+
+        if (boardEntity == null) {
+            log.info("관리자 페이지 게시글 조회 실패={}", (Object) null);
+            // TODO 예외 처리
+            return null;
+        }
+
+        List<AdminBoardFileDTO> adminBoardFiles = jpaQueryFactory.select(new QAdminBoardFileDTO(
+                        fileBox.id,
+                        fileBox.fileName,
+                        fileBox.fileOrgName,
+                        fileBox.fileSize,
+                        fileBox.fileType,
+                        fileBox.filePath,
+                        fileBox.fileRegDate,
+                        fileBox.board.id))
+                .from(fileBox)
+                .where(fileBox.board.id.eq(boardId))
+                .fetch();
+
+        return new DetailAdminBoardDTO(
+                boardEntity.getId(),
+                boardEntity.getBoardTitle(),
+                boardEntity.getBoardContent(),
+                boardEntity.getBoardViewCount(),
+                boardEntity.getBoardRegDate(),
+                boardEntity.getBoardUpdate(),
+                boardEntity.getBoardType(),
+                boardEntity.getBoardYN(),
+                boardEntity.getUsers().getName(),
+                adminBoardFiles
+        );
+
     }
 }

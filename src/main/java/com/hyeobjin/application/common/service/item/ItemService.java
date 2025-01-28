@@ -1,23 +1,13 @@
 package com.hyeobjin.application.common.service.item;
 
-import com.hyeobjin.application.common.dto.item.CreateItemDTO;
 import com.hyeobjin.application.common.dto.item.FindByItemDTO;
-import com.hyeobjin.application.common.dto.item.UpdateItemDTO;
-import com.hyeobjin.application.common.service.file.FileBoxService;
-import com.hyeobjin.application.common.service.manufacturer.ManufacturerService;
-import com.hyeobjin.domain.entity.item.Item;
-import com.hyeobjin.domain.entity.manufacturer.Manufacturer;
 import com.hyeobjin.domain.repository.item.ItemRepository;
 import com.hyeobjin.domain.repository.item.ItemRepositoryImpl;
-import com.hyeobjin.exception.CustomException;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 
 
@@ -43,10 +33,6 @@ public class ItemService {
         log.info("@@@@@@@@@@@@@@@@@@@@@@@result ={}", result.getItemName());
         return result;
     }
-
-
-
-
 
     /**
      * 제품의 모든 품번을 조회

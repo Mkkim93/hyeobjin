@@ -62,7 +62,8 @@ public class Board {
         this.id = createBoardDTO.getBoardId();
         this.boardTitle = createBoardDTO.getBoardTitle();
         this.boardContent = createBoardDTO.getBoardContent();
-        this.boardYN = "N";
+        this.boardType = createBoardDTO.getBoardType();
+        this.boardYN = createBoardDTO.getBoardYN();
         this.boardViewCount = 0L;
         this.users = Users.builder()
                 .userId(createBoardDTO.getUsersId())

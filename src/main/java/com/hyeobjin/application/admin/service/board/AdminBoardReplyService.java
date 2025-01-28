@@ -1,6 +1,6 @@
-package com.hyeobjin.application.common.service.board;
+package com.hyeobjin.application.admin.service.board;
 
-import com.hyeobjin.application.common.dto.board.BoardListDTO;
+import com.hyeobjin.application.admin.dto.board.FindAdminBoardDTO;
 import com.hyeobjin.domain.entity.board.Board;
 import com.hyeobjin.domain.repository.board.BoardRepository;
 import lombok.RequiredArgsConstructor;
@@ -8,28 +8,28 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
-@Transactional
 @RequiredArgsConstructor
-public class BoardReplyService {
+public class AdminBoardReplyService {
 
     private final BoardRepository boardRepository;
 
-    public Page<BoardListDTO> searchKeywordList(String searchKeyword, Pageable pageable) {
+    public Page<FindAdminBoardDTO> searchKeywordList(String searchKeyword, Pageable pageable) {
 
-        String boardYN = "Y";
+        Page<Board> keyWordList = boardRepository.findByBoardTitleContaining(pageable, searchKeyword);
 
-        Page<Board> keyWordList = boardRepository.findByBoardYNAndBoardTitleContaining(boardYN, searchKeyword, pageable);
-
-        return keyWordList.map(board -> new BoardListDTO(
+        return keyWordList.map(board -> new FindAdminBoardDTO(
                 board.getId(),
                 board.getBoardTitle(),
                 board.getBoardViewCount(),
                 board.getBoardRegDate(),
+                board.getBoardUpdate(),
+                board.getBoardType(),
+                board.getBoardYN(),
                 board.getUsers().getName()
         ));
     }
+
 }

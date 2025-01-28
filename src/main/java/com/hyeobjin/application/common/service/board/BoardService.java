@@ -34,8 +34,6 @@ public class BoardService {
 
     private final BoardRepository boardRepository;
     private final BoardRepositoryImpl boardRepositoryImpl;
-    private final BoardFileService boardFileService;
-    private final EntityManager entityManager;
 
     public Board existById(Long boardId) {
         boolean exists = boardRepository.existsById(boardId);
@@ -70,6 +68,7 @@ public class BoardService {
     /**
      * 게시글 상세 조회
      * test code : O
+     * ROLE : COMMON
      * @param boardId 게시글 번호를 전송하여 해당 게시글의 모든 데이터(게시글 콘텐츠 & 파일데이터)를 조회한다.
      * @return
      */
@@ -88,32 +87,19 @@ public class BoardService {
 //        }
 
         return boardRepositoryImpl.findByBoardDetail(boardId);
-
     }
 
+    // TODO 조회수
     private void updateViewCount(Long id) {
     }
 
-    /**
-     * 게시글 작성
-     * # test code : O
-     * @param createBoardDTO
-     */
-    public void saveBoard(CreateBoardDTO createBoardDTO, List<MultipartFile> files) throws IOException {
 
-        Board board = createBoardDTO.toEntity(createBoardDTO);
-
-        boardRepository.save(board);
-
-        if (files != null && !files.isEmpty()) {
-            boardFileService.saveFilesForBoard(board, files);
-        }
-    }
 
     /**
      * 게시글 삭제
      * test code : O
-     * @param boardId 사용자가 삭제할 게시글 번호을 전송하면 해당 게시글번호가 존재여부 검즈엥 성공하면 게시글을 삭제한다.
+     * // TODO 안쓸 듯
+     * @param boardId 사용자가 삭제할 게시글 번호을 전송하면 해당 게시글번호의 존재여부 검증 성공 시 게시글을 삭제한다.
      */
     public void delete(Long boardId) {
 
@@ -121,16 +107,5 @@ public class BoardService {
                 .orElseThrow(() -> new EntityNotFoundException("게시물 조회에 실패하였습니다. 해당 게시글이 존재하지 않습니다."));
 
         boardRepository.deleteBoard(boardId);
-    }
-
-    /**
-     * 수정할 게시글의 데이터를 DTO 객체에 담아 로직을 수행한다.
-     * 게시글 제목만 수정 시 이전의 게시글 내용은 유지하고 제목만 수정한다.
-     * 반대로 게시글 내용만 수정 시 이전의 게시글 제목은 유지하고 내용만 수정한다.
-     * test code : O
-     * @param updateBoardDTO 업데이트 객체
-     */
-    public void update(UpdateBoardDTO updateBoardDTO) {
-        boardRepositoryImpl.updateBoard(updateBoardDTO);
     }
 }
