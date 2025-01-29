@@ -1,6 +1,5 @@
 package com.hyeobjin.web.admin.board.api;
 
-import com.hyeobjin.application.admin.service.board.AdminBoardService;
 import com.hyeobjin.application.common.service.board.BoardFileService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

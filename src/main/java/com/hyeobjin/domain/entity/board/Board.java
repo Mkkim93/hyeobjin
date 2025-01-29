@@ -58,6 +58,10 @@ public class Board {
     @JoinColumn(name = "users_id")
     private Users users;
 
+    public Board(Long id) {
+        this.id = id;
+    }
+
     public Board saveToEntity(CreateBoardDTO createBoardDTO) {
         this.id = createBoardDTO.getBoardId();
         this.boardTitle = createBoardDTO.getBoardTitle();
@@ -72,12 +76,13 @@ public class Board {
     }
 
     @Builder
-    public Board(Long boardId, String boardTitle,
-                 String boardContent, String boardYN, Long boardViewCount, Long userId) {
+    public Board(Long boardId, String boardTitle, String boardType,
+                 String boardContent, String boardYN, Long userId) {
         this.id = boardId;
         this.boardTitle = boardTitle;
         this.boardContent = boardContent;
-        this.boardYN = "N";
+        this.boardYN = boardYN;
+        this.boardType = boardType;
         this.boardViewCount = 0L;
         this.users = Users.builder()
                 .userId(userId)

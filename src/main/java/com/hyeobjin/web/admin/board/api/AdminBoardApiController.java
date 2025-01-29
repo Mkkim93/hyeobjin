@@ -1,29 +1,32 @@
 package com.hyeobjin.web.admin.board.api;
 
+import aj.org.objectweb.asm.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hyeobjin.application.admin.dto.board.DetailAdminBoardDTO;
 import com.hyeobjin.application.admin.dto.board.FindAdminBoardDTO;
 import com.hyeobjin.application.admin.service.board.AdminBoardReplyService;
 import com.hyeobjin.application.admin.service.board.AdminBoardService;
+import com.hyeobjin.application.admin.service.board.BoardAuthService;
 import com.hyeobjin.application.common.dto.board.CreateBoardDTO;
+import com.hyeobjin.application.common.dto.board.FileBoxBoardDTO;
 import com.hyeobjin.application.common.dto.board.UpdateBoardDTO;
 import com.hyeobjin.application.common.service.board.BoardService;
-import com.hyeobjin.jwt.JwtUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.jni.FileInfo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -33,8 +36,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AdminBoardApiController {
 
-    private final JwtUtil jwtUtil;
-    private final BoardService boardService;
+    private final BoardAuthService boardAuthService;
     private final AdminBoardService adminBoardService;
     private final AdminBoardReplyService adminBoardReplyService;
 
@@ -68,17 +70,31 @@ public class AdminBoardApiController {
      */
     @Operation(summary = "게시글 작성", description = "게시글 & 파일 저장을 위한 API 입니다.")
     @PostMapping
-    public ResponseEntity<Long> save(@RequestBody CreateBoardDTO createBoardDTO,
-                                       @RequestPart(value = "files", required = false) List<MultipartFile> files, HttpServletRequest request) throws IOException {
+    public ResponseEntity<Long> save(@RequestPart(name = "createBoardDTO") CreateBoardDTO createBoardDTO,
+                                     @RequestPart(value = "files", required = false) List<MultipartFile> files,
+                                     HttpServletRequest request) throws IOException {
 
         String authToken = request.getHeader("Authorization");
-        createBoardDTO.setAuthToken(authToken);
 
-        Long boardId = adminBoardService.saveBoard(createBoardDTO, files);
+        Long userId = boardAuthService.findByUserId(authToken);
+
+        Long boardId = adminBoardService.saveBoard(createBoardDTO, files, userId);
 
         log.info("boardId={}", boardId);
 
         return ResponseEntity.ok(boardId);
+    }
+
+    /**
+     * 관리자가 수정할 게시글을 호출하는 API
+     * (vue 컴포넌트로 변경할지 고민 props 사용하면 API 호출 업이 기존 상세 페이지 데이터 재사용 가능)
+     * @param boardId
+     * @return
+     */
+    @Operation(summary = "수정할 게시글 조회", description = "수정할 게시글을 폼을 랜더링 하기 위한 API 입니다.")
+    @GetMapping("/modify")
+    public ResponseEntity<DetailAdminBoardDTO> findByModifyBoard(@RequestParam("boardId") Long boardId) {
+        return ResponseEntity.ok(adminBoardService.findDetailBoard(boardId));
     }
 
     /**
@@ -89,11 +105,18 @@ public class AdminBoardApiController {
      * @return
      */
     @Operation(summary = "게시글 수정", description = "게시글 수정을 위한 API 입니다.")
-    @PostMapping("/update")
-    public ResponseEntity<Void> update(@RequestBody UpdateBoardDTO updateBoardDTO)    {
-        adminBoardService.update(updateBoardDTO);
+    @PostMapping(value = "/update", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> update(@RequestPart(name = "updateBoardDTO") UpdateBoardDTO updateBoardDTO,
+                                    @RequestPart(value = "files", required = false) List<MultipartFile> file) throws IOException {
+
+        if (file == null) {
+            file = new ArrayList<>();
+        }
+
+        adminBoardService.update(updateBoardDTO, file);
         return ResponseEntity.ok().build();
     }
+
 
     /**
      * 관리자가 제품을 삭제하면 해당 제품과 연관된 파일 데이터도 함께 영구적으로 삭제됩니다.
@@ -103,7 +126,7 @@ public class AdminBoardApiController {
      */
     @Operation(summary = "게시글 삭제", description = "관리자가 게시글을 삭제한 모든 게시글과 파일 데이터가 영구적으로 삭제되는 API 입니다.")
     @DeleteMapping
-    public ResponseEntity<Void> delete(@RequestBody List<Long> boardIds) {
+    public ResponseEntity<?> delete(@RequestBody List<Long> boardIds) {
         try {
             adminBoardService.deleteBoardAndFiles(boardIds);
             return ResponseEntity.ok().build();
@@ -113,26 +136,10 @@ public class AdminBoardApiController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
-    /**
-     * 일반 사용자가 자신이 작성한 게시글을 삭제 (관리자용은 별도로 admin package 구성)
-     * # swagger : O
-     * @param boardId 게시글 번호를 기준으로 자신의 게시글을 삭제한다
-     *                DB 데이터가 삭제되는 것이 아니라 특정 컬럼의 값을 업데이트하여 게시글이 조회되지 않도록 함
-     *  ROLE : ADMIN
-     *                // TODO 안쓸듯
-     * @return
-     */
-    @Operation(summary = "게시글 삭제", description = "게시글 삭제를 위한 API 입니다.")
-    @PostMapping("/delete/{boardId}")
-    public ResponseEntity<String> delete(@PathVariable("boardId") Long boardId) {
-        boardService.delete(boardId);
-        return ResponseEntity.ok("success delete board content");
-    }
 
     @Operation(summary = "게시글 상세 조회", description = "관리자가 게시글을 상세 조회 하는 API 입니다.")
     @GetMapping("/detail/{boardId}")
     public ResponseEntity<DetailAdminBoardDTO> detail(@PathVariable("boardId") Long boardId) {
        return ResponseEntity.ok(adminBoardService.findDetailBoard(boardId));
     }
-
 }

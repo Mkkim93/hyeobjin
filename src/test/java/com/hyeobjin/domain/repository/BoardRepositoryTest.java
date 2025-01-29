@@ -81,9 +81,7 @@ class BoardRepositoryTest {
     void deleteByIdsAllBatch() {
         List<Long> boardIds = new ArrayList<>();
 
-        boardIds.add(8L);
-        boardIds.add(4L);
-
+        boardIds.add(6L);
         boardRepository.deleteAllByIdInBatch(boardIds);
     }
 

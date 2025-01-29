@@ -12,10 +12,9 @@ import java.util.List;
 @AllArgsConstructor
 public class UpdateBoardDTO {
 
-    @NotNull
     private Long boardId;
-
     private String boardTitle;
     private String content;
-    private List<FileBoxBoardDTO> files;
+
+    private List<FileBoxBoardDTO> boardFiles;
 }

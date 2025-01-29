@@ -32,7 +32,8 @@ public class AdminItemApiController {
 
     @Operation(summary = "관리자 제품 조회" , description = "관리자가 모든 제품을 조건별로 조회하는 페이징 API 입니다.")
     @GetMapping
-    public ResponseEntity<?> findItemPageList(@RequestParam(name = "page", defaultValue = "0") int page,
+    public ResponseEntity<Page<FindAdminItemDTO>> findItemPageList(
+                                              @RequestParam(name = "page", defaultValue = "0") int page,
                                               @RequestParam(name = "size", defaultValue = "10") int size,
                                               @RequestParam(name = "manuName", required = false) String manuName
                                               ) {

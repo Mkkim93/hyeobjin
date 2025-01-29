@@ -37,10 +37,8 @@ class AdminBoardServiceTest {
     @DisplayName("관리자가 게시글을 삭제 체크박스로 리스트 형태의 데이터를 삭제한다")
     void deleteAllBoard() {
         List<Long> boardIds = new ArrayList<>();
-        boardIds.add(1L);
-        boardIds.add(8L);
-        boardIds.add(9L);
-        boardIds.add(10L);
+        boardIds.add(52L); // 파일 데이터가 없는 게시글 PK
+        boardIds.add(10L); // 파일 데이터가 3개 존재하는 게시글 PK
         adminBoardService.deleteBoardAndFiles(boardIds);
     }
 

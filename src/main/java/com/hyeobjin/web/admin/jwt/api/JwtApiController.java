@@ -55,9 +55,10 @@ public class JwtApiController {
 
         // TODO expired Time : @Value 사용
         String newAccess = jwtUtil.createJwt("access", username, role, 600000L);
+
        //  String newRefresh = jwtUtil.createJwt("refresh", username, role, 86400000L);
 
-        response.setHeader("access", newAccess);
+        response.setHeader("Authorization", newAccess);
        //  response.addCookie(createCookie("refresh", newRefresh));
         // 현재 쿠키에 새로운 리플래시 토큰을 추가하는 로직을 redis 에서 현재 리플래시 토큰이 존재하지 않을 때 추가하는데
         // 리플래시 토큰이 존재하지 않으면 재로그인 요청을 하고 새로운 리플래시 토큰을 쿠키에 저장해야함

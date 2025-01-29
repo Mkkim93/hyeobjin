@@ -14,12 +14,15 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 
 @Slf4j
@@ -32,7 +35,35 @@ public class AdminBoardService {
     private final BoardRepositoryImpl boardRepositoryImpl;
     private final BoardFileService boardFileService;
     private final AdminBoardFileService adminBoardFileService;
-    private final BoardAuthService boardAuthService;
+
+    /**
+     * 게시글 번호를 리스트 형태로 가져와서 해당 게시글과 참조하는 모든 파일을 영구적으로 삭제한다.
+     * @param boardIds 삭제할 게시글 번호들
+     * @return
+     */
+    public void deleteBoardAndFiles(List<Long> boardIds) {
+
+        try {
+            CompletableFuture<Boolean> fileDeletion = CompletableFuture.supplyAsync(() -> {
+                return adminBoardFileService.deleteByStaticFiles(boardIds);
+            });
+
+            // 동기화
+            Boolean haseFiles = fileDeletion.join();
+
+            if (!haseFiles) {
+                boardRepository.deleteAllByIdInBatch(boardIds);
+                log.info("파일이 없는 게시판 삭제 로직 종료");
+                return;
+            }
+
+            boardRepository.deleteAllByIdInBatch(boardIds);
+            log.info("파일이 있는 게시판 삭제 (파일 삭제될때까지 기다렸음)");
+
+        } catch (ObjectOptimisticLockingFailureException e) {
+            log.info("ObjectOptimisticLockingFailureException ={}", e);
+        }
+    }
 
     /**
      * 관리자 페이지에서의 게시글 조회
@@ -64,8 +95,13 @@ public class AdminBoardService {
      * test code : O
      * @param updateBoardDTO 업데이트 객체
      */
-    public void update(UpdateBoardDTO updateBoardDTO) {
-        boardRepositoryImpl.updateBoard(updateBoardDTO);
+    public void update(UpdateBoardDTO updateBoardDTO, List<MultipartFile> files) throws IOException {
+
+        Board board = boardRepositoryImpl.updateBoard(updateBoardDTO);
+
+        if (files != null && !files.isEmpty()) {
+            boardFileService.saveFilesForBoard(board, files);
+        }
     }
 
     /**
@@ -73,9 +109,7 @@ public class AdminBoardService {
      * # test code : O
      * @param createBoardDTO 새로운 게시글 작성 데이터 DTO
      */
-    public Long saveBoard(CreateBoardDTO createBoardDTO, List<MultipartFile> files) throws IOException {
-
-        Long userId = boardAuthService.findByUserId(createBoardDTO.getAuthToken());
+    public Long saveBoard(CreateBoardDTO createBoardDTO, List<MultipartFile> files, Long userId) throws IOException {
 
         Board board = createBoardDTO.toEntity(createBoardDTO, userId);
         Board savedBoard = boardRepository.save(board);
@@ -86,20 +120,7 @@ public class AdminBoardService {
         return savedBoard.getId();
     }
 
-    /**
-     * 게시글 번호를 리스트 형태로 가져와서 해당 게시글과 참조하는 모든 파일을 영구적으로 삭제한다.
-     * @param boardIds 삭제할 게시글 번호들
-     * @return
-     */
-    public void deleteBoardAndFiles(List<Long> boardIds) {
 
-        adminBoardFileService.deleteByStaticFiles(boardIds);
-        try {
-            boardRepository.deleteAllByIdInBatch(boardIds);
-        } catch (Exception e) {
-            throw e;
-        }
-    }
 
     /**
      * 관리자가 게시글 번호 (pk) 를 기준으로 게시글을 상세조회하기 위한 메서드

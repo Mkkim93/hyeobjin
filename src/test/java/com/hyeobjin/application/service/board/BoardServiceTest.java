@@ -56,7 +56,7 @@ class BoardServiceTest {
         createBoardDTO.setBoardContent("게시글 내용 테스트06");
         createBoardDTO.setUsersId(3L);
 
-        adminBoardService.saveBoard(createBoardDTO, null);
+        adminBoardService.saveBoard(createBoardDTO, null, null);
 
         Board savedBoard = boardRepository.findByBoardTitle("게시글 제목 테스트06");
 
@@ -80,12 +80,12 @@ class BoardServiceTest {
 
     @Test
     @DisplayName("게시글 제목 수정 (내용은 유지)")
-    void updateTitle() {
+    void updateTitle() throws IOException {
         UpdateBoardDTO updateBoardDTO = new UpdateBoardDTO();
         updateBoardDTO.setBoardId(19L);
         updateBoardDTO.setBoardTitle("19 게시글 제목 수정");
 
-        adminBoardService.update(updateBoardDTO);
+        adminBoardService.update(updateBoardDTO, null);
 
         Board board = boardRepository.findById(19L).get();
 
@@ -95,12 +95,12 @@ class BoardServiceTest {
 
     @Test
     @DisplayName("게시글 내용 수정 (제목은 유지)")
-    void updateContent() {
+    void updateContent() throws IOException {
         UpdateBoardDTO updateBoardDTO = new UpdateBoardDTO();
         updateBoardDTO.setBoardId(19L);
         updateBoardDTO.setContent("19 게시글 내용 수정");
 
-        adminBoardService.update(updateBoardDTO);
+        adminBoardService.update(updateBoardDTO, null);
 
         Board board = boardRepository.findById(19L).get();
 

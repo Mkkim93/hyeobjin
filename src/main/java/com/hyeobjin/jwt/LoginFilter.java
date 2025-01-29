@@ -81,11 +81,11 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         String access = jwtUtil.createJwt("access", username, role, 600000L); // 10 min
 
         // refresh 토큰 생성
-        String refresh = jwtUtil.createJwt("refresh", username, role, 86400000L);// 24 hours
+        String refresh = jwtUtil.createJwt("refresh", username, role, 36000000L);// 24 hours
         log.info("refresh value ={}", refresh.toString());
 
         // redis 에 최초 발급된 refresh token 저장
-        redisService.save("refresh", refresh, 864000L);
+        redisService.save("refresh", refresh, 36000000L);
 
         // 응답 설정
         response.setHeader("Authorization", access);
@@ -95,7 +95,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     private Cookie createCookie(String key, String value) {
         Cookie cookie = new Cookie(key, value);
-        cookie.setMaxAge(24 * 60 * 60);
+        cookie.setMaxAge(60 * 60 * 10);
 //        cookie.setSecure(true);
 //        cookie.setPath("/");
         cookie.setHttpOnly(true);

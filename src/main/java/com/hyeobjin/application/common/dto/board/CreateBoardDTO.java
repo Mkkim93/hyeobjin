@@ -1,6 +1,7 @@
 package com.hyeobjin.application.common.dto.board;
 
 import com.hyeobjin.domain.entity.board.Board;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,10 +26,7 @@ public class CreateBoardDTO {
     private LocalDateTime boardUpdate;
     private String boardYN;
 
-    private String authToken;
-
     private Long usersId;
-
     private List<FileBoxBoardDTO> boardFiles;
 
     public Board toEntity(CreateBoardDTO createBoardDTO, Long userId) {
@@ -37,6 +35,8 @@ public class CreateBoardDTO {
                 .boardId(createBoardDTO.getBoardId())
                 .boardTitle(createBoardDTO.getBoardTitle())
                 .boardContent(createBoardDTO.getBoardContent())
+                .boardYN(createBoardDTO.getBoardYN())
+                .boardType("NOTICE")
                 .userId(userId)
                 .build();
     }

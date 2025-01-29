@@ -83,7 +83,7 @@ public class BoardRepositoryImpl extends QuerydslRepositorySupport implements Bo
     }
 
     @Override
-    public UpdateBoardDTO updateBoard(UpdateBoardDTO updateBoardDTO) {
+    public Board updateBoard(UpdateBoardDTO updateBoardDTO) { // dto null
 
         EntityManager entityManager = getEntityManager();
 
@@ -103,11 +103,9 @@ public class BoardRepositoryImpl extends QuerydslRepositorySupport implements Bo
         long updateCount = updateClause.execute();
 
         if (updateCount > 0) {
-            return new UpdateBoardDTO(
-                    updateBoardDTO.getBoardId(),
-                    updateBoardDTO.getBoardTitle(),
-                    updateBoardDTO.getContent(),
-                    updateBoardDTO.getFiles()
+            return new Board(
+                    updateBoardDTO.getBoardId()
+
             );
         } else {
             throw new EntityNotFoundException("해당 게시글이 존재하지 않습니다.");

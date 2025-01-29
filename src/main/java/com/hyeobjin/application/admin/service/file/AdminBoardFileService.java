@@ -6,6 +6,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
 import java.util.List;
@@ -16,19 +17,20 @@ import java.util.List;
  */
 @Slf4j
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class AdminBoardFileService {
 
     private final FileBoxRepository fileBoxRepository;
 
-    public void deleteByStaticFiles(List<Long> boardIds) {
+    public synchronized boolean deleteByStaticFiles(List<Long> boardIds) {
 
         List<Long> deleteFileBoxIds = fileBoxRepository.findFileBoxIdsByBoardIdIn(boardIds);
 
         List<FileBox> fileBoxes = fileBoxRepository.findAllById(deleteFileBoxIds);
 
         if (fileBoxes.isEmpty()) {
-            throw new EntityNotFoundException("해당 파일들이 존재하지 않습니다.");
+            return false;
         }
 
         for (FileBox fileBox : fileBoxes) {
@@ -44,9 +46,9 @@ public class AdminBoardFileService {
                     throw new RuntimeException("파일 삭제 오류");
                 }
             }
-
             // FileBox 레코드 삭제
             fileBoxRepository.delete(fileBox);
         }
+        return true;
     }
 }
