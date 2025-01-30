@@ -62,19 +62,6 @@ public class Board {
         this.id = id;
     }
 
-    public Board saveToEntity(CreateBoardDTO createBoardDTO) {
-        this.id = createBoardDTO.getBoardId();
-        this.boardTitle = createBoardDTO.getBoardTitle();
-        this.boardContent = createBoardDTO.getBoardContent();
-        this.boardType = createBoardDTO.getBoardType();
-        this.boardYN = createBoardDTO.getBoardYN();
-        this.boardViewCount = 0L;
-        this.users = Users.builder()
-                .userId(createBoardDTO.getUsersId())
-                .build();
-        return this;
-    }
-
     @Builder
     public Board(Long boardId, String boardTitle, String boardType,
                  String boardContent, String boardYN, Long userId) {

@@ -197,9 +197,6 @@ public class ItemRepositoryImpl extends QuerydslRepositorySupport implements Ite
         }
             updateClause.set(item.itemUpdate, LocalDateTime.now());
 
-//        if (updateItemDTO.getManuName() != null) {
-//            updateClause.set(item.manufacturer.manuName, updateItemDTO.getManuName());
-//        }
         updateClause.where(item.id.eq(updateItemDTO.getItemId()));
 
         long updateCount = updateClause.execute();
@@ -221,7 +218,8 @@ public class ItemRepositoryImpl extends QuerydslRepositorySupport implements Ite
                     updateItemDTO.getItemYN(),
                     updateItemDTO.getItemUpdate(),
                     updateItemDTO.getManuId(),
-                    updateItemDTO.getManuName()
+                    updateItemDTO.getManuName(),
+                    updateItemDTO.getFileBoxId()
                     );
         } else {
             throw new EntityNotFoundException("해당 제품을 찾을 수 없습니다.");

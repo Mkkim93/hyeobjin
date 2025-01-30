@@ -34,6 +34,7 @@ public class FindByItemDTO {
 
     @JsonView(SummaryView.class)
     private Long manuId;
+
     private String manuName;
     private List<FindFileBoxDTO> fileBoxes;
 

@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Tag(name = "ADMIN_ITEM", description = "관리자 권한으로 제품의 CRUD 관리를 위한 REST API 입니다.")
@@ -86,7 +87,7 @@ public class AdminItemApiController {
      * 제품 등록 시 파일 데이터와 함께 저장
      * postman api : O (swagger ui 에서는 하나의 api 에서 서로 다른 두개의 데이터 타입을 파싱하지 못하기 때문에 postman api 를 통해 테스트 진행.)
      * @param createItemDTO
-     * @param files
+     * @param itemFiles
      * admin
      * @return
      * @throws IOException
@@ -94,8 +95,10 @@ public class AdminItemApiController {
     @Operation(summary = "제품 등록", description = "제품의 모든 정보 등록하는 API 입니다.")
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> save(@ModelAttribute CreateItemDTO createItemDTO,
-                                  @RequestPart(value = "files", required = false) List<MultipartFile> files) throws IOException {
-        adminItemService.saveItem(createItemDTO, files);
+                                  @RequestPart(value = "files", required = false) List<MultipartFile> itemFiles
+                                  ) throws IOException {
+        log.info("files ={}", itemFiles);
+        adminItemService.saveItem(createItemDTO, itemFiles);
         return ResponseEntity.ok("제품이 성공적으로 등록 되었습니다.");
     }
 

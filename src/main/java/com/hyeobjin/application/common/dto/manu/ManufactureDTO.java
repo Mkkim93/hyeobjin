@@ -23,16 +23,4 @@ public class ManufactureDTO {
                 .manuName(manuName)
                 .build();
     }
-
-    public Long findByIdToDTO(Manufacturer manufacturer) {
-        return manuId = manufacturer.getId();
-    }
-
-    public Manufacturer toEntity(ManufactureDTO manufactureDTO) {
-        return Manufacturer.builder()
-                .manuId(manufactureDTO.getManuId())
-                .manuName(manufactureDTO.getManuName())
-                .manuYN(manufactureDTO.getManuYN())
-                .build();
-    }
 }

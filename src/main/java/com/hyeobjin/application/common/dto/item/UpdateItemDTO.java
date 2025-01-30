@@ -31,11 +31,13 @@ public class UpdateItemDTO {
 
     private List<FileBoxBoardDTO> updateFiles;
 
+    private Long fileBoxId; // 추가 01/30
+
     public UpdateItemDTO(Long itemId, String itemNum, String itemName, Boolean isMain,
                          String itemUse, String itemSpec, String itemInColor, String itemOutColor, String itemFrameWidth,
                          String itemType, String itemDescription,
                          String itemYN, LocalDateTime itemUpdate,
-                         Long manuId, String manuName) {
+                         Long manuId, String manuName, Long fileBoxId) {
         this.itemId = itemId;
         this.itemNum = itemNum;
         this.itemName = itemName;
@@ -51,5 +53,6 @@ public class UpdateItemDTO {
         this.itemUpdate = itemUpdate;
         this.manuId = manuId;
         this.manuName = manuName;
+        this.fileBoxId = fileBoxId;
     }
 }

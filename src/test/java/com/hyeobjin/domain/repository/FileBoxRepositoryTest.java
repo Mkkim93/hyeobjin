@@ -1,11 +1,10 @@
 package com.hyeobjin.domain.repository;
 
-import com.hyeobjin.application.common.dto.file.UpdateItemDTO;
+import com.hyeobjin.application.common.dto.file.UpdateItemFileDTO;
 import com.hyeobjin.domain.entity.file.FileBox;
 import com.hyeobjin.domain.entity.item.Item;
 import com.hyeobjin.domain.repository.file.FileBoxRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +35,7 @@ class FileBoxRepositoryTest {
     @Test
     @DisplayName("file save test")
     void save() {
-        UpdateItemDTO createFileBoxDTO = new UpdateItemDTO();
+        UpdateItemFileDTO createFileBoxDTO = new UpdateItemFileDTO();
         createFileBoxDTO.setItemId(Item.builder()
                         .itemId(createFileBoxDTO.getItemId())
                 .build().getId());

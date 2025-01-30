@@ -59,15 +59,17 @@ public class FileBox {
     private Board board;
 
     @Builder
-    public FileBox(String fileOrgName, String fileName,
-                   String filePath, String fileType, Long fileSize, Boolean isMain,
+    public FileBox(Long id, String fileOrgName, String fileName,
+                   String filePath, String fileType, Long fileSize, Boolean isMain, LocalDateTime fileRegDate,
                    Item itemId, Board boardId) {
+        this.id = id;
         this.fileOrgName = fileOrgName;
         this.fileName = fileName;
         this.filePath = filePath;
         this.fileSize = fileSize;
         this.fileType = fileType;
         this.isMain = isMain;
+        this.fileRegDate = fileRegDate;
         this.item = itemId;
         this.board = boardId;
     }

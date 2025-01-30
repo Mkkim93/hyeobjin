@@ -18,14 +18,15 @@ public class AdminFileService {
 
     private final FileBoxRepository fileBoxRepository;
 
-    public void deleteFiles(List<Long> itemIds) {
+    public synchronized boolean deleteFiles(List<Long> itemIds) {
         // fileBoxIds에 해당하는 모든 FileBox 객체를 조회
         List<Long> fileBoxIds = fileBoxRepository.findFileBoxIdsByItemIdIn(itemIds);
 
         List<FileBox> fileBoxes = fileBoxRepository.findAllById(fileBoxIds);
 
         if (fileBoxes.isEmpty()) {
-            throw new EntityNotFoundException("해당 파일들이 존재하지 않습니다.");
+            return false;
+
         }
 
         for (FileBox fileBox : fileBoxes) {
@@ -45,5 +46,6 @@ public class AdminFileService {
             // FileBox 레코드 삭제
             fileBoxRepository.delete(fileBox);
         }
+        return true;
     }
 }

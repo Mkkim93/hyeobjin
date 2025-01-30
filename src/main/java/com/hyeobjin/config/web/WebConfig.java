@@ -15,4 +15,6 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addResourceHandler("/files/board/**")
                 .addResourceLocations("classpath:/static/files/board/");
     }
+
+
 }

@@ -1,6 +1,6 @@
 package com.hyeobjin.application.common.service.file;
 
-import com.hyeobjin.application.common.dto.file.UpdateItemDTO;
+import com.hyeobjin.application.common.dto.file.UpdateItemFileDTO;
 import com.hyeobjin.domain.entity.file.FileBox;
 import com.hyeobjin.domain.entity.item.Item;
 import com.hyeobjin.domain.repository.file.FileBoxRepository;
@@ -15,17 +15,24 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 @Slf4j
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class FileBoxService {
 
     @Value("${file.item.dir}")
     private String fileDir;
+
+    @Value("${file.itemSub.dir}")
+    private String fileDirSub;
+
     private final FileBoxRepository fileBoxRepository;
 
     // file download 시 필요
@@ -64,17 +71,9 @@ public class FileBoxService {
     // MultipartFile 의 메타데이터 저장 : file -> dto
     public void saveFilesForItem(Item item, List<MultipartFile> files, Boolean isMain) throws IOException {
 
-        UpdateItemDTO createFileBoxDTO = new UpdateItemDTO();
+        UpdateItemFileDTO createFileBoxDTO = new UpdateItemFileDTO();
         createFileBoxDTO.setItemId(item.getId());
         createFileBoxDTO.setIsMain(isMain);
-
-//        Boolean exist = fileBoxRepository.existsByIsMain(createFileBoxDTO.getItemId());
-//        if (exist) {
-//            // TODO
-//            Long deleteById = fileBoxRepository.findByDeleteFileBoxId(item.getId());
-//            deleteFile(deleteById);
-//            return;
-//        }
 
         try {
             fileSave(createFileBoxDTO, files);
@@ -85,66 +84,73 @@ public class FileBoxService {
         }
     }
 
-    @Transactional
-    public void updateFilesForItem(Item updateItem, List<MultipartFile> files, Boolean isMain) {
 
-        UpdateItemDTO updateItemDTO = new UpdateItemDTO();
-        updateItemDTO.setItemId(updateItem.getId());
-        updateItemDTO.setIsMain(isMain);
+    public void updateFilesForItem(UpdateItemFileDTO updateItemFileDTO, List<MultipartFile> files) {
 
-        // 기존 파일 삭제 조건 없이 무조건 파일을 저장합니다.
         try {
-            // 파일이 존재하는 경우 먼저 삭제 로직
             if (files != null && !files.isEmpty()) {
-                // 파일을 저장하기 전에 기존 파일을 삭제합니다 (필요한 경우)
-                Long deleteById = fileBoxRepository.findByDeleteFileBoxId(updateItem.getId());
+                Long deleteById = fileBoxRepository.findByDeleteFileBoxId(updateItemFileDTO.getItemId());
                 if (deleteById != null) {
-                    deleteFile(deleteById); // 기존 파일 삭제
+                    boolean deleted = deleteFile(deleteById); // 동기적으로 실행
+                    if (deleted) {
+                        fileSave(updateItemFileDTO, files);
+                    } else {
+                        throw new RuntimeException("파일 삭제 실패로 인해 새로운 파일을 저장할 수 없습니다.");
+                    }
+                } else {
+                    fileSave(updateItemFileDTO, files);
                 }
-
-                // 새로운 파일을 저장
-                fileSave(updateItemDTO, files);
             } else {
                 log.info("파일이 제공되지 않았습니다. 기존 파일을 유지합니다.");
             }
         } catch (IOException e) {
-            log.info("파일 저장 중 오류 발생: {}", e.getMessage(), e);
-            throw new RuntimeException("오류");
+            log.error("파일 저장 중 오류 발생: {}", e.getMessage(), e);
+            throw new RuntimeException("파일 저장 오류");
         }
     }
 
     /**
      * fileSave() : 파일 등록
-     * @param createFileBoxDTO 파일 객체
+     * @param updateItemFileDTO 파일 객체
      * @param files
      * @return
      * @throws IOException
      */
-    public void fileSave(UpdateItemDTO createFileBoxDTO, List<MultipartFile> files) throws IOException {
+    public void fileSave(UpdateItemFileDTO updateItemFileDTO, List<MultipartFile> files) throws IOException {
 
         List<FileBox> fileBoxes = new ArrayList<>();
 
-        for (MultipartFile file : files) {
+        for (int i = 0; i < files.size(); i++) {
+            MultipartFile file = files.get(i);
             if (file.isEmpty()) {
                 continue;
             }
 
             String filePath = fileDir;
+            String filePathSub = fileDirSub; // TODO 저장할 경로 나눠야될듯
+
             UUID uuid = UUID.randomUUID();
             String fileName = uuid + "_" + file.getOriginalFilename();
-            File saveFile = new File(filePath, fileName);
+
+            // 첫 번째 파일 (인덱스 0)은 isMain = TRUE, 나머지 파일은 isMain = FALSE
+            boolean isMain = (i == 0); // i가 0이면 isMain = TRUE, 그렇지 않으면 FALSE
+
+            String targetPath = isMain ? filePath : filePathSub; // 저장할 경로 선택
+
+            File saveFile = new File(targetPath, fileName);
 
             file.transferTo(saveFile);
-
             FileBox savedFiles = FileBox.builder()
+                    .id(updateItemFileDTO.getFileBoxId())
                     .fileOrgName(file.getOriginalFilename())
                     .fileName(fileName)
-                    .filePath(filePath + fileName)
+                    .filePath(targetPath + fileName)
                     .fileSize(file.getSize())
                     .fileType(file.getContentType())
-                    .isMain(createFileBoxDTO.getIsMain())
+                    .isMain(isMain) // 인덱스에 따라 isMain 설정
+                    .fileRegDate(LocalDateTime.now())
                     .itemId(Item.builder()
-                            .itemId(createFileBoxDTO.getItemId())
+                            .itemId(updateItemFileDTO.getItemId())
                             .build())
                     .build();
 
@@ -161,7 +167,7 @@ public class FileBoxService {
      * @throws IOException
      */
     public void saveFileOnly(Long itemId, List<MultipartFile> files) throws IOException {
-        fileSave(new UpdateItemDTO(itemId), files);
+        fileSave(new UpdateItemFileDTO(itemId), files);
     }
 
     /**
@@ -169,23 +175,21 @@ public class FileBoxService {
      * RuntimeException : 정적 파일 삭제 실패 시, 런타임 예외 발생 메타데이터 삭제 로직이 실행 되지 않도록 한다.
      * @param fileBoxId
      */
-    public void deleteFile(Long fileBoxId) {
-
+    public boolean deleteFile(Long fileBoxId) {
         FileBox fileBox = fileBoxRepository.findById(fileBoxId)
                 .orElseThrow(() -> new EntityNotFoundException("해당 파일이 존재하지 않습니다."));
-
         File file = new File(fileBox.getFilePath());
-        // 정적경로 파일 삭제
+        log.info("file ={}", file);
+        log.info("file.getAbsolutePath ={}", file.getAbsoluteFile());
         if (file.exists()) {
             boolean fileDeleted = file.delete();
-            log.info("파일이 성공적으로 삭제 되었습니다.");
             if (!fileDeleted) {
                 throw new RuntimeException("파일 삭제 오류");
             }
+            log.info("파일이 성공적으로 삭제되었습니다.");
+        } else {
+            log.warn("파일이 존재하지 않아 삭제할 수 없습니다.");
         }
-        fileBoxRepository.delete(fileBox);
+        return true;
     }
-
-
-
 }

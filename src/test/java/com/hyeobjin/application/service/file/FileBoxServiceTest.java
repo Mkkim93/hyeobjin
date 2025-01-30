@@ -1,6 +1,6 @@
 package com.hyeobjin.application.service.file;
 
-import com.hyeobjin.application.common.dto.file.UpdateItemDTO;
+import com.hyeobjin.application.common.dto.file.UpdateItemFileDTO;
 import com.hyeobjin.application.common.service.file.FileBoxService;
 import com.hyeobjin.domain.entity.file.FileBox;
 import com.hyeobjin.domain.entity.item.Item;
@@ -40,7 +40,7 @@ class FileBoxServiceTest {
     @Test
     @DisplayName("file & Item save test")
     void save() throws IOException {
-        UpdateItemDTO createFileBoxDTO = new UpdateItemDTO();
+        UpdateItemFileDTO createFileBoxDTO = new UpdateItemFileDTO();
 
         List<MultipartFile> files = new ArrayList<>();
         createFileBoxDTO.setItemId(Item.builder()
@@ -70,7 +70,7 @@ class FileBoxServiceTest {
     @DisplayName("file only save test")
     void fileOnlySave() throws IOException {
         Long itemId = 1L;
-        UpdateItemDTO createFileBoxDTO = new UpdateItemDTO();
+        UpdateItemFileDTO createFileBoxDTO = new UpdateItemFileDTO();
         createFileBoxDTO.setFileName("test fileName03");
         createFileBoxDTO.setFileType("jpeg/image");
         createFileBoxDTO.setFileSize(1234L);

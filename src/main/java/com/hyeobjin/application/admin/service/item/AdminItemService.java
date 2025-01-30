@@ -4,6 +4,7 @@ import com.hyeobjin.application.admin.dto.item.FindAdminDetailDTO;
 import com.hyeobjin.application.admin.dto.item.FindAdminItemDTO;
 import com.hyeobjin.application.admin.service.file.AdminFileService;
 import com.hyeobjin.application.admin.service.fix.AdminItemManuService;
+import com.hyeobjin.application.common.dto.file.UpdateItemFileDTO;
 import com.hyeobjin.application.common.dto.item.CreateItemDTO;
 import com.hyeobjin.application.common.dto.item.FindByItemDTO;
 import com.hyeobjin.application.common.dto.item.UpdateItemDTO;
@@ -17,12 +18,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @Slf4j
 @Service
@@ -39,25 +42,34 @@ public class AdminItemService {
     public void deleteItemIds(List<Long> itemIds) {
 
         try {
-            List<Item> itemsToDelete = itemRepository.findAllById(itemIds);
+            List<Item> itemsToDelete = itemRepository.findAllById(itemIds); // 삭제할 아이디 존재 확인
+
             if (itemsToDelete.isEmpty()) {
                 throw new RuntimeException("삭제할 제품이 데이터베이스에 존재하지 않습니다.");
             }
 
+            CompletableFuture<Boolean> fileDeletion = CompletableFuture.supplyAsync(() -> {
+                return adminFileService.deleteFiles(itemIds);
+            });
+
+            Boolean haseFiles = fileDeletion.join();
+
+            if (!haseFiles) {
+                itemRepository.deleteAllByIdIn(itemIds);
+                log.info("파일이 없느느 제품 삭제, 로직 종료");
+                return;
+            }
+
             // 제품 삭제
-            deleteAllFile(itemIds); // 트랜잭션 외부 작업
             itemRepository.deleteAllByIdIn(itemIds);
             log.info("삭제된 제품 수 ={}", itemsToDelete.size());
 
-        } catch (Exception e) {
-            log.error("제품 삭제 실패 ={}", e.getMessage(), e);
-            throw new RuntimeException("제품 삭제 실패", e);
+        } catch (ObjectOptimisticLockingFailureException e) {
+            log.info("ObjectOptimisticLockingFailureException ={}", e);
         }
     }
 
-    private void deleteAllFile(List<Long> itemIds) {
-        adminFileService.deleteFiles(itemIds);
-    }
+
 
     public Page<FindAdminItemDTO> findAdminItemPages(Pageable pageable, String manuName) {
 
@@ -104,15 +116,18 @@ public class AdminItemService {
      */
     public void update(UpdateItemDTO updateItemDTO, List<MultipartFile> files) throws IOException {
 
-        Item updateItem = itemRepository.findById(updateItemDTO.getItemId())
+        itemRepository.findById(updateItemDTO.getItemId())
                 .orElseThrow(() -> new EntityNotFoundException("해당 제품이 존재하지 않습니다."));
 
-        UpdateItemDTO updatedItemDTO = itemRepositoryImpl.updateItem(updateItemDTO);
+        UpdateItemDTO updateComplete = itemRepositoryImpl.updateItem(updateItemDTO);
 
-        updateItem.setItemIdFromDto(updatedItemDTO);
+        UpdateItemFileDTO updateItemFileDTO = new UpdateItemFileDTO();
+        updateItemFileDTO.setItemId(updateComplete.getItemId());
+        updateItemFileDTO.setFileBoxId(updateComplete.getFileBoxId());
 
         if (files != null && !files.isEmpty()) {
-            fileBoxService.updateFilesForItem(updateItem, files, updateItemDTO.getIsMain());
+            // TODO
+            fileBoxService.updateFilesForItem(updateItemFileDTO, files);
         }
     }
 

@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UpdateItemDTO {
+public class UpdateItemFileDTO {
 
     private Long fileBoxId;
     private String fileName;
@@ -26,7 +26,7 @@ public class UpdateItemDTO {
 
     private Long itemId;
 
-    public UpdateItemDTO(Long itemId) {
+    public UpdateItemFileDTO(Long itemId) {
         this.itemId = itemId;
     }
 }
