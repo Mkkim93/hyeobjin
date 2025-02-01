@@ -1,7 +1,7 @@
 package com.hyeobjin.application.service.file;
 
-import com.hyeobjin.application.common.dto.file.UpdateItemFileDTO;
-import com.hyeobjin.application.common.service.file.FileBoxService;
+import com.hyeobjin.application.admin.dto.file.UpdateItemFileDTO;
+import com.hyeobjin.application.admin.service.file.AdminItemFileService;
 import com.hyeobjin.domain.entity.file.FileBox;
 import com.hyeobjin.domain.entity.item.Item;
 import com.hyeobjin.domain.repository.file.FileBoxRepository;
@@ -29,13 +29,13 @@ import static org.mockito.Mockito.*;
 @Transactional
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest
-class FileBoxServiceTest {
+class FileBoxItemServiceTest {
 
     @Mock
     private FileBoxRepository fileBoxRepository;
 
     @InjectMocks
-    private FileBoxService fileBoxService;
+    private AdminItemFileService fileBoxItemService;
 
     @Test
     @DisplayName("file & Item save test")
@@ -61,7 +61,7 @@ class FileBoxServiceTest {
 
         files.add(mockFile);
 
-        fileBoxService.fileSave(createFileBoxDTO, files);
+        fileBoxItemService.fileSave(createFileBoxDTO, files);
 
         assertFalse(files.isEmpty());
     }
@@ -86,7 +86,7 @@ class FileBoxServiceTest {
 
         files.add(mockFile);
 
-        fileBoxService.saveFileOnly(itemId, files);
+
 
 
         verify(fileBoxRepository,
@@ -103,6 +103,6 @@ class FileBoxServiceTest {
     @DisplayName("file delete metadata & static path all")
     void fileDelete() {
         Long fileBoxId = 1L;
-        fileBoxService.deleteFile(fileBoxId);
+        fileBoxItemService.deleteFile(fileBoxId);
     }
 }

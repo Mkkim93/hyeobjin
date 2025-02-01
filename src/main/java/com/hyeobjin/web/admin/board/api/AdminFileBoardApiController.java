@@ -45,9 +45,16 @@ public class AdminFileBoardApiController {
     @DeleteMapping
     public ResponseEntity<String> deleteFile(@RequestParam("boardId") Long boardId,
                                              @RequestParam("fileBoxId") Long fileBoxId) {
-
         boardFileService.delete(fileBoxId, boardId);
-
         return ResponseEntity.ok("게시글 내의 파일 삭제 성공");
+    }
+
+    @Operation(summary = "게시글 수정 중 파일 삭제", description = "게시글 상세 페이지에서 파일의 메타 데이터 및 정적 파일을 삭제하는 API 입니다.")
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> staticFileDelete(@RequestParam("fileName") String fileName) {
+        log.info("fileName={}", fileName);
+        boardFileService.staticFileDelete(fileName);
+
+        return ResponseEntity.ok("파일 삭제 성공");
     }
 }

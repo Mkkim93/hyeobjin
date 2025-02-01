@@ -151,4 +151,19 @@ public class BoardFileService {
     public FileBox findById(Long fileBoxId) {
         return fileBoxRepository.findById(fileBoxId).orElseThrow(() -> new EntityNotFoundException("해당 파일이 존재하지 않습니다."));
     }
+
+    public void staticFileDelete(String fileName) {
+
+        FileBox deleteFileName = fileBoxRepository.findByFileOrgName(fileName);
+
+        File file = new File(deleteFileName.getFilePath());
+
+        if (file.exists()) {
+            boolean fileDeleted = file.delete();
+            if (!fileDeleted) {
+                throw new RuntimeException("정적 파일 삭제 오류");
+            }
+        }
+        fileBoxRepository.delete(deleteFileName);
+    }
 }

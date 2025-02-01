@@ -3,7 +3,6 @@ package com.hyeobjin.web.admin.manu.api;
 import com.hyeobjin.application.admin.dto.manu.FindManufacturerDTO;
 import com.hyeobjin.application.admin.service.manu.AdminManuService;
 import com.hyeobjin.application.common.dto.manu.ManufactureDTO;
-import com.hyeobjin.application.common.service.manufacturer.ManufacturerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;

@@ -4,15 +4,13 @@ import com.hyeobjin.application.admin.dto.file.FindAdminFileBoxDTO;
 import com.hyeobjin.application.admin.dto.item.FindAdminDetailDTO;
 import com.hyeobjin.application.admin.dto.item.FindAdminItemDTO;
 import com.hyeobjin.application.admin.dto.item.QFindAdminItemDTO;
+import com.hyeobjin.application.admin.dto.item.UpdateItemDTO;
 import com.hyeobjin.application.common.dto.file.FindFileBoxDTO;
 import com.hyeobjin.application.common.dto.item.FindByItemDTO;
-import com.hyeobjin.application.common.dto.item.UpdateItemDTO;
 import com.hyeobjin.domain.entity.file.QFileBox;
 import com.hyeobjin.domain.entity.item.QItem;
-import com.hyeobjin.domain.entity.manufacturer.QManufacturer;
 import com.hyeobjin.domain.entity.item.Item;
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.querydsl.jpa.impl.JPAUpdateClause;
@@ -25,7 +23,6 @@ import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -57,7 +54,7 @@ public class ItemRepositoryImpl extends QuerydslRepositorySupport implements Ite
                 .where(
                         item.id.eq(itemId)
                                 .and(item.manufacturer.id.eq(manuId))
-                )
+                ).orderBy(fileBox.id.asc())
                 .fetch()
                 // TODO 파일과 함께 조회 시 불필요한 데이터 제거
                 .stream().map(FindAdminFileBoxDTO::new)
@@ -124,8 +121,8 @@ public class ItemRepositoryImpl extends QuerydslRepositorySupport implements Ite
 
         List<FindFileBoxDTO> fileBoxes = jpaQueryFactory
                 .selectFrom(fileBox)
-                .join(fileBox.item, item).fetchJoin()
-                .join(item.manufacturer, manufacturer).fetchJoin()
+                .leftJoin(fileBox.item, item).fetchJoin()
+                .leftJoin(item.manufacturer, manufacturer).fetchJoin()
                 .where(
                         item.id.eq(itemId)
                                 .and(item.manufacturer.id.eq(manuId))
@@ -138,7 +135,7 @@ public class ItemRepositoryImpl extends QuerydslRepositorySupport implements Ite
 
         Item selectItem = jpaQueryFactory
                 .selectFrom(item)
-                .join(item.manufacturer, manufacturer)
+                .leftJoin(item.manufacturer, manufacturer)
                 .where(item.id.eq(itemId))
                 .fetchOne();
 
@@ -218,9 +215,7 @@ public class ItemRepositoryImpl extends QuerydslRepositorySupport implements Ite
                     updateItemDTO.getItemYN(),
                     updateItemDTO.getItemUpdate(),
                     updateItemDTO.getManuId(),
-                    updateItemDTO.getManuName(),
-                    updateItemDTO.getFileBoxId()
-                    );
+                    updateItemDTO.getManuName());
         } else {
             throw new EntityNotFoundException("해당 제품을 찾을 수 없습니다.");
         }

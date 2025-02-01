@@ -1,13 +1,12 @@
 package com.hyeobjin.domain.repository;
 
+import com.hyeobjin.application.admin.dto.item.CreateItemDTO;
 import com.hyeobjin.application.admin.dto.item.FindAdminDetailDTO;
-import com.hyeobjin.application.common.dto.item.CreateItemDTO;
 import com.hyeobjin.application.common.dto.item.FindByItemDTO;
 import com.hyeobjin.domain.entity.item.Item;
 import com.hyeobjin.domain.repository.item.ItemRepository;
 import com.hyeobjin.domain.repository.item.ItemRepositoryImpl;
 import lombok.extern.slf4j.Slf4j;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,7 +71,7 @@ class ItemRepositoryTest {
     @DisplayName("특정 제조사번호를 입력 후, 제품의 모든 품번을 조회")
     void findAllItemId() {
         Long manuId = 1L;
-//        itemRepository.findAllItemId(manuId).stream().forEach(System.out::println);
+        itemRepository.findAllItemId(manuId).stream().forEach(System.out::println);
     }
 
     @Test

@@ -14,16 +14,13 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriUtils;
 
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 
 @Slf4j
-@Tag(name = "BoardFileBox", description = "게시판 파일 관련 API")
+@Tag(name = "COMMON_BOARD_FILE", description = "게시판 파일 관련 API")
 @RestController
 @RequestMapping("/boardFiles")
 @RequiredArgsConstructor

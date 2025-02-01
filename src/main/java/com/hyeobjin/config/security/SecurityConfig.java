@@ -62,19 +62,21 @@ public class SecurityConfig {
                 .httpBasic((auth) -> auth.disable());
 
         http
+                // 중요!! : Spring Security 가 로그인 처리를 담당할 url, 프론트의 비동기 처리 할 url 과 매핑 (컨트롤러 필요없음)
+                // 여기서 설정하는 url 경로는 클라이언트의 웹사이트의 경로가 아니라 서버 restcontroller 의 rest api 경로 기준이다
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/login", "/auth","/items", "logout",
-                                "/notice", "/**", "/swagger-ui").permitAll() // 중요!! : Spring Security 가 로그인 처리를 담당할 url, 프론트의 비동기 처리 할 url 과 매핑 (컨트롤러 필요없음)
+                        .requestMatchers("/login","/auth","/items/**",
+                                "/manufacturers/**", "/boards/**", "/item/**",
+                                "/swagger-ui").permitAll()
 
-//                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/admins", "/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated());
 
-        // TODO JwtFilter 로직 실행 안됨 나중에 확인
         http
-                .addFilterAt(new JwtFilter(jwtUtil), LoginFilter.class);
+                .addFilterBefore(new JwtFilter(jwtUtil), LoginFilter.class);
 
         http
-                .addFilterBefore(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, redisService),
+                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, redisService),
                         UsernamePasswordAuthenticationFilter.class);
 
         http

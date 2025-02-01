@@ -1,24 +1,19 @@
 package com.hyeobjin.web.common.item.api;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import com.hyeobjin.application.common.dto.item.CreateItemDTO;
 import com.hyeobjin.application.common.dto.item.FindByItemDTO;
-import com.hyeobjin.application.common.dto.item.UpdateItemDTO;
 import com.hyeobjin.application.common.service.item.ItemService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 
 @Slf4j
-@Tag(name = "Item", description = "Item 등록 관련 API")
+@Tag(name = "COMMON_ITEM", description = "Item 등록 관련 API")
 @RestController
 @RequestMapping("/items")
 @RequiredArgsConstructor
@@ -47,7 +42,7 @@ public class ItemApiController {
     }
 
     /**
-     * //TODO 너무 오래 되서 기억안남 찾아볼 것
+     *
      * @param manuId
      * @return
      */

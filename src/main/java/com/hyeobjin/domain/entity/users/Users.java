@@ -1,6 +1,7 @@
 package com.hyeobjin.domain.entity.users;
 
 import com.hyeobjin.application.common.dto.register.RegisterDTO;
+import com.hyeobjin.domain.entity.users.enums.RoleType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Builder;
@@ -30,7 +31,8 @@ public class Users {
     private String name;
 
     @Column(name = "role")
-    private String role;
+    @Enumerated(EnumType.STRING)
+    private RoleType role;
 
     @Column(name = "user_tel")
     private String userTel;
@@ -43,16 +45,19 @@ public class Users {
         this.id = userId;
     }
 
-    public void setCreateJwtData(String username, String role) {
+    public void setCreateJwtData(String username, RoleType role) {
         this.username = username;
         this.role = role;
     }
 
+    // 관리자 등록
     public Users registerData(RegisterDTO registerDTO, String password) {
         this.username = registerDTO.getUsername();
         this.password = password;
         this.name = registerDTO.getName();
-        this.role = "ROLE_ADMIN";
+        this.role = RoleType.ROLE_ADMIN;
+        this.userTel = registerDTO.getUserTel();
+        this.userMail = registerDTO.getUserMail();
         return this;
     }
 }

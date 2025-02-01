@@ -2,7 +2,6 @@ package com.hyeobjin.application.admin.dto.item;
 
 import com.hyeobjin.application.admin.dto.file.FindAdminFileBoxDTO;
 import com.querydsl.core.annotations.QueryProjection;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

@@ -2,13 +2,11 @@ package com.hyeobjin.application.admin.service.file;
 
 import com.hyeobjin.domain.entity.file.FileBox;
 import com.hyeobjin.domain.repository.file.FileBoxRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 @Slf4j

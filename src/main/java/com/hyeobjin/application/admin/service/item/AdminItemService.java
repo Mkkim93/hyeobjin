@@ -1,21 +1,20 @@
 package com.hyeobjin.application.admin.service.item;
 
+import com.hyeobjin.application.admin.dto.item.CreateItemDTO;
 import com.hyeobjin.application.admin.dto.item.FindAdminDetailDTO;
 import com.hyeobjin.application.admin.dto.item.FindAdminItemDTO;
+import com.hyeobjin.application.admin.dto.item.UpdateItemDTO;
 import com.hyeobjin.application.admin.service.file.AdminFileService;
+import com.hyeobjin.application.admin.service.file.AdminItemFileService;
 import com.hyeobjin.application.admin.service.fix.AdminItemManuService;
-import com.hyeobjin.application.common.dto.file.UpdateItemFileDTO;
-import com.hyeobjin.application.common.dto.item.CreateItemDTO;
 import com.hyeobjin.application.common.dto.item.FindByItemDTO;
-import com.hyeobjin.application.common.dto.item.UpdateItemDTO;
-import com.hyeobjin.application.common.service.file.FileBoxService;
 import com.hyeobjin.domain.entity.item.Item;
 import com.hyeobjin.domain.entity.manufacturer.Manufacturer;
 import com.hyeobjin.domain.repository.item.ItemRepository;
 import com.hyeobjin.domain.repository.item.ItemRepositoryImpl;
 import jakarta.persistence.EntityNotFoundException;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
@@ -30,14 +29,26 @@ import java.util.concurrent.CompletableFuture;
 @Slf4j
 @Service
 @Transactional
-@RequiredArgsConstructor
 public class AdminItemService {
 
-    private final FileBoxService fileBoxService;
+    private final AdminItemFileService adminItemFileService;
     private final AdminFileService adminFileService;
     private final AdminItemManuService adminItemManuService;
     private final ItemRepository itemRepository;
     private final ItemRepositoryImpl itemRepositoryImpl;
+
+    @Autowired
+    public AdminItemService(AdminItemFileService adminItemFileService,
+                            AdminFileService adminFileService,
+                            AdminItemManuService adminItemManuService,
+                            ItemRepository itemRepository,
+                            ItemRepositoryImpl itemRepositoryImpl) {
+        this.adminItemFileService = adminItemFileService;
+        this.adminFileService = adminFileService;
+        this.adminItemManuService = adminItemManuService;
+        this.itemRepository = itemRepository;
+        this.itemRepositoryImpl = itemRepositoryImpl;
+    }
 
     public void deleteItemIds(List<Long> itemIds) {
 
@@ -56,7 +67,7 @@ public class AdminItemService {
 
             if (!haseFiles) {
                 itemRepository.deleteAllByIdIn(itemIds);
-                log.info("파일이 없느느 제품 삭제, 로직 종료");
+                log.info("파일이 없는 제품 삭제, 로직 종료");
                 return;
             }
 
@@ -68,8 +79,6 @@ public class AdminItemService {
             log.info("ObjectOptimisticLockingFailureException ={}", e);
         }
     }
-
-
 
     public Page<FindAdminItemDTO> findAdminItemPages(Pageable pageable, String manuName) {
 
@@ -106,7 +115,7 @@ public class AdminItemService {
         Item savedItem = itemRepository.save(item);
 
         if (files != null && !files.isEmpty()) {
-            fileBoxService.saveFilesForItem(savedItem, files, createItemDTO.getIsMain());
+            adminItemFileService.saveFilesForItem(savedItem, files);
         }
     }
 
@@ -114,21 +123,11 @@ public class AdminItemService {
      * 제품 수정
      * - 수정할 제품의 객체를 id 로 조회 - 클라이언트에서 입력한 데이터가 존재하면 수정하고 존재하지 않으면 기존 데이터 유지
      */
-    public void update(UpdateItemDTO updateItemDTO, List<MultipartFile> files) throws IOException {
-
+    public void update(UpdateItemDTO updateItemDTO) {
         itemRepository.findById(updateItemDTO.getItemId())
                 .orElseThrow(() -> new EntityNotFoundException("해당 제품이 존재하지 않습니다."));
 
-        UpdateItemDTO updateComplete = itemRepositoryImpl.updateItem(updateItemDTO);
-
-        UpdateItemFileDTO updateItemFileDTO = new UpdateItemFileDTO();
-        updateItemFileDTO.setItemId(updateComplete.getItemId());
-        updateItemFileDTO.setFileBoxId(updateComplete.getFileBoxId());
-
-        if (files != null && !files.isEmpty()) {
-            // TODO
-            fileBoxService.updateFilesForItem(updateItemFileDTO, files);
-        }
+        itemRepositoryImpl.updateItem(updateItemDTO);
     }
 
     /**

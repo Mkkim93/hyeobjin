@@ -1,6 +1,6 @@
 package com.hyeobjin.domain.entity.item;
 
-import com.hyeobjin.application.common.dto.item.UpdateItemDTO;
+import com.hyeobjin.application.admin.dto.item.UpdateItemDTO;
 import com.hyeobjin.domain.entity.manufacturer.Manufacturer;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import java.time.LocalDateTime;
 
@@ -18,7 +17,6 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Entity
 @Table(name = "item")
 @Getter
-@EnableJpaAuditing
 @EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor
 public class Item {
@@ -96,9 +94,5 @@ public class Item {
         this.manufacturer = Manufacturer.builder()
                 .manuId(manufacturerId)
                 .build();
-    }
-
-    public void setItemIdFromDto(UpdateItemDTO updateItemDTO) {
-        this.id = updateItemDTO.getItemId();
     }
 }

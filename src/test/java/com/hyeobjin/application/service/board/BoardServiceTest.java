@@ -1,7 +1,6 @@
 package com.hyeobjin.application.service.board;
 
 import com.hyeobjin.application.admin.service.board.AdminBoardService;
-import com.hyeobjin.application.common.dto.board.BoardFileDTO;
 import com.hyeobjin.application.common.dto.board.BoardListDTO;
 import com.hyeobjin.application.common.dto.board.CreateBoardDTO;
 import com.hyeobjin.application.common.dto.board.UpdateBoardDTO;

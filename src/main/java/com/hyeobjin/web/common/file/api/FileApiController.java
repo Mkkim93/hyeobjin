@@ -1,6 +1,6 @@
 package com.hyeobjin.web.common.file.api;
 
-import com.hyeobjin.application.common.service.file.FileBoxService;
+import com.hyeobjin.application.admin.service.file.AdminItemFileService;
 import com.hyeobjin.domain.entity.file.FileBox;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -20,28 +20,13 @@ import java.net.MalformedURLException;
 import java.nio.charset.StandardCharsets;
 
 @Slf4j
-@Tag(name = "ItemFileBox", description = "제품 파일 관련 API")
+@Tag(name = "COMMON_FILE", description = "제품 파일 관련 API")
 @RestController
 @RequestMapping("/files")
 @RequiredArgsConstructor
 public class FileApiController {
 
-    private final FileBoxService fileBoxService;
-
-    /**
-     * 현재 등록중이거나 등록된 파일의 데이터 삭제 (정적파일 & 메타데이터)
-     * postman api : O
-     * @param fileBoxId 삭제할 file 의 기본키
-     * @return
-     */
-    @Operation(summary = "파일 삭제", description = "fileBoxId 값을 기준으로 파일을 삭제 API 입니다. (메타데이터 & 정적파일 모두 삭제)")
-    @DeleteMapping
-    public ResponseEntity<String> deleteFile(@RequestParam("fileBoxId") Long fileBoxId) {
-
-        fileBoxService.deleteFile(fileBoxId);
-
-        return ResponseEntity.ok("파일 삭제 성공");
-    }
+    private final AdminItemFileService adminItemFileService;
 
     /**
      * 파일 데이터 다운로드를 위한 컨트롤러입니다.
@@ -59,7 +44,7 @@ public class FileApiController {
     @PostMapping("/download/{fileBoxId}")
     public ResponseEntity<Resource> download(@PathVariable("fileBoxId") Long fileBoxId) throws MalformedURLException {
 
-        FileBox fileBox = fileBoxService.findById(fileBoxId);
+        FileBox fileBox = adminItemFileService.findById(fileBoxId);
 
         if (fileBox == null) {
             return ResponseEntity.notFound().build(); // 파일이 없을 경우 404 에러
@@ -68,7 +53,7 @@ public class FileApiController {
         String uploadFileName = fileBox.getFileOrgName();
         String fileBoxName = fileBox.getFileName();
 
-        UrlResource urlResource = new UrlResource("file:" + fileBoxService.getFullPath(fileBoxName));
+        UrlResource urlResource = new UrlResource("file:" + adminItemFileService.getFullPath(fileBoxName));
 
         log.info("urlResource={}", urlResource);
         log.info("fileName={}", uploadFileName);

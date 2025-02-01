@@ -1,6 +1,7 @@
 package com.hyeobjin.jwt;
 
 import com.hyeobjin.domain.entity.users.Users;
+import com.hyeobjin.domain.entity.users.enums.RoleType;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -41,7 +42,9 @@ public class JwtFilter extends OncePerRequestFilter {
         log.info("doFilterInternal 실행");
 
         // 헤더에서 access 키에 담긴 토큰을 꺼냄
-        String accessToken = request.getHeader("access");
+        String accessToken = request.getHeader("Authorization"); // LoginFilter 에서 넣는 헤더 키값과 일치시켜야됨
+
+        log.info("access ={}", accessToken);
 
         // 토큰이 없다면 다음 필터로 넘김
         if (accessToken == null) {
@@ -76,9 +79,11 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         String username = jwtUtil.getUsername(accessToken);
-        String role = jwtUtil.getRole(accessToken);
+        String role = jwtUtil.getRole(accessToken).toUpperCase();
+        log.info("jwtFilter role ={}", role);
         Users users = new Users();
-        users.setCreateJwtData(username, role);
+
+        users.setCreateJwtData(username, RoleType.valueOf(role));
 
         CustomUserDetails customUserDetails = new CustomUserDetails(users);
         UsernamePasswordAuthenticationToken authToken =

@@ -1,5 +1,6 @@
 package com.hyeobjin.application.admin.dto.users;
 
+import com.hyeobjin.domain.entity.users.enums.RoleType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,7 +14,7 @@ public class FindUsersDTO {
     private String username;
 
     private String name;
-    private String role;
+    private RoleType role;
 
     private String userTel;
     private String userMail;

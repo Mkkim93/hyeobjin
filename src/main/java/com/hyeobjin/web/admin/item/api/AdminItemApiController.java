@@ -1,11 +1,11 @@
 package com.hyeobjin.web.admin.item.api;
 
+import com.hyeobjin.application.admin.dto.item.CreateItemDTO;
 import com.hyeobjin.application.admin.dto.item.FindAdminDetailDTO;
 import com.hyeobjin.application.admin.dto.item.FindAdminItemDTO;
+import com.hyeobjin.application.admin.dto.item.UpdateItemDTO;
 import com.hyeobjin.application.admin.service.item.AdminItemService;
-import com.hyeobjin.application.common.dto.item.CreateItemDTO;
 import com.hyeobjin.application.common.dto.item.FindByItemDTO;
-import com.hyeobjin.application.common.dto.item.UpdateItemDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @Tag(name = "ADMIN_ITEM", description = "관리자 권한으로 제품의 CRUD 관리를 위한 REST API 입니다.")
@@ -95,8 +94,7 @@ public class AdminItemApiController {
     @Operation(summary = "제품 등록", description = "제품의 모든 정보 등록하는 API 입니다.")
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> save(@ModelAttribute CreateItemDTO createItemDTO,
-                                  @RequestPart(value = "files", required = false) List<MultipartFile> itemFiles
-                                  ) throws IOException {
+                                  @RequestPart(value = "files", required = false) List<MultipartFile> itemFiles) throws IOException {
         log.info("files ={}", itemFiles);
         adminItemService.saveItem(createItemDTO, itemFiles);
         return ResponseEntity.ok("제품이 성공적으로 등록 되었습니다.");
@@ -105,7 +103,6 @@ public class AdminItemApiController {
     /**
      * 제품 수정
      * @param updateItemDTO
-     * @param files
      * # postman api : O
      * ROLE : ADMIN
      * @return
@@ -113,23 +110,9 @@ public class AdminItemApiController {
      */
     @Operation(summary = "제품 수정", description = "제품의 모든 정보(manufacturer, file, item)를 수정하는 API 입니다.")
     @PostMapping(value = "/update", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> findOneDetail(@ModelAttribute UpdateItemDTO updateItemDTO,
-                                           @RequestPart(value = "files", required = false) List<MultipartFile> files) throws IOException {
-        adminItemService.update(updateItemDTO, files);
+    public ResponseEntity<?> update(@ModelAttribute UpdateItemDTO updateItemDTO) {
+        adminItemService.update(updateItemDTO);
         return ResponseEntity.ok("file update success");
-    }
-
-    /**
-     * 제품 삭제
-     * swagger : X
-     * ROLE : ADMIN
-     * // TODO 안쓸듯
-     */
-    @Operation(summary = "제품 삭제", description = "관리자가 제품의 정보를 폼에서 삭제하고 제품의 정보는 데이터베이스에 유지 하는 API 입니다.")
-    @PostMapping("/change") // TODO 제품의 PK 로 조회하지 않고 DTO 나 itemNum 으로 조회 후 삭제 업데이트 ?
-    public ResponseEntity<String> deleteItem(@RequestParam("itemId") Long itemId) {
-        adminItemService.delete(itemId);
-        return ResponseEntity.ok("item delete success");
     }
 
 }

@@ -1,22 +1,17 @@
 package com.hyeobjin.web.admin.board.api;
 
-import aj.org.objectweb.asm.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hyeobjin.application.admin.dto.board.DetailAdminBoardDTO;
 import com.hyeobjin.application.admin.dto.board.FindAdminBoardDTO;
 import com.hyeobjin.application.admin.service.board.AdminBoardReplyService;
 import com.hyeobjin.application.admin.service.board.AdminBoardService;
 import com.hyeobjin.application.admin.service.board.BoardAuthService;
 import com.hyeobjin.application.common.dto.board.CreateBoardDTO;
-import com.hyeobjin.application.common.dto.board.FileBoxBoardDTO;
 import com.hyeobjin.application.common.dto.board.UpdateBoardDTO;
-import com.hyeobjin.application.common.service.board.BoardService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.jni.FileInfo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
@@ -73,15 +68,10 @@ public class AdminBoardApiController {
     public ResponseEntity<Long> save(@RequestPart(name = "createBoardDTO") CreateBoardDTO createBoardDTO,
                                      @RequestPart(value = "files", required = false) List<MultipartFile> files,
                                      HttpServletRequest request) throws IOException {
-
         String authToken = request.getHeader("Authorization");
-
         Long userId = boardAuthService.findByUserId(authToken);
-
         Long boardId = adminBoardService.saveBoard(createBoardDTO, files, userId);
-
         log.info("boardId={}", boardId);
-
         return ResponseEntity.ok(boardId);
     }
 

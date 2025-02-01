@@ -1,9 +1,9 @@
 package com.hyeobjin.application.service.item;
 
+import com.hyeobjin.application.admin.dto.item.CreateItemDTO;
+import com.hyeobjin.application.admin.dto.item.UpdateItemDTO;
 import com.hyeobjin.application.admin.service.item.AdminItemService;
-import com.hyeobjin.application.common.dto.item.CreateItemDTO;
 import com.hyeobjin.application.common.dto.item.FindByItemDTO;
-import com.hyeobjin.application.common.dto.item.UpdateItemDTO;
 import com.hyeobjin.application.common.service.item.ItemService;
 import com.hyeobjin.domain.entity.item.Item;
 import com.hyeobjin.domain.repository.item.ItemRepository;

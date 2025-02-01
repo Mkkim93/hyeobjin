@@ -7,9 +7,7 @@ import com.hyeobjin.domain.entity.manufacturer.Manufacturer;
 import com.hyeobjin.domain.repository.manu.ManuFactJpaRepository;
 import com.hyeobjin.domain.repository.manu.ManufacturerRepository;
 import com.hyeobjin.exception.DuplicateManufacturerException;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.EntityNotFoundException;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -17,13 +15,19 @@ import java.util.List;
 
 @Slf4j
 @Service
-
-@RequiredArgsConstructor
 public class AdminManuService {
 
     private final ManuFactJpaRepository manuFactJpaRepository;
     private final ManufacturerRepository manufacturerRepository;
     private final AdminItemService adminItemService;
+
+    public AdminManuService(ManuFactJpaRepository manuFactJpaRepository,
+                            ManufacturerRepository manufacturerRepository,
+                            AdminItemService adminItemService) {
+        this.manuFactJpaRepository = manuFactJpaRepository;
+        this.manufacturerRepository = manufacturerRepository;
+        this.adminItemService = adminItemService;
+    }
 
     /**
      * 관리자 목록을 조회할 때 해당 제조사에 등록된 제품의 개수를 카운팅하여 조회
@@ -76,6 +80,7 @@ public class AdminManuService {
             log.info("이미 존재하는 제조사 입니다.");
             throw new DuplicateManufacturerException("이미 존재하는 제조사명입니다.");
         }
+
         Manufacturer manufacturer = Manufacturer.builder()
                 .manuName(manufactureDTO.getManuName())
                 .manuYN(manufactureDTO.getManuYN())
@@ -102,7 +107,6 @@ public class AdminManuService {
         if (manufactureDTO.getManuYN() != null) {
             manufacturer.adminUpdateManuYN(manufactureDTO.getManuYN());
         }
-
         manufacturerRepository.save(manufacturer);
     }
 }

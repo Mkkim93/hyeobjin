@@ -1,6 +1,6 @@
 package com.hyeobjin.domain.repository;
 
-import com.hyeobjin.application.common.dto.file.UpdateItemFileDTO;
+import com.hyeobjin.application.admin.dto.file.UpdateItemFileDTO;
 import com.hyeobjin.domain.entity.file.FileBox;
 import com.hyeobjin.domain.entity.item.Item;
 import com.hyeobjin.domain.repository.file.FileBoxRepository;
@@ -106,6 +106,14 @@ class FileBoxRepositoryTest {
         List<Long> deletedFileBoxIds = fileBoxRepository.findFileBoxIdsByBoardIdIn(boardIds);
 
         assertThat(deletedFileBoxIds.size()).isEqualTo(7);
+    }
+
+    @Test
+    void findFileNameToEntity() {
+        FileBox byFileName = fileBoxRepository.findByFileOrgName("서브수정1.jpg");
+        System.out.println("byFileName.getId() = " + byFileName.getId());
+        System.out.println("byFileName = " + byFileName.getFileName());
+        System.out.println("byFileName.getFileOrgName() = " + byFileName.getFileOrgName());
     }
 
 }

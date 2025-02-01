@@ -1,6 +1,6 @@
-package com.hyeobjin.application.common.service.file;
+package com.hyeobjin.application.admin.service.file;
 
-import com.hyeobjin.application.common.dto.file.UpdateItemFileDTO;
+import com.hyeobjin.application.admin.dto.file.UpdateItemFileDTO;
 import com.hyeobjin.domain.entity.file.FileBox;
 import com.hyeobjin.domain.entity.item.Item;
 import com.hyeobjin.domain.repository.file.FileBoxRepository;
@@ -25,7 +25,7 @@ import java.util.concurrent.CompletableFuture;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class FileBoxService {
+public class AdminItemFileService {
 
     @Value("${file.item.dir}")
     private String fileDir;
@@ -69,11 +69,10 @@ public class FileBoxService {
     }
 
     // MultipartFile 의 메타데이터 저장 : file -> dto
-    public void saveFilesForItem(Item item, List<MultipartFile> files, Boolean isMain) throws IOException {
+    public void saveFilesForItem(Item item, List<MultipartFile> files) throws IOException {
 
         UpdateItemFileDTO createFileBoxDTO = new UpdateItemFileDTO();
         createFileBoxDTO.setItemId(item.getId());
-        createFileBoxDTO.setIsMain(isMain);
 
         try {
             fileSave(createFileBoxDTO, files);
@@ -81,31 +80,6 @@ public class FileBoxService {
             } catch (IOException e) {
                 log.info("파일 저장 중 오류 발생: {}", e.getMessage(), e);
                 throw e;
-        }
-    }
-
-
-    public void updateFilesForItem(UpdateItemFileDTO updateItemFileDTO, List<MultipartFile> files) {
-
-        try {
-            if (files != null && !files.isEmpty()) {
-                Long deleteById = fileBoxRepository.findByDeleteFileBoxId(updateItemFileDTO.getItemId());
-                if (deleteById != null) {
-                    boolean deleted = deleteFile(deleteById); // 동기적으로 실행
-                    if (deleted) {
-                        fileSave(updateItemFileDTO, files);
-                    } else {
-                        throw new RuntimeException("파일 삭제 실패로 인해 새로운 파일을 저장할 수 없습니다.");
-                    }
-                } else {
-                    fileSave(updateItemFileDTO, files);
-                }
-            } else {
-                log.info("파일이 제공되지 않았습니다. 기존 파일을 유지합니다.");
-            }
-        } catch (IOException e) {
-            log.error("파일 저장 중 오류 발생: {}", e.getMessage(), e);
-            throw new RuntimeException("파일 저장 오류");
         }
     }
 
@@ -138,8 +112,9 @@ public class FileBoxService {
             String targetPath = isMain ? filePath : filePathSub; // 저장할 경로 선택
 
             File saveFile = new File(targetPath, fileName);
-
+        
             file.transferTo(saveFile);
+
             FileBox savedFiles = FileBox.builder()
                     .id(updateItemFileDTO.getFileBoxId())
                     .fileOrgName(file.getOriginalFilename())
@@ -161,28 +136,23 @@ public class FileBoxService {
     }
 
     /**
-     * 현재 제품번호를 조회하고 제품이 존재하면 새로운 파일을 추가
-     * @param itemId 제품 번호
-     * @param files 파일 데이터
-     * @throws IOException
-     */
-    public void saveFileOnly(Long itemId, List<MultipartFile> files) throws IOException {
-        fileSave(new UpdateItemFileDTO(itemId), files);
-    }
-
-    /**
      * 파일 삭제 (정적경로의 파일 우선 삭제 후 DB 메타데이터 삭제)
      * RuntimeException : 정적 파일 삭제 실패 시, 런타임 예외 발생 메타데이터 삭제 로직이 실행 되지 않도록 한다.
      * @param fileBoxId
      */
     public boolean deleteFile(Long fileBoxId) {
+
         FileBox fileBox = fileBoxRepository.findById(fileBoxId)
                 .orElseThrow(() -> new EntityNotFoundException("해당 파일이 존재하지 않습니다."));
+
         File file = new File(fileBox.getFilePath());
+
         log.info("file ={}", file);
         log.info("file.getAbsolutePath ={}", file.getAbsoluteFile());
+
         if (file.exists()) {
             boolean fileDeleted = file.delete();
+
             if (!fileDeleted) {
                 throw new RuntimeException("파일 삭제 오류");
             }
@@ -192,4 +162,139 @@ public class FileBoxService {
         }
         return true;
     }
+
+    public void updateFile(Long fileBoxId, MultipartFile file) throws IOException {
+
+        FileBox fileBox = fileBoxRepository.findById(fileBoxId)
+                .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 파일 입니다."));
+
+        CompletableFuture<Boolean> future = CompletableFuture.supplyAsync(() -> {
+            return deleteFile(fileBox.getId());
+        });
+
+        Boolean hasEnd = future.join();
+
+        if (hasEnd) {
+            updateToFileData(fileBox, file);
+        }
+    }
+
+    private void updateToFileData(FileBox fileBox, MultipartFile file) throws IOException {
+
+        String filePath = fileDir;
+        String filePathSub = fileDirSub; // TODO 저장할 경로 나눠야될듯
+
+        UUID uuid = UUID.randomUUID();
+        String fileName = uuid + "_" + file.getOriginalFilename();
+
+        // 첫 번째 파일 (인덱스 0)은 isMain = TRUE, 나머지 파일은 isMain = FALSE
+        boolean isMain = (fileBox.getIsMain()); // i가 0이면 isMain = TRUE, 그렇지 않으면 FALSE
+
+        String targetPath = isMain ? filePath : filePathSub; // 저장할 경로 선택
+
+        File saveFile = new File(targetPath, fileName);
+
+        file.transferTo(saveFile);
+
+        FileBox savedFiles = FileBox.builder()
+                .id(fileBox.getId())
+                .fileOrgName(file.getOriginalFilename())
+                .fileName(fileName)
+                .filePath(targetPath + fileName)
+                .fileSize(file.getSize())
+                .fileType(file.getContentType())
+                .isMain(isMain) // 인덱스에 따라 isMain 설정
+                .fileRegDate(LocalDateTime.now())
+                .itemId(Item.builder()
+                        .itemId(fileBox.getItem().getId())
+                        .build())
+                .build();
+
+        fileBoxRepository.save(savedFiles);
+    }
+
+    public void fileAddSave(UpdateItemFileDTO updateItemFileDTO, List<MultipartFile> files) throws IOException {
+
+        List<FileBox> fileBoxes = new ArrayList<>();
+
+        for (int i = 0; i < files.size(); i++) {
+            MultipartFile file = files.get(i);
+            if (file.isEmpty()) {
+                continue;
+            }
+
+            String filePath = fileDir;
+            String filePathSub = fileDirSub; // TODO 저장할 경로 나눠야될듯
+
+            UUID uuid = UUID.randomUUID();
+            String fileName = uuid + "_" + file.getOriginalFilename();
+
+            String targetPath = updateItemFileDTO.getIsMain() ? filePath : filePathSub; // 저장할 경로 선택
+
+            File saveFile = new File(targetPath, fileName);
+
+            file.transferTo(saveFile);
+
+            FileBox savedFiles = FileBox.builder()
+                    .id(updateItemFileDTO.getFileBoxId())
+                    .fileOrgName(file.getOriginalFilename())
+                    .fileName(fileName)
+                    .filePath(targetPath + fileName)
+                    .fileSize(file.getSize())
+                    .fileType(file.getContentType())
+                    .isMain(updateItemFileDTO.getIsMain()) // 인덱스에 따라 isMain 설정
+                    .fileRegDate(LocalDateTime.now())
+                    .itemId(Item.builder()
+                            .itemId(updateItemFileDTO.getItemId())
+                            .build())
+                    .build();
+
+            fileBoxes.add(savedFiles);
+
+            fileBoxRepository.save(savedFiles);
+        }
+    }
+
+    public void deleteFileFirst(Long fileBoxId) {
+
+        FileBox fileBox = fileBoxRepository.findById(fileBoxId).orElseThrow(() -> new EntityNotFoundException("해당 파일이 존재 하지 않습니다."));
+
+        CompletableFuture<Boolean> hasDeleted = CompletableFuture.supplyAsync(() -> {
+            return deleteFile(fileBoxId);
+        });
+
+        Boolean hasDeleteFile = hasDeleted.join();
+
+        if (!hasDeleteFile) {
+            log.info("파일 삭제 중 오류 발생");
+            return;
+        }
+
+        fileBoxRepository.delete(fileBox);
+    }
+
+    // TODO Transaction issue
+    /* public void updateFilesForItem(UpdateItemFileDTO updateItemFileDTO, List<MultipartFile> files) {
+
+        try {
+            if (files != null && !files.isEmpty()) {
+                Long deleteById = fileBoxRepository.findByDeleteFileBoxId(updateItemFileDTO.getItemId());
+                if (deleteById != null) {
+                    boolean deleted = deleteFile(deleteById); // 동기적으로 실행
+                    if (deleted) {
+                        fileSave(updateItemFileDTO, files);
+                    } else {
+                        throw new RuntimeException("파일 삭제 실패로 인해 새로운 파일을 저장할 수 없습니다.");
+                    }
+                } else {
+                    fileSave(updateItemFileDTO, files);
+                }
+            } else {
+                log.info("파일이 제공되지 않았습니다. 기존 파일을 유지합니다.");
+            }
+        } catch (IOException e) {
+            log.error("파일 저장 중 오류 발생: {}", e.getMessage(), e);
+            throw new RuntimeException("파일 저장 오류");
+        }
+    } */
 }

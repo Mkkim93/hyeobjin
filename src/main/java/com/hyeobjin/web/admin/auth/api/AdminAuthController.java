@@ -36,9 +36,9 @@ public class AdminAuthController {
         Boolean isRegistered = adminAuthService.register(registerDTO);
 
         if (isRegistered) {
-            return ResponseEntity.status(HttpStatus.CREATED).body("register front success");
+            return ResponseEntity.status(HttpStatus.CREATED).body("add Admin Register success");
         } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("register front failed");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("add Admin Register failed");
         }
     }
 }

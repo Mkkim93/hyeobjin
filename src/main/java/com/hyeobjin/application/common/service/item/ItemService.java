@@ -3,22 +3,26 @@ package com.hyeobjin.application.common.service.item;
 import com.hyeobjin.application.common.dto.item.FindByItemDTO;
 import com.hyeobjin.domain.repository.item.ItemRepository;
 import com.hyeobjin.domain.repository.item.ItemRepositoryImpl;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-
 @Slf4j
-@Transactional
 @Service
-@RequiredArgsConstructor
+@Transactional
 public class ItemService {
 
     private final ItemRepository itemRepository;
     private final ItemRepositoryImpl itemRepositoryImpl;
+
+    @Autowired
+    public ItemService(ItemRepository itemRepository, ItemRepositoryImpl itemRepositoryImpl) {
+        this.itemRepository = itemRepository;
+        this.itemRepositoryImpl = itemRepositoryImpl;
+    }
 
     /**
      * 제품 카테고리별 품번으로 검색

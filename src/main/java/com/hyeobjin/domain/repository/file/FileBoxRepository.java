@@ -5,10 +5,8 @@ import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface FileBoxRepository extends JpaRepository<FileBox, Long> {
 
@@ -31,4 +29,6 @@ public interface FileBoxRepository extends JpaRepository<FileBox, Long> {
 
     @Query("select f.id from FileBox f where f.board.id in :boardIds")
     List<Long> findFileBoxIdsByBoardIdIn(@Param("boardIds") List<Long> boardIds);
+
+    FileBox findByFileOrgName(String fileName);
 }

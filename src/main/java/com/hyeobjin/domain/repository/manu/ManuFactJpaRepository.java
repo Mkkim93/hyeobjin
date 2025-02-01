@@ -1,11 +1,8 @@
 package com.hyeobjin.domain.repository.manu;
 
 import com.hyeobjin.application.admin.dto.manu.FindManufacturerDTO;
-import com.hyeobjin.domain.entity.manufacturer.Manufacturer;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import lombok.RequiredArgsConstructor;
-import org.apache.catalina.LifecycleState;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

@@ -34,7 +34,7 @@ public class JwtUtil {
                 .build()
                 .parseSignedClaims(token)
                 .getPayload()
-                .get("role", String.class);
+                .get("roles", String.class);
     }
 
     public Boolean isExpired(String token) {
@@ -60,7 +60,7 @@ public class JwtUtil {
         return Jwts.builder()
                 .claim("category", category)
                 .claim("username", username)
-                .claim("role", role)
+                .claim("roles", role)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + expirationTime))
                 .signWith(secretKey)

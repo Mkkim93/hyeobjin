@@ -88,7 +88,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         redisService.save("refresh", refresh, 36000000L);
 
         // 응답 설정
-        response.setHeader("Authorization", access);
+        response.setHeader("Authorization", access); // 여기에서 넣은 토큰 키값을 doFilterInter~() 에서 getHeader 로 읽는다 키값 일치화 시켜야됨
         response.addCookie(createCookie("refresh", refresh));
         response.setStatus(HttpStatus.OK.value());
     }
@@ -96,8 +96,8 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     private Cookie createCookie(String key, String value) {
         Cookie cookie = new Cookie(key, value);
         cookie.setMaxAge(60 * 60 * 10);
-//        cookie.setSecure(true);
-//        cookie.setPath("/");
+        cookie.setSecure(true);
+        cookie.setPath("/");
         cookie.setHttpOnly(true);
         return cookie;
     }

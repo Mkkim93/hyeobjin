@@ -1,4 +1,4 @@
-package com.hyeobjin.application.common.dto.file;
+package com.hyeobjin.application.admin.dto.file;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,9 +21,7 @@ public class UpdateItemFileDTO {
     private Long fileSize;
     private String fileType;
     private String filePath;
-
     private Boolean isMain;
-
     private Long itemId;
 
     public UpdateItemFileDTO(Long itemId) {

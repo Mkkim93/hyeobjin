@@ -1,7 +1,5 @@
 package com.hyeobjin.domain.entity.board;
 
-import com.hyeobjin.application.common.dto.board.BoardFileDTO;
-import com.hyeobjin.application.common.dto.board.CreateBoardDTO;
 import com.hyeobjin.domain.entity.users.Users;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -10,7 +8,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import java.time.LocalDateTime;
 
@@ -21,7 +18,6 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Table(name = "board")
 @Getter
 @NoArgsConstructor
-@EnableJpaAuditing
 @EntityListeners(AuditingEntityListener.class)
 public class Board {
 

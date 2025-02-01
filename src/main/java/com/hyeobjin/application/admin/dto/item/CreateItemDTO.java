@@ -1,4 +1,4 @@
-package com.hyeobjin.application.common.dto.item;
+package com.hyeobjin.application.admin.dto.item;
 
 import com.hyeobjin.application.common.dto.file.FileBoxItemDTO;
 import com.hyeobjin.domain.entity.item.Item;
@@ -32,6 +32,7 @@ public class CreateItemDTO {
     private Long manuId;
 
     private List<FileBoxItemDTO> itemFiles;
+
     private Boolean isMain;
 
     public Item toEntity(CreateItemDTO createItemDTO) {

@@ -2,8 +2,6 @@ package com.hyeobjin.web.common.board.api;
 
 import com.hyeobjin.application.common.dto.board.BoardDetailDTO;
 import com.hyeobjin.application.common.dto.board.BoardListDTO;
-import com.hyeobjin.application.common.dto.board.CreateBoardDTO;
-import com.hyeobjin.application.common.dto.board.UpdateBoardDTO;
 import com.hyeobjin.application.common.service.board.BoardReplyService;
 import com.hyeobjin.application.common.service.board.BoardService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,16 +10,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
-import java.util.List;
 
 @Slf4j
-@Tag(name = "board", description = "게시판 관련 API")
+@Tag(name = "COMMON_BOARD", description = "게시판 관련 API")
 @RestController
 @RequestMapping("/boards")
 @RequiredArgsConstructor

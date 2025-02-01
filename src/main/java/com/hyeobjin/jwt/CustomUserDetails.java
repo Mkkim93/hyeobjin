@@ -1,6 +1,8 @@
 package com.hyeobjin.jwt;
 
 import com.hyeobjin.domain.entity.users.Users;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -9,6 +11,7 @@ import java.util.Collection;
 
 public class CustomUserDetails implements UserDetails {
 
+    private static final Logger log = LoggerFactory.getLogger(CustomUserDetails.class);
     private final Users users;
 
     public CustomUserDetails(Users users) {
@@ -22,7 +25,8 @@ public class CustomUserDetails implements UserDetails {
         collection.add(new GrantedAuthority() {
             @Override
             public String getAuthority() {
-                return users.getRole();
+                log.info("users.getRole().name={}", users.getRole().name());
+                return users.getRole().name();
             }
         });
         return collection;
