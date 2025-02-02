@@ -41,8 +41,9 @@ public class Users {
     private String userMail;
 
     @Builder
-    public Users(Long userId) {
+    public Users(Long userId, String name) {
         this.id = userId;
+        this.name = name;
     }
 
     public void setCreateJwtData(String username, RoleType role) {

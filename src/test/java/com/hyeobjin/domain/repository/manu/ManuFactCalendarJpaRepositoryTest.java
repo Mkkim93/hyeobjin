@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @Slf4j
 @SpringBootTest
-class ManuFactJpaRepositoryTest {
+class ManuFactCalendarJpaRepositoryTest {
 
     @Autowired ManuFactJpaRepository manuFactJpaRepository;
 

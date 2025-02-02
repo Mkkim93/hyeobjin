@@ -65,11 +65,13 @@ public class SecurityConfig {
                 // 중요!! : Spring Security 가 로그인 처리를 담당할 url, 프론트의 비동기 처리 할 url 과 매핑 (컨트롤러 필요없음)
                 // 여기서 설정하는 url 경로는 클라이언트의 웹사이트의 경로가 아니라 서버 restcontroller 의 rest api 경로 기준이다
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/login","/auth","/items/**",
-                                "/manufacturers/**", "/boards/**", "/item/**",
-                                "/swagger-ui").permitAll()
+                        .requestMatchers("/login","/auth",
+                                "/manufacturers/**", "/boards/**", "/items/**",
+                                "/swagger-ui/**", "/calendar/**", "/swagger-ui.html", "/v3/api-docs",
+                                "/swagger-resources/**", "/webjars/**", "/v3/api-docs/swagger-config",
+                                "/swagger-ui/index.html#/ADMIN_CALENDAR/**", "/admin/calendar/**", "/**").permitAll()
 
-                        .requestMatchers("/admins", "/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/admins").hasRole("ADMIN")
                         .anyRequest().authenticated());
 
         http

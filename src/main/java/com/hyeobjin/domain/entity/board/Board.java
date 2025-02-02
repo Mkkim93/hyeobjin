@@ -13,7 +13,6 @@ import java.time.LocalDateTime;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
-
 @Entity
 @Table(name = "board")
 @Getter
