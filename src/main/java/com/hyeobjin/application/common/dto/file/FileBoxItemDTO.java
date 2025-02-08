@@ -16,4 +16,5 @@ public class FileBoxItemDTO {
     private String fileType;
     private String filePath;
     private Boolean isMain;
+    private Boolean updated;
 }

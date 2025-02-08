@@ -18,6 +18,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -57,6 +58,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
                     new UsernamePasswordAuthenticationToken(username, password, null);
 
             log.info("AuthToken={}", authToken);
+            log.info("로그인 시각 ={}", LocalDateTime.now());
 
             return authenticationManager.authenticate(authToken);
         } catch (IOException e) {
@@ -78,7 +80,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         String role = auth.getAuthority();
 
         // access 토큰 생성
-        String access = jwtUtil.createJwt("access", username, role, 600000L); // 10 min
+        String access = jwtUtil.createJwt("access", username, role, 36000000L); // TODO 원래 10 min 인데 일단 늘려놓음
 
         // refresh 토큰 생성
         String refresh = jwtUtil.createJwt("refresh", username, role, 36000000L);// 24 hours

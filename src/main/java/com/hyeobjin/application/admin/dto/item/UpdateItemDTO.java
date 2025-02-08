@@ -1,9 +1,11 @@
 package com.hyeobjin.application.admin.dto.item;
 
+import com.hyeobjin.application.common.dto.file.FileBoxItemDTO;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -27,6 +29,20 @@ public class UpdateItemDTO {
     private Long manuId;
     private String manuName;
 
+    private Boolean updated;
+
+    private FileBoxItemDTO updateMainFile;
+
+    private List<FileBoxItemDTO> updateSubFiles;
+
+    public List<String> getUpdateSubFileNames() {
+        List<String> updateNames = null;
+        for (FileBoxItemDTO updateSubFile : updateSubFiles) {
+            updateNames.add(updateSubFile.getFileName());
+        }
+        return  updateNames;
+    }
+
     public UpdateItemDTO(Long itemId, String itemNum, String itemName, Boolean isMain,
                          String itemUse, String itemSpec, String itemInColor, String itemOutColor, String itemFrameWidth,
                          String itemType, String itemDescription,
@@ -47,6 +63,5 @@ public class UpdateItemDTO {
         this.itemUpdate = itemUpdate;
         this.manuId = manuId;
         this.manuName = manuName;
-
     }
 }

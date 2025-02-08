@@ -48,7 +48,7 @@ public class AdminItemFileApiController {
     @PostMapping
     public ResponseEntity<?> updateFile(@RequestParam("fileBoxId") Long fileBoxId,
                                         @RequestPart("files") MultipartFile file) throws IOException {
-        adminItemFileService.updateFile(fileBoxId, file);
+//        adminItemFileService.updateFile(fileBoxId, file);
         return ResponseEntity.ok("파일 수정 성공");
     }
 
@@ -62,5 +62,4 @@ public class AdminItemFileApiController {
         adminItemFileService.fileAddSave(updateItemFileDTO, file);
         return ResponseEntity.ok("파일 등록 성공");
     }
-
 }

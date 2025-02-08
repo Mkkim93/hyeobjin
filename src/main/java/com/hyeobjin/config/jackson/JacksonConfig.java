@@ -13,7 +13,7 @@ public class JacksonConfig {
         return builder -> builder.postConfigurer(objectMapper -> {
             objectMapper.getFactory()
                     .setStreamReadConstraints(StreamReadConstraints.builder()
-                            .maxStringLength(100_000_000) // 최대 50MB까지 허용
+                            .maxStringLength(100_000_000) // 최대 50MB 까지 허용
                             .build());
         });
     }

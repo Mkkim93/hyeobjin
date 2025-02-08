@@ -42,7 +42,7 @@ public class ItemRepositoryImpl extends QuerydslRepositorySupport implements Ite
     }
 
     @Override
-    public FindAdminDetailDTO findItemDetail(Long manuId, Long itemId) {
+    public FindAdminDetailDTO findItemDetail(Long itemId) {
 
         QItem item = QItem.item;
         QFileBox fileBox = QFileBox.fileBox;
@@ -53,7 +53,6 @@ public class ItemRepositoryImpl extends QuerydslRepositorySupport implements Ite
                 .join(item.manufacturer, manufacturer).fetchJoin()
                 .where(
                         item.id.eq(itemId)
-                                .and(item.manufacturer.id.eq(manuId))
                 ).orderBy(fileBox.id.asc())
                 .fetch()
                 // TODO 파일과 함께 조회 시 불필요한 데이터 제거

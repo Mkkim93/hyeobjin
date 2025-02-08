@@ -1,6 +1,8 @@
 package com.hyeobjin.application.admin.service.file;
 
 import com.hyeobjin.application.admin.dto.file.UpdateItemFileDTO;
+import com.hyeobjin.application.admin.dto.item.UpdateItemDTO;
+import com.hyeobjin.application.common.dto.file.FileBoxItemDTO;
 import com.hyeobjin.domain.entity.file.FileBox;
 import com.hyeobjin.domain.entity.item.Item;
 import com.hyeobjin.domain.repository.file.FileBoxRepository;
@@ -20,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -163,20 +166,8 @@ public class AdminItemFileService {
         return true;
     }
 
-    public void updateFile(Long fileBoxId, MultipartFile file) throws IOException {
+    public void updateFile(UpdateItemDTO updateItemDTO, List<MultipartFile> file) throws IOException {
 
-        FileBox fileBox = fileBoxRepository.findById(fileBoxId)
-                .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 파일 입니다."));
-
-        CompletableFuture<Boolean> future = CompletableFuture.supplyAsync(() -> {
-            return deleteFile(fileBox.getId());
-        });
-
-        Boolean hasEnd = future.join();
-
-        if (hasEnd) {
-            updateToFileData(fileBox, file);
-        }
     }
 
     private void updateToFileData(FileBox fileBox, MultipartFile file) throws IOException {
@@ -271,6 +262,21 @@ public class AdminItemFileService {
         }
 
         fileBoxRepository.delete(fileBox);
+    }
+
+    // TODO
+    public String findFileBoxIds(UpdateItemDTO updateItemDTO, MultipartFile mainFile, List<MultipartFile> subFiles) {
+
+        Long mainFileId = fileBoxRepository.findByIdForMainFile(updateItemDTO.getItemId());
+        List<Long> subFileIds = fileBoxRepository.findByIdForSubFile(updateItemDTO.getItemId());
+
+        log.info("subfile ids", subFileIds);
+
+        FileBox mainFileEntity = fileBoxRepository.findById(mainFileId).orElseThrow(() -> new EntityNotFoundException("존재하지 않은 파일"));
+
+        log.info("mainFileEntity fileName ={}",mainFileEntity.getFileName());
+
+        return "성공";
     }
 
     // TODO Transaction issue

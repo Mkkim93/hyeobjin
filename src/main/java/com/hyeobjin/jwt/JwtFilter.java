@@ -15,6 +15,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.LocalDateTime;
 
 @Slf4j
 @Component
@@ -92,7 +93,8 @@ public class JwtFilter extends OncePerRequestFilter {
 
         SecurityContextHolder.getContext().setAuthentication(authToken);
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
-        log.info("로그인한 사용자의 정보 ={}", name);
+        log.info("로그인한 사용자 정보 ={}", name);
+
         filterChain.doFilter(request, response);
     }
 }

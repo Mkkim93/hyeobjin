@@ -66,7 +66,7 @@ public class AdminBoardApiController {
      */
     @Operation(summary = "게시글 작성", description = "게시글 & 파일 저장을 위한 API 입니다.")
     @PostMapping
-    public ResponseEntity<Long> save(@RequestPart(name = "createBoardDTO") CreateBoardDTO createBoardDTO,
+    public ResponseEntity<Long> save(@RequestPart(value = "createBoardDTO") CreateBoardDTO createBoardDTO,
                                      @RequestPart(value = "files", required = false) List<MultipartFile> files,
                                      HttpServletRequest request) throws IOException {
         String authToken = request.getHeader("Authorization");
@@ -104,8 +104,8 @@ public class AdminBoardApiController {
             file = new ArrayList<>();
         }
 
-        adminBoardService.update(updateBoardDTO, file);
-        return ResponseEntity.ok().build();
+        Long updatedId = adminBoardService.update(updateBoardDTO, file);
+        return ResponseEntity.ok(updatedId);
     }
 
 

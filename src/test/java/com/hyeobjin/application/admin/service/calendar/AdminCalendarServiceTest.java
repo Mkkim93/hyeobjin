@@ -29,9 +29,9 @@ class AdminCalendarServiceTest {
     @Test
     @DisplayName("관리자 일정 목록 조회")
     void findAllAdmin() {
-        List<AdminFindCalendarDTO> result = adminCalendarService.findAll();
+//        List<AdminFindCalendarDTO> result = adminCalendarService.findAll();
 
-        result.stream().forEach(System.out::println);
+//        result.stream().forEach(System.out::println);
     }
 
     @Test
@@ -41,7 +41,7 @@ class AdminCalendarServiceTest {
 
         AdminFindCalendarDTO resultDetail = adminCalendarService.findDetail(calendarId);
 
-        System.out.println("resultDetail.getUsers().getName() = " + resultDetail.getUsers().getName());
+//        System.out.println("resultDetail.getUsers().getName() = " + resultDetail.getUsers().getName());
 
         Assertions.assertThat(resultDetail.getCalenderId()).isEqualTo(calendarId);
     }

@@ -9,15 +9,15 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class AdminCalendarSummaryDTO {
 
-    private Long calenderId;
+    private Long calendarId;
     private String title;
     private LocalDateTime createAt;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
 
-    public AdminCalendarSummaryDTO(Long calenderId, String title, LocalDateTime createAt,
-                                LocalDateTime startTime, LocalDateTime endTime) {
-        this.calenderId = calenderId;
+    public AdminCalendarSummaryDTO(Long calendarId, String title, LocalDateTime createAt,
+                                   LocalDateTime startTime, LocalDateTime endTime) {
+        this.calendarId = calendarId;
         this.title = title;
         this.createAt = createAt;
         this.startTime = startTime;

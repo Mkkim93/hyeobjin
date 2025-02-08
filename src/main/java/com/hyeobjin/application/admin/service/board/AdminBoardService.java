@@ -15,7 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -95,13 +94,15 @@ public class AdminBoardService {
      * test code : O
      * @param updateBoardDTO 업데이트 객체
      */
-    public void update(UpdateBoardDTO updateBoardDTO, List<MultipartFile> files) throws IOException {
+    public Long update(UpdateBoardDTO updateBoardDTO, List<MultipartFile> files) throws IOException {
 
         Board board = boardRepositoryImpl.updateBoard(updateBoardDTO);
 
         if (files != null && !files.isEmpty()) {
             boardFileService.saveFilesForBoard(board, files);
         }
+
+        return board.getId();
     }
 
     /**

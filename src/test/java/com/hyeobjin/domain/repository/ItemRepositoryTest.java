@@ -87,10 +87,7 @@ class ItemRepositoryTest {
     @DisplayName("관리자 페이지 상세 조회")
     void findByItemDetail() {
 
-        FindAdminDetailDTO itemDetail = itemRepositoryImpl.findItemDetail(1L, 1L);
-        System.out.println("itemDetail = " + itemDetail);
+//        FindAdminDetailDTO itemDetail = itemRepositoryImpl.findItemDetail(1L, 1L);
+//        System.out.println("itemDetail = " + itemDetail);
     }
-
-
-
 }

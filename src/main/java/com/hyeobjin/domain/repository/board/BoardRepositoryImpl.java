@@ -92,10 +92,9 @@ public class BoardRepositoryImpl extends QuerydslRepositorySupport implements Bo
         if (updateBoardDTO.getBoardTitle() != null) {
             updateClause.set(board.boardTitle, updateBoardDTO.getBoardTitle());
         }
-        if (updateBoardDTO.getContent() != null) {
-            updateClause.set(board.boardContent, updateBoardDTO.getContent());
+        if (updateBoardDTO.getBoardContent() != null) {
+            updateClause.set(board.boardContent, updateBoardDTO.getBoardContent());
         }
-
         updateClause.set(board.boardUpdate, LocalDateTime.now()); // 게시글 수정 시 현재 시간으로 업데이트
 
         updateClause.where(board.id.eq(updateBoardDTO.getBoardId()));

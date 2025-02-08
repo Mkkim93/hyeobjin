@@ -1,10 +1,12 @@
 package com.hyeobjin.web.admin.item.api;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hyeobjin.application.admin.dto.item.CreateItemDTO;
 import com.hyeobjin.application.admin.dto.item.FindAdminDetailDTO;
 import com.hyeobjin.application.admin.dto.item.FindAdminItemDTO;
 import com.hyeobjin.application.admin.dto.item.UpdateItemDTO;
 import com.hyeobjin.application.admin.service.item.AdminItemService;
+import com.hyeobjin.application.common.dto.file.FileBoxItemDTO;
 import com.hyeobjin.application.common.dto.item.FindByItemDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -46,11 +48,11 @@ public class AdminItemApiController {
 
     @Operation(summary = "관리자 제품 상세 조회", description = "관리자가 제품을 상세 조회하기 위한 API 입니다.")
     @GetMapping("/detail")
-    public ResponseEntity<FindAdminDetailDTO> findItemDetail(@RequestParam("manuId") Long manuId,
+    public ResponseEntity<FindAdminDetailDTO> findItemDetail(
                                                              @RequestParam("itemId") Long itemId) {
         FindByItemDTO findAdminItemDTO = new FindByItemDTO();
         findAdminItemDTO.setItemId(itemId);
-        findAdminItemDTO.setManuId(manuId);
+
         return ResponseEntity.ok(adminItemService.findByItemDetail(findAdminItemDTO));
     }
 
@@ -108,11 +110,16 @@ public class AdminItemApiController {
      * @return
      * @throws IOException
      */
+    // TODO
     @Operation(summary = "제품 수정", description = "제품의 모든 정보(manufacturer, file, item)를 수정하는 API 입니다.")
     @PostMapping(value = "/update", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> update(@ModelAttribute UpdateItemDTO updateItemDTO) {
-        adminItemService.update(updateItemDTO);
+    public ResponseEntity<?> update(@ModelAttribute UpdateItemDTO updateItemDTO,
+                                    @RequestPart(value = "mainFile", required = false) MultipartFile mainFile,
+                                    @RequestPart(value = "subFiles", required = false) List<MultipartFile> subFiles
+                                    ) throws IOException {
+
+        adminItemService.update(updateItemDTO, mainFile, subFiles);
+
         return ResponseEntity.ok("file update success");
     }
-
 }

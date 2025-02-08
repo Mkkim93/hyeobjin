@@ -15,5 +15,5 @@ public interface ItemRepositoryCustom {
 
     Page<FindAdminItemDTO> findItemList(Pageable pageable, String manuName);
 
-    FindAdminDetailDTO findItemDetail(Long manuId, Long itemId);
+    FindAdminDetailDTO findItemDetail(Long itemId);
 }

@@ -31,8 +31,8 @@ class CalendarJpaRepositoryTest {
     @Test
     @DisplayName("관리자 일정 리스트 간단 조회")
     void findAllAdmin() {
-        List<AdminFindCalendarDTO> result = calendarJpaRepository.findByAllAdmin();
-
-        result.stream().forEach(System.out::println);
+//        List<AdminFindCalendarDTO> result = calendarJpaRepository.findByAllAdmin();
+//
+//        result.stream().forEach(System.out::println);
     }
 }

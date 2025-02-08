@@ -116,4 +116,20 @@ class FileBoxRepositoryTest {
         System.out.println("byFileName.getFileOrgName() = " + byFileName.getFileOrgName());
     }
 
+    @Test
+    @DisplayName("수정할 제품의 메인 파일의 PK, 서브 파일의 PK 들을 조회")
+    void findByIdMainSubFile() {
+        Long itemId = 1L;
+        Long byIdForMainFile = fileBoxRepository.findByIdForMainFile(itemId);
+        List<Long> byIdForSubFile = fileBoxRepository.findByIdForSubFile(itemId);
+
+        System.out.println("byIdForMainFile = " + byIdForMainFile);
+        System.out.println("byIdForSubFile = " + byIdForSubFile);
+
+        List<FileBox> byIdSubFiles = fileBoxRepository.findByIdSubFiles(byIdForSubFile);
+        for (FileBox byIdSubFile : byIdSubFiles) {
+            System.out.println("byIdSubFile = " + byIdSubFile);
+        }
+    }
+
 }

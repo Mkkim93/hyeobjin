@@ -13,7 +13,7 @@ public class UpdateBoardDTO {
 
     private Long boardId;
     private String boardTitle;
-    private String content;
+    private String boardContent;
 
     private List<FileBoxBoardDTO> boardFiles;
 }

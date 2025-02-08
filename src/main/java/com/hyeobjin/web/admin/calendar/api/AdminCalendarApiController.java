@@ -5,12 +5,14 @@ import com.hyeobjin.application.admin.dto.calendar.AdminFindCalendarDTO;
 import com.hyeobjin.application.admin.dto.calendar.CreateCalendarDTO;
 import com.hyeobjin.application.admin.dto.calendar.UpdateCalendarDTO;
 import com.hyeobjin.application.admin.service.calendar.AdminCalendarService;
+import com.hyeobjin.application.admin.service.calendar.CalendarAuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,6 +25,7 @@ import java.util.List;
 public class AdminCalendarApiController {
 
     private final AdminCalendarService adminCalendarService;
+    private final CalendarAuthService calendarAuthService;
 
     /**
      * swagger : O
@@ -60,6 +63,11 @@ public class AdminCalendarApiController {
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<?> save(@RequestBody CreateCalendarDTO createCalenderDTO) {
 
+        String name = SecurityContextHolder.getContext().getAuthentication().getName();
+        Long userId = calendarAuthService.findUserId(name);
+
+        createCalenderDTO.setUsersId(userId);
+
         adminCalendarService.save(createCalenderDTO);
 
         return ResponseEntity.ok("Calendar event successfully created.");
@@ -89,7 +97,7 @@ public class AdminCalendarApiController {
     public ResponseEntity<?> delete(@RequestParam("calendarId") Long calendarId) {
 
         adminCalendarService.delete(calendarId);
-
+    
         return ResponseEntity.ok("delete success");
     }
 }
