@@ -97,13 +97,13 @@ class BoardServiceTest {
     void updateContent() throws IOException {
         UpdateBoardDTO updateBoardDTO = new UpdateBoardDTO();
         updateBoardDTO.setBoardId(19L);
-        updateBoardDTO.setContent("19 게시글 내용 수정");
+        updateBoardDTO.setBoardContent("19 게시글 내용 수정");
 
         adminBoardService.update(updateBoardDTO, null);
 
         Board board = boardRepository.findById(19L).get();
 
-        assertThat(updateBoardDTO.getContent()).isEqualTo(board.getBoardContent());
+        assertThat(updateBoardDTO.getBoardContent()).isEqualTo(board.getBoardContent());
         assertThat(updateBoardDTO.getBoardId()).isEqualTo(board.getId());
     }
 }

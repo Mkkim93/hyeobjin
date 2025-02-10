@@ -48,8 +48,7 @@ public class AdminItemApiController {
 
     @Operation(summary = "관리자 제품 상세 조회", description = "관리자가 제품을 상세 조회하기 위한 API 입니다.")
     @GetMapping("/detail")
-    public ResponseEntity<FindAdminDetailDTO> findItemDetail(
-                                                             @RequestParam("itemId") Long itemId) {
+    public ResponseEntity<FindAdminDetailDTO> findItemDetail(@RequestParam("itemId") Long itemId) {
         FindByItemDTO findAdminItemDTO = new FindByItemDTO();
         findAdminItemDTO.setItemId(itemId);
 
@@ -113,13 +112,22 @@ public class AdminItemApiController {
     // TODO
     @Operation(summary = "제품 수정", description = "제품의 모든 정보(manufacturer, file, item)를 수정하는 API 입니다.")
     @PostMapping(value = "/update", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> update(@ModelAttribute UpdateItemDTO updateItemDTO,
-                                    @RequestPart(value = "mainFile", required = false) MultipartFile mainFile,
-                                    @RequestPart(value = "subFiles", required = false) List<MultipartFile> subFiles
+    public ResponseEntity<?> update(@RequestPart("updateItemDTO") UpdateItemDTO updateItemDTO,
+                                    @RequestPart(value = "mainFile", required = false) MultipartFile mainFile
                                     ) throws IOException {
 
-        adminItemService.update(updateItemDTO, mainFile, subFiles);
+        adminItemService.update(updateItemDTO, mainFile);
 
         return ResponseEntity.ok("file update success");
+    }
+
+    @Operation(summary = "제품 등록/미등록 수정", description = "관리자가 제품 리스트에서 등록 여부만 간단하게 수정하는 API 입니다.")
+    @PostMapping("/updateYN")
+    public String updateItemYN(@RequestParam("itemId") Long itemId,
+                               @RequestParam("itemYN") String itemYN) {
+
+        adminItemService.updateItemYN(itemId, itemYN);
+
+        return null;
     }
 }

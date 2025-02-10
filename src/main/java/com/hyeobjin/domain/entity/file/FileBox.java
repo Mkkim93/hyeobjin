@@ -71,4 +71,17 @@ public class FileBox {
         this.item = itemId;
         this.board = boardId;
     }
+
+    public void setUpdateNewFileItemIdAndFileBoxId(Long fileBoxId, Long itemId) {
+        this.id = fileBoxId;
+        this.item = Item.builder()
+                .itemId(itemId)
+                .build();
+    }
+
+    public void setUpdateFileBoxItemId(Long itemId) {
+        this.item = Item.builder()
+                .itemId(itemId)
+                .build();
+    }
 }

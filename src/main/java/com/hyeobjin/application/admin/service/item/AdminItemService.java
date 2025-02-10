@@ -123,13 +123,17 @@ public class AdminItemService {
      * 제품 수정
      * - 수정할 제품의 객체를 id 로 조회 - 클라이언트에서 입력한 데이터가 존재하면 수정하고 존재하지 않으면 기존 데이터 유지
      */
-    public void update(UpdateItemDTO updateItemDTO, MultipartFile mainFile, List<MultipartFile> subFiles) throws IOException {
+    public void update(UpdateItemDTO updateItemDTO, MultipartFile mainFile) throws IOException {
+
         itemRepository.findById(updateItemDTO.getItemId())
                 .orElseThrow(() -> new EntityNotFoundException("해당 제품이 존재하지 않습니다."));
+
         itemRepositoryImpl.updateItem(updateItemDTO);
 
-        // 파일 업데이트 (메인파일, 서브파일 각각 업데이트)
-        adminItemFileService.findFileBoxIds(updateItemDTO, mainFile, subFiles); // mainFile 와 subFiles 의 pk 를 찾기 위한 메서드
+        // 파일이 존재 시 update 로직 수행
+        if (mainFile != null && !mainFile.isEmpty()) {
+            adminItemFileService.findFileBoxIds(updateItemDTO, mainFile); // mainFile 와 subFiles 의 pk 를 찾기 위한 메서드
+        }
     }
 
     /**
@@ -148,4 +152,12 @@ public class AdminItemService {
         log.info("제품이 성공적으로 삭제 되었습니다.");
     }
 
+    public Boolean updateItemYN(Long itemId, String itemYN) {
+
+
+        itemRepository.updateYN(itemId, itemYN);
+
+        return null;
+
+    }
 }

@@ -87,7 +87,15 @@ class ItemRepositoryTest {
     @DisplayName("관리자 페이지 상세 조회")
     void findByItemDetail() {
 
-//        FindAdminDetailDTO itemDetail = itemRepositoryImpl.findItemDetail(1L, 1L);
-//        System.out.println("itemDetail = " + itemDetail);
+        FindAdminDetailDTO itemDetail = itemRepositoryImpl.findItemDetail(1L);
+        System.out.println("itemDetail = " + itemDetail);
+    }
+
+    @Test
+    @DisplayName("관리자 제품 리스트에서 등록/미등록 상태 관리")
+    void updateItemYN() {
+        Long itemId = 17L;
+        String itemYN = "Y";
+        Long updateCount = itemRepository.updateYN(itemId, itemYN);
     }
 }

@@ -23,4 +23,9 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
 
     @Transactional
     void deleteAllByIdIn(List<Long> list);
+
+    @Transactional
+    @Modifying
+    @Query("update Item i set i.itemYN = :itemYN where i.id = :itemId")
+    Long updateYN(@Param("itemId") Long itemId, @Param("itemYN") String itemYN);
 }

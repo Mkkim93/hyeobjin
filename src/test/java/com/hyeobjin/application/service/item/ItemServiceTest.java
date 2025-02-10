@@ -86,14 +86,13 @@ class ItemServiceTest {
 //        updateItemDTO.setItemDescription("up01 itemDescription");
 //        updateItemDTO.setItemSpec("up01 itemSpec");
         updateItemDTO.setItemUse("up01 itemUse");
-        updateItemDTO.setItemType("up01 itemType");
+//        updateItemDTO.("up01 itemType");
         updateItemDTO.setItemNum("up01 250B");
 
         Item item = itemRepository.findById(updateItemDTO.getItemId()).get();
 
         assertThat("up01 itemName").isEqualTo(item.getItemName());
         assertThat("up01 itemDescription").isEqualTo(item.getItemDescription());
-        assertThat("up01 itemSpec").isEqualTo(item.getItemSpec());
         assertThat("up01 itemUse").isEqualTo(item.getItemUse());
     }
 

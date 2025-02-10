@@ -28,6 +28,12 @@ public class CreateItemDTO {
     private String itemType;
     private String itemYN;
 
+
+    private Long glassSpecId;
+    private Long itemTypeId;
+
+    private String freeContent; // ckeditor 추가
+
     private String manuName;
     private Long manuId;
 
@@ -42,13 +48,14 @@ public class CreateItemDTO {
                 .itemNum(createItemDTO.getItemNum())
                 .itemName(createItemDTO.getItemName())
                 .itemUse(createItemDTO.getItemUse())
-                .itemSpec(createItemDTO.getItemSpec())
                 .itemInColor(createItemDTO.getItemInColor())
                 .itemOutColor(createItemDTO.getItemOutColor())
                 .itemFrameWidth(createItemDTO.getItemFrameWidth())
-                .itemType(createItemDTO.getItemType())
                 .itemDescription(createItemDTO.getItemDescription())
                 .itemYN(createItemDTO.getItemYN())
+                .freeContent(createItemDTO.getFreeContent())
+                .glassSpecId(createItemDTO.getGlassSpecId())
+                .itemTypeId(createItemDTO.getItemTypeId())
                 .build();
     }
 }

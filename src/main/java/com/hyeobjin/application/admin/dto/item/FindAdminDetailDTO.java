@@ -15,52 +15,55 @@ public class FindAdminDetailDTO {
     private Long itemId;
     private String itemName;
     private String itemNum;
-    private String itemSpec;
     private String itemInColor;
     private String itemOutColor;
     private String itemFrameWidth;
     private String itemDescription;
-    private String itemType; // 중요
     private LocalDateTime itemRegDate;
     private LocalDateTime itemUpdate;
     private String itemUse;
     private String itemYN;
     private Long manuId;
     private String manuName;
+    private String freeContent;
+    private String itemType;
+    private String glassSize;
     private List<FindAdminFileBoxDTO> fileBoxes;
 
     @QueryProjection
     public FindAdminDetailDTO(Long itemId,
                               String itemName,
                               String itemNum,
-                              String itemSpec,
                               String itemUse,
                               String itemInColor,
                               String itemOutColor,
                               String itemFrameWidth,
                               String itemDescription,
-                              String itemType,
                               LocalDateTime itemRegDate,
                               LocalDateTime itemUpdate,
                               String itemYN,
+                              String freeContent,
                               Long manuId,
                               String manuName,
+                              String itemType,
+                              String glassSize,
                               List<FindAdminFileBoxDTO> fileBoxes) {
         this.itemId = itemId;
         this.itemName = itemName;
         this.itemNum = itemNum;
-        this.itemSpec = itemSpec;
         this.itemUse = itemUse;
         this.itemInColor = itemInColor;
         this.itemOutColor = itemOutColor;
         this.itemFrameWidth = itemFrameWidth;
         this.itemDescription = itemDescription;
-        this.itemType = itemType;
         this.itemRegDate = itemRegDate;
         this.itemUpdate = itemUpdate;
         this.itemYN = itemYN;
+        this.freeContent = freeContent;
         this.manuId = manuId;
         this.manuName = manuName;
+        this.itemType = itemType;
+        this.glassSize = glassSize;
         this.fileBoxes = fileBoxes;
     }
 }

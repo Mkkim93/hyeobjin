@@ -22,12 +22,12 @@ public class FindAdminItemDTO {
 
     @QueryProjection
     public FindAdminItemDTO(Long itemId, String itemNum, String itemName,
-                            String itemType, LocalDateTime itemRegDate, LocalDateTime itemUpdate,
+                             LocalDateTime itemRegDate, LocalDateTime itemUpdate,
                             String itemYN, Long manuId, String manuName) {
         this.itemId = itemId;
         this.itemNum = itemNum;
         this.itemName = itemName;
-        this.itemType = itemType;
+
         this.itemRegDate = itemRegDate;
         this.itemUpdate = itemUpdate;
         this.itemYN = itemYN;

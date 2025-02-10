@@ -15,19 +15,24 @@ public class UpdateItemDTO {
     private String itemNum;
     private String itemName;
     private String itemUse;
-    private String itemSpec;
     private String itemInColor;
     private String itemOutColor;
     private String itemFrameWidth;
-    private String itemType;
     private String itemDescription;
     private String itemYN;
     private LocalDateTime itemUpdate;
+    private String fileDeleted;
 
     private Boolean isMain;
+    private String freeContent;
 
     private Long manuId;
     private String manuName;
+
+    private Long glassSpecId;
+    private Long itemTypeId;
+
+    private Long fileBoxId;
 
     private Boolean updated;
 
@@ -35,33 +40,28 @@ public class UpdateItemDTO {
 
     private List<FileBoxItemDTO> updateSubFiles;
 
-    public List<String> getUpdateSubFileNames() {
-        List<String> updateNames = null;
-        for (FileBoxItemDTO updateSubFile : updateSubFiles) {
-            updateNames.add(updateSubFile.getFileName());
-        }
-        return  updateNames;
-    }
+    private List<Long> updatedFileIds;
 
     public UpdateItemDTO(Long itemId, String itemNum, String itemName, Boolean isMain,
-                         String itemUse, String itemSpec, String itemInColor, String itemOutColor, String itemFrameWidth,
-                         String itemType, String itemDescription,
-                         String itemYN, LocalDateTime itemUpdate,
-                         Long manuId, String manuName) {
+                         String itemUse,  String itemInColor, String itemOutColor, String itemFrameWidth,
+                          String itemDescription,
+                         String itemYN, LocalDateTime itemUpdate, String freeContent,
+                         Long manuId, String manuName, Long itemTypeId, Long glassSpecId) {
         this.itemId = itemId;
         this.itemNum = itemNum;
         this.itemName = itemName;
         this.isMain = isMain;
         this.itemUse = itemUse;
-        this.itemSpec = itemSpec;
         this.itemInColor = itemInColor;
         this.itemOutColor = itemOutColor;
         this.itemFrameWidth = itemFrameWidth;
-        this.itemType = itemType;
         this.itemDescription = itemDescription;
         this.itemYN = itemYN;
         this.itemUpdate = itemUpdate;
+        this.freeContent = freeContent;
         this.manuId = manuId;
         this.manuName = manuName;
+        this.itemTypeId = itemTypeId;
+        this.glassSpecId = glassSpecId;
     }
 }

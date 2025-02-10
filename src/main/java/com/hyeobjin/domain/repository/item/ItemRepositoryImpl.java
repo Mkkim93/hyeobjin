@@ -8,8 +8,10 @@ import com.hyeobjin.application.admin.dto.item.UpdateItemDTO;
 import com.hyeobjin.application.common.dto.file.FindFileBoxDTO;
 import com.hyeobjin.application.common.dto.item.FindByItemDTO;
 import com.hyeobjin.domain.entity.file.QFileBox;
+import com.hyeobjin.domain.entity.item.QGlassSpec;
 import com.hyeobjin.domain.entity.item.QItem;
 import com.hyeobjin.domain.entity.item.Item;
+import com.hyeobjin.domain.entity.item.QItemType;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -50,6 +52,7 @@ public class ItemRepositoryImpl extends QuerydslRepositorySupport implements Ite
         List<FindAdminFileBoxDTO> fileBoxes = jpaQueryFactory
                 .selectFrom(fileBox)
                 .join(fileBox.item, item).fetchJoin()
+
                 .join(item.manufacturer, manufacturer).fetchJoin()
                 .where(
                         item.id.eq(itemId)
@@ -59,9 +62,15 @@ public class ItemRepositoryImpl extends QuerydslRepositorySupport implements Ite
                 .stream().map(FindAdminFileBoxDTO::new)
                 .collect(Collectors.toList());
 
+        // 정규화의 문제점
+        // itemType, glassSpec 을 item 테이블에 구현했으나 클라이언트 요청으로 별도로 분리하게됨
+        // 별도로 분리한 이후 join 연산이 2번 발생함
+        // TODO 향후 어떻게 최적화 해야 할지 고민
         Item selectItem = jpaQueryFactory
                 .selectFrom(item)
                 .join(item.manufacturer, manufacturer)
+                .join(QItem.item.itemType, QItemType.itemType)
+                .join(QItem.item.glassSize, QGlassSpec.glassSpec1)
                 .where(item.id.eq(itemId))
                 .fetchOne();
 
@@ -69,19 +78,21 @@ public class ItemRepositoryImpl extends QuerydslRepositorySupport implements Ite
                 selectItem.getId(),
                 selectItem.getItemName(),
                 selectItem.getItemNum(),
-                selectItem.getItemSpec(),
                 selectItem.getItemUse(),
                 selectItem.getItemInColor(),
                 selectItem.getItemOutColor(),
                 selectItem.getItemFrameWidth(),
                 selectItem.getItemDescription(),
-                selectItem.getItemType(),
                 selectItem.getItemRegDate(),
                 selectItem.getItemUpdate(),
                 selectItem.getItemYN(),
+                selectItem.getFreeContent(),
                 selectItem.getManufacturer().getId(),
                 selectItem.getManufacturer().getManuName(),
+                selectItem.getItemType().getTypeName(),
+                selectItem.getGlassSize().getGlassSpec(),
                 fileBoxes
+
         );
     }
 
@@ -95,7 +106,7 @@ public class ItemRepositoryImpl extends QuerydslRepositorySupport implements Ite
         }
 
         List<FindAdminItemDTO> results = jpaQueryFactory.select(new QFindAdminItemDTO(
-                        item.id, item.itemNum, item.itemName, item.itemType,
+                        item.id, item.itemNum, item.itemName,
                         item.itemRegDate, item.itemUpdate, item.itemYN,
                         manufacturer.id, manufacturer.manuName))
                 .from(item)
@@ -143,12 +154,13 @@ public class ItemRepositoryImpl extends QuerydslRepositorySupport implements Ite
                 selectItem.getItemName(),
                 selectItem.getItemNum(),
                 selectItem.getItemUse(),
-                selectItem.getItemSpec(),
+//                selectItem.getItemSpec(),
                 selectItem.getItemInColor(),
                 selectItem.getItemOutColor(),
                 selectItem.getItemFrameWidth(),
                 selectItem.getItemDescription(),
-                selectItem.getItemType(),
+//                selectItem.getItemType().name(),
+                selectItem.getFreeContent(),
                 selectItem.getManufacturer().getId(),
                 selectItem.getManufacturer().getManuName(),
                 fileBoxes
@@ -173,8 +185,8 @@ public class ItemRepositoryImpl extends QuerydslRepositorySupport implements Ite
         if (updateItemDTO.getItemUse() != null) {
             updateClause.set(item.itemUse, updateItemDTO.getItemUse());
         }
-        if (updateItemDTO.getItemSpec() != null) {
-            updateClause.set(item.itemSpec, updateItemDTO.getItemSpec());
+        if (updateItemDTO.getGlassSpecId() != null) {
+            updateClause.set(item.glassSize.id, updateItemDTO.getGlassSpecId());
         }
         if (updateItemDTO.getItemInColor() != null) {
             updateClause.set(item.itemInColor, updateItemDTO.getItemInColor());
@@ -191,6 +203,15 @@ public class ItemRepositoryImpl extends QuerydslRepositorySupport implements Ite
         if (updateItemDTO.getItemYN() != null) {
             updateClause.set(item.itemYN, updateItemDTO.getItemYN());
         }
+
+        // TODO 문제 발생 가능성 있음
+        if (updateItemDTO.getItemTypeId() != null) {
+            updateClause.set(item.itemType.id, updateItemDTO.getItemTypeId());
+        }
+
+        if (updateItemDTO.getFreeContent() != null) {
+            updateClause.set(item.freeContent, updateItemDTO.getFreeContent());
+        }
             updateClause.set(item.itemUpdate, LocalDateTime.now());
 
         updateClause.where(item.id.eq(updateItemDTO.getItemId()));
@@ -205,16 +226,17 @@ public class ItemRepositoryImpl extends QuerydslRepositorySupport implements Ite
                     updateItemDTO.getItemName(),
                     updateItemDTO.getIsMain(),
                     updateItemDTO.getItemUse(),
-                    updateItemDTO.getItemSpec(),
                     updateItemDTO.getItemInColor(),
                     updateItemDTO.getItemOutColor(),
                     updateItemDTO.getItemFrameWidth(),
-                    updateItemDTO.getItemType(),
                     updateItemDTO.getItemDescription(),
                     updateItemDTO.getItemYN(),
                     updateItemDTO.getItemUpdate(),
+                    updateItemDTO.getFreeContent(),
                     updateItemDTO.getManuId(),
-                    updateItemDTO.getManuName());
+                    updateItemDTO.getManuName(),
+                    updateItemDTO.getItemTypeId(),
+                            updateItemDTO.getGlassSpecId());
         } else {
             throw new EntityNotFoundException("해당 제품을 찾을 수 없습니다.");
         }
