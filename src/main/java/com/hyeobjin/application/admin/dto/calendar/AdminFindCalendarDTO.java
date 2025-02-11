@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 상세 조회를 위한 DTO
@@ -25,18 +27,28 @@ public class AdminFindCalendarDTO {
     private Long usersId;
     private String writer;
 
-    public AdminFindCalendarDTO toDto(Calendar calendar) {
-        this.calenderId = calendar.getId();
-        this.title = calendar.getTitle();
-        this.description = calendar.getDescription();
-        this.createAt = calendar.getCreateAt();
-        this.startTime = calendar.getStartTime();
-        this.endTime = calendar.getEndTime();
-        this.updateAt = calendar.getUpdateAt();
-        this.location = calendar.getLocation();
-        this.calendarYN = calendar.getCalenderYN();
-        this.usersId = calendar.getUsers().getId();
-        this.writer = calendar.getUsers().getName();
-        return this;
+    public AdminFindCalendarDTO(Long calenderId, String title, LocalDateTime endTime, LocalDateTime startTime, String description) {
+        this.calenderId = calenderId;
+        this.title = title;
+        this.endTime = endTime;
+        this.startTime = startTime;
+        this.description = description;
     }
+
+    public List<AdminFindCalendarDTO> toDto(List<Calendar> calendars) {
+        return calendars.stream()
+                .map(this::convertToDto) // ✅ 개별 변환 메서드 호출
+                .collect(Collectors.toList());
+    }
+
+    private AdminFindCalendarDTO convertToDto(Calendar calendar) {
+        return new AdminFindCalendarDTO(
+                calendar.getId(),
+                calendar.getTitle(),
+                calendar.getStartTime(),
+                calendar.getEndTime(),
+                calendar.getDescription()
+        );
+    }
+
 }

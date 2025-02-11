@@ -45,7 +45,7 @@ public class Item {
     private String itemDescription;
 
     @Column(name = "item_yn")
-    private String itemYN;
+    private Boolean itemYN;
 
     @CreatedDate
     @Column(name = "item_regdate", updatable = false)
@@ -67,13 +67,13 @@ public class Item {
     private GlassSpec glassSize;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "item_type")
+    @JoinColumn(name = "type_id")
     private ItemType itemType;
 
     @Builder
     public Item(Long itemId, String itemNum, String itemName,
                 String itemUse, String itemInColor, String itemOutColor, String itemFrameWidth,
-                 String itemDescription, String itemYN,
+                 String itemDescription, Boolean itemYN,
                 LocalDateTime itemRegDate, LocalDateTime itemUpdate, String freeContent,
                 Long manufacturerId, Long glassSpecId, Long itemTypeId) {
         this.id = itemId;

@@ -19,7 +19,7 @@ public class UpdateItemDTO {
     private String itemOutColor;
     private String itemFrameWidth;
     private String itemDescription;
-    private String itemYN;
+    private Boolean itemYN;
     private LocalDateTime itemUpdate;
     private String fileDeleted;
 
@@ -45,7 +45,7 @@ public class UpdateItemDTO {
     public UpdateItemDTO(Long itemId, String itemNum, String itemName, Boolean isMain,
                          String itemUse,  String itemInColor, String itemOutColor, String itemFrameWidth,
                           String itemDescription,
-                         String itemYN, LocalDateTime itemUpdate, String freeContent,
+                         Boolean itemYN, LocalDateTime itemUpdate, String freeContent,
                          Long manuId, String manuName, Long itemTypeId, Long glassSpecId) {
         this.itemId = itemId;
         this.itemNum = itemNum;

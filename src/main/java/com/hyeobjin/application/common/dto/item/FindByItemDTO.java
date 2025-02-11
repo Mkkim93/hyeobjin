@@ -32,13 +32,16 @@ public class FindByItemDTO {
     @JsonView(SummaryView.class)
     private Long manuId;
 
+    private String itemTypeName;
+    private String glassSize;
+
     private String manuName;
     private List<FindFileBoxDTO> fileBoxes;
 
     @QueryProjection
     public FindByItemDTO(Long itemId, String itemName, String itemNum, String itemUse,
                           String itemInColor, String itemOutColor, String itemFrameWidth,
-                         String itemDescription, String freeContent, Long manuId,
+                         String itemDescription, String freeContent, String itemTypeName, String glassSize, Long manuId,
                          String manuName, List<FindFileBoxDTO> fileBoxes) {
         this.itemId = itemId;
         this.itemName = itemName;
@@ -49,6 +52,8 @@ public class FindByItemDTO {
         this.itemFrameWidth = itemFrameWidth;
         this.itemDescription = itemDescription;
         this.freeContent = freeContent;
+        this.itemTypeName = itemTypeName;
+        this.glassSize = glassSize;
         this.manuId = manuId;
         this.manuName = manuName;
         this.fileBoxes = fileBoxes;

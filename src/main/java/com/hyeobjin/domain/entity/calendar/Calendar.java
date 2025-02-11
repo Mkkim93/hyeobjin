@@ -89,4 +89,22 @@ public class Calendar {
                 .userId(updateCalendarDTO.getUsersId())
                 .build();
     }
+
+    @Override
+    public String toString() {
+        return "Calendar{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                ", createAt=" + createAt +
+                ", updateAt=" + updateAt +
+                ", location='" + location + '\'' +
+                ", scheduleStatus=" + scheduleStatus +
+                ", calenderYN='" + calenderYN + '\'' +
+                ", holidays='" + holidays + '\'' +
+                ", users=" + users +
+                '}';
+    }
 }

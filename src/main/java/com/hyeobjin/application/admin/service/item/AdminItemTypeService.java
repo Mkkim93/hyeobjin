@@ -1,6 +1,6 @@
 package com.hyeobjin.application.admin.service.item;
 
-import com.hyeobjin.application.admin.dto.item.type.ItemTypeDTO;
+import com.hyeobjin.application.admin.dto.item.type.AdminItemTypeDTO;
 import com.hyeobjin.application.admin.dto.item.type.UpdateItemTypeDTO;
 import com.hyeobjin.domain.entity.item.ItemType;
 import com.hyeobjin.domain.repository.item.ItemTypeRepository;
@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class ItemTypeService {
+public class AdminItemTypeService {
 
     private final ItemTypeRepository itemTypeRepository;
 
@@ -26,11 +26,11 @@ public class ItemTypeService {
         itemTypeRepository.save(itemType);
     }
 
-    public List<ItemTypeDTO> findItemTypeList() {
+    public List<AdminItemTypeDTO> findItemTypeList() {
 
         List<ItemType> itemTypeList = itemTypeRepository.findAll();
 
-        return itemTypeList.stream().map(itemType -> new ItemTypeDTO(
+        return itemTypeList.stream().map(itemType -> new AdminItemTypeDTO(
                 itemType.getId(),
                 itemType.getTypeName()
         )).collect(Collectors.toList());
@@ -54,4 +54,6 @@ public class ItemTypeService {
 
         itemTypeRepository.deleteById(itemTypeId);
     }
+
+
 }

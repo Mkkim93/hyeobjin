@@ -1,6 +1,6 @@
 package com.hyeobjin.application.admin.service.item;
 
-import com.hyeobjin.application.admin.dto.item.type.ItemTypeDTO;
+import com.hyeobjin.application.admin.dto.item.type.AdminItemTypeDTO;
 import com.hyeobjin.application.admin.dto.item.type.UpdateItemTypeDTO;
 import com.hyeobjin.domain.entity.item.ItemType;
 import com.hyeobjin.domain.repository.item.ItemTypeRepository;
@@ -16,10 +16,10 @@ import java.util.Optional;
 
 @Slf4j
 @SpringBootTest
-class ItemTypeServiceTest {
+class AdminItemTypeServiceTest {
 
     @Autowired
-    ItemTypeService itemTypeService;
+    AdminItemTypeService adminItemTypeService;
 
     @Autowired
     ItemTypeRepository itemTypeRepository;
@@ -28,21 +28,21 @@ class ItemTypeServiceTest {
     @DisplayName("제품 타입 등록")
     void saveType() {
 
-        ItemTypeDTO itemTypeDTO = new ItemTypeDTO();
-        itemTypeDTO.setItemTypeName("단창");
+        AdminItemTypeDTO adminItemTypeDTO = new AdminItemTypeDTO();
+        adminItemTypeDTO.setItemTypeName("단창");
 
-        itemTypeService.save(itemTypeDTO.getItemTypeName());
+        adminItemTypeService.save(adminItemTypeDTO.getItemTypeName());
 
         ItemType itemType = itemTypeRepository.findById(1L).get();
 
-        Assertions.assertThat(itemTypeDTO.getItemTypeName()).isEqualTo(itemType.getTypeName());
+        Assertions.assertThat(adminItemTypeDTO.getItemTypeName()).isEqualTo(itemType.getTypeName());
     }
 
     @Test
     @DisplayName("제품 타입 조회")
     void findType() {
 
-        List<ItemTypeDTO> itemTypeList = itemTypeService.findItemTypeList();
+        List<AdminItemTypeDTO> itemTypeList = adminItemTypeService.findItemTypeList();
 
         itemTypeList.stream().forEach(System.out::println);
 
@@ -56,7 +56,7 @@ class ItemTypeServiceTest {
         updateItemTypeDTO.setItemTypeId(1L);
         updateItemTypeDTO.setUpdateItemTypeName("단창");
 
-        itemTypeService.updateItemType(updateItemTypeDTO.getItemTypeId(), updateItemTypeDTO);
+        adminItemTypeService.updateItemType(updateItemTypeDTO.getItemTypeId(), updateItemTypeDTO);
 
         ItemType itemType = itemTypeRepository.findById(updateItemTypeDTO.getItemTypeId()).get();
 
@@ -69,7 +69,7 @@ class ItemTypeServiceTest {
 
         Long deleteId = 1L;
 
-        itemTypeService.deleteItemType(deleteId);
+        adminItemTypeService.deleteItemType(deleteId);
 
         Optional<ItemType> deleteById = itemTypeRepository.findById(1L);
 

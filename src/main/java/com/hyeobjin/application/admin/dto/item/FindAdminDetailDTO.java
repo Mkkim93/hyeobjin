@@ -22,7 +22,7 @@ public class FindAdminDetailDTO {
     private LocalDateTime itemRegDate;
     private LocalDateTime itemUpdate;
     private String itemUse;
-    private String itemYN;
+    private Boolean itemYN;
     private Long manuId;
     private String manuName;
     private String freeContent;
@@ -41,7 +41,7 @@ public class FindAdminDetailDTO {
                               String itemDescription,
                               LocalDateTime itemRegDate,
                               LocalDateTime itemUpdate,
-                              String itemYN,
+                              Boolean itemYN,
                               String freeContent,
                               Long manuId,
                               String manuName,

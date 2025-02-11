@@ -134,9 +134,9 @@ public class ItemRepositoryImpl extends QuerydslRepositorySupport implements Ite
                 .leftJoin(fileBox.item, item).fetchJoin()
                 .leftJoin(item.manufacturer, manufacturer).fetchJoin()
                 .where(
-                        item.id.eq(itemId)
-                                .and(item.manufacturer.id.eq(manuId))
-                                .and(item.itemYN.eq("Y"))
+                        item.id.eq(itemId),
+                                (item.manufacturer.id.eq(manuId)),
+                                (item.itemYN.eq(true))
                 )
                 .fetch()
                 // TODO 파일과 함께 조회 시 불필요한 데이터 제거
@@ -146,6 +146,8 @@ public class ItemRepositoryImpl extends QuerydslRepositorySupport implements Ite
         Item selectItem = jpaQueryFactory
                 .selectFrom(item)
                 .leftJoin(item.manufacturer, manufacturer)
+                .leftJoin(item.itemType, QItemType.itemType)
+                .leftJoin(item.glassSize, QGlassSpec.glassSpec1)
                 .where(item.id.eq(itemId))
                 .fetchOne();
 
@@ -154,13 +156,13 @@ public class ItemRepositoryImpl extends QuerydslRepositorySupport implements Ite
                 selectItem.getItemName(),
                 selectItem.getItemNum(),
                 selectItem.getItemUse(),
-//                selectItem.getItemSpec(),
                 selectItem.getItemInColor(),
                 selectItem.getItemOutColor(),
                 selectItem.getItemFrameWidth(),
                 selectItem.getItemDescription(),
-//                selectItem.getItemType().name(),
                 selectItem.getFreeContent(),
+                selectItem.getItemType().getTypeName(),
+                selectItem.getGlassSize().getGlassSpec(),
                 selectItem.getManufacturer().getId(),
                 selectItem.getManufacturer().getManuName(),
                 fileBoxes

@@ -7,6 +7,8 @@ import com.hyeobjin.application.admin.dto.calendar.UpdateCalendarDTO;
 import com.hyeobjin.application.admin.service.calendar.AdminCalendarService;
 import com.hyeobjin.application.admin.service.calendar.CalendarAuthService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
@@ -42,14 +45,19 @@ public class AdminCalendarApiController {
     /**
      * swagger : O
      * 관리자가 해당 CALENDER PK 를 기준으로 일정 상제 조회
-     * @param calendarId
+     * @param
      * @return
      */
     @Operation(summary = "관리자 일정 상세 조회", description = "관리자가 상세 일정을 조회하기 위한 API 입니다.")
     @GetMapping("/detail")
-    public ResponseEntity<AdminFindCalendarDTO> findDetail(@RequestParam("calendarId") Long calendarId) {
+    public ResponseEntity<List<AdminFindCalendarDTO>> findDetail(
+            @Parameter(description = "조회 시작 시간 (예: 2025-02-11T00:00:00)", example = "2025-02-11T00:00:00")
+            @RequestParam("startTime") @Schema(type = "string", format = "date-time") LocalDateTime startTime,
 
-        return ResponseEntity.ok(adminCalendarService.findDetail(calendarId));
+            @Parameter(description = "조회 종료 시간 (예: 2025-02-11T23:59:59)", example = "2025-02-11T23:59:59")
+            @RequestParam("endTime") @Schema(type = "string", format = "date-time") LocalDateTime endTime
+    ) {
+        return ResponseEntity.ok(adminCalendarService.findDetail(startTime, endTime));
     }
 
     /**

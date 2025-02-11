@@ -1,8 +1,10 @@
 package com.hyeobjin.application.common.service.item;
 
 import com.hyeobjin.application.common.dto.item.FindByItemDTO;
+import com.hyeobjin.domain.entity.item.Item;
 import com.hyeobjin.domain.repository.item.ItemRepository;
 import com.hyeobjin.domain.repository.item.ItemRepositoryImpl;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,9 +30,11 @@ public class ItemService {
      * 제품 카테고리별 품번으로 검색
      */
     public FindByItemDTO findByItemOne(FindByItemDTO findByItemDTO) {
+        Item item = itemRepository.findById(findByItemDTO.getItemId()).orElseThrow(() -> new EntityNotFoundException("제품의 아이디가 존재하지 않습니다."));
+
         FindByItemDTO result = new FindByItemDTO();
         try {
-            result = itemRepositoryImpl.findByItem(findByItemDTO.getManuId() ,findByItemDTO.getItemId());
+            result = itemRepositoryImpl.findByItem(item.getManufacturer().getId() ,item.getId());
         } catch (TypeNotPresentException e) {
             e.getMessage();
         }

@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
@@ -43,13 +44,11 @@ public class AdminCalendarService {
 
     }
 
-    public AdminFindCalendarDTO findDetail(Long calendarId) {
+    public List<AdminFindCalendarDTO> findDetail(LocalDateTime startTime, LocalDateTime endTime) {
 
-        Calendar findEntity = calendarJpaRepository.findById(
-                calendarId)
-                .orElseThrow(() -> new EntityNotFoundException("일정이 존재하지 않습니다."));
+        List<Calendar> result = calendarJpaRepository.findByStartTimeBetween(startTime, endTime);
 
-        return new AdminFindCalendarDTO().toDto(findEntity);
+        return new AdminFindCalendarDTO().toDto(result);
     }
 
     /**

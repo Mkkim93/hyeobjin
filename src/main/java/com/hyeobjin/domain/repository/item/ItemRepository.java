@@ -15,10 +15,10 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
 
     @Transactional
     @Modifying
-    @Query("update Item i set i.itemYN = 'Y' where i.id = :itemId")
+    @Query("update Item i set i.itemYN = TRUE where i.id = :itemId")
     Integer updateItemYN(@Param("itemId") Long itemId);
 
-    @Query("select new com.hyeobjin.application.common.dto.item.FindByItemDTO(i.id, i.itemNum, i.manufacturer.id) from Item i where i.manufacturer.id = :manuId and i.itemYN = 'Y'")
+    @Query("select new com.hyeobjin.application.common.dto.item.FindByItemDTO(i.id, i.itemNum, i.manufacturer.id) from Item i where i.manufacturer.id = :manuId and i.itemYN = TRUE")
     List<FindByItemDTO> findAllItemId(@Param("manuId") Long manuId);
 
     @Transactional
@@ -27,5 +27,7 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
     @Transactional
     @Modifying
     @Query("update Item i set i.itemYN = :itemYN where i.id = :itemId")
-    Long updateYN(@Param("itemId") Long itemId, @Param("itemYN") String itemYN);
+    Long updateYN(@Param("itemId") Long itemId, @Param("itemYN") Boolean itemYN);
+
+
 }

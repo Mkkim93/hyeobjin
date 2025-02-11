@@ -16,14 +16,14 @@ public class FindAdminItemDTO {
     private String itemType; // 중요
     private LocalDateTime itemRegDate;
     private LocalDateTime itemUpdate;
-    private String itemYN;
+    private Boolean itemYN;
     private Long manuId;
     private String manuName;
 
     @QueryProjection
     public FindAdminItemDTO(Long itemId, String itemNum, String itemName,
                              LocalDateTime itemRegDate, LocalDateTime itemUpdate,
-                            String itemYN, Long manuId, String manuName) {
+                            Boolean itemYN, Long manuId, String manuName) {
         this.itemId = itemId;
         this.itemNum = itemNum;
         this.itemName = itemName;

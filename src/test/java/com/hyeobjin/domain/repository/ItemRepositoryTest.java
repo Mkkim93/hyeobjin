@@ -42,7 +42,7 @@ class ItemRepositoryTest {
         createItemDTO.setItemSpec("test ItemSpec02");
         createItemDTO.setItemUse("test ItemUse02");
         createItemDTO.setItemType("door");
-        createItemDTO.setItemYN("N");
+        createItemDTO.setItemYN(false);
         createItemDTO.setItemDescription("test ItemDescription test");
 
         Item savedBeforeItem = createItemDTO.toEntity(createItemDTO);
@@ -96,6 +96,8 @@ class ItemRepositoryTest {
     void updateItemYN() {
         Long itemId = 17L;
         String itemYN = "Y";
-        Long updateCount = itemRepository.updateYN(itemId, itemYN);
+        Long updateCount = itemRepository.updateYN(itemId, Boolean.parseBoolean(itemYN));
     }
+
+
 }

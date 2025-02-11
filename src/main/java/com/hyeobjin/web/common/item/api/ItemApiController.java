@@ -30,14 +30,12 @@ public class ItemApiController {
      */
     @Operation(summary = "제품 조회 (품번)", description = "품번으로 제품을 상세 조회하는 API 입니다.")
     @GetMapping
-    public ResponseEntity<FindByItemDTO> findOne(@RequestParam(value = "manuId", required = false) Long manuId,
-                                                 @RequestParam(value = "itemId", required = false) Long itemId
-                                                ) {
+    public ResponseEntity<FindByItemDTO> findOne(@RequestParam(value = "itemId", required = false) Long itemId) {
         log.info("itemNum log : ", itemId);
         System.out.println("itemId = " + itemId);
         FindByItemDTO findByItemDTO = new FindByItemDTO();
         findByItemDTO.setItemId(itemId);
-        findByItemDTO.setManuId(manuId);
+//        findByItemDTO.setManuId(manuId);
         return ResponseEntity.ok(itemService.findByItemOne(findByItemDTO));
     }
 

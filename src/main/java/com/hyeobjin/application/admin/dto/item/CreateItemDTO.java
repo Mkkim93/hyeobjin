@@ -26,7 +26,7 @@ public class CreateItemDTO {
     private String itemFrameWidth;
     private String itemDescription;
     private String itemType;
-    private String itemYN;
+    private Boolean itemYN;
 
 
     private Long glassSpecId;

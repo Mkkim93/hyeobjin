@@ -155,7 +155,7 @@ public class AdminItemService {
     public Boolean updateItemYN(Long itemId, String itemYN) {
 
 
-        itemRepository.updateYN(itemId, itemYN);
+        itemRepository.updateYN(itemId, Boolean.parseBoolean(itemYN));
 
         return null;
 

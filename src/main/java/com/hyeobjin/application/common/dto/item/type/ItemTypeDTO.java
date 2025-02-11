@@ -1,4 +1,4 @@
-package com.hyeobjin.application.admin.dto.item.type;
+package com.hyeobjin.application.common.dto.item.type;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

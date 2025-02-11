@@ -13,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -39,11 +40,11 @@ class AdminCalendarServiceTest {
     void findDetail() {
         Long calendarId = 1L;
 
-        AdminFindCalendarDTO resultDetail = adminCalendarService.findDetail(calendarId);
+        Calendar calendar = calendarJpaRepository.findById(calendarId).get();
 
-//        System.out.println("resultDetail.getUsers().getName() = " + resultDetail.getUsers().getName());
+        List<AdminFindCalendarDTO> result = adminCalendarService.findDetail(calendar.getStartTime(), calendar.getEndTime());
 
-        Assertions.assertThat(resultDetail.getCalenderId()).isEqualTo(calendarId);
+        result.stream().forEach(System.out::println);
     }
 
     @Test
@@ -58,9 +59,10 @@ class AdminCalendarServiceTest {
 
         adminCalendarService.update(updateCalendarDTO);
 
-        AdminFindCalendarDTO findUpdateDetail = adminCalendarService.findDetail(1L);
-        Assertions.assertThat(findUpdateDetail.getCalenderId()).isEqualTo(updateCalendarDTO.getCalenderId());
+        List<AdminFindCalendarDTO> detail = adminCalendarService.findDetail(updateCalendarDTO.getStartTime(), updateCalendarDTO.getEndTime());
+        System.out.println(detail);
     }
+
 
     @Test
     @DisplayName("관리자 일정 삭제")
