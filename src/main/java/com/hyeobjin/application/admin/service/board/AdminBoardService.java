@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 
 @Slf4j
@@ -134,5 +135,15 @@ public class AdminBoardService {
                 .orElseThrow(() -> new EntityNotFoundException("해당 게시글이 존재하지 않습니다."));
 
         return boardRepositoryImpl.findByBoardDetailAdmin(findBoardId.getId());
+    }
+
+    public List<FindAdminBoardDTO> findBySimpleList() {
+        List<Board> orderByBoardList = boardRepository.findTop2ByOrderByBoardUpdateDesc();
+
+        return orderByBoardList.stream().map(Board -> new FindAdminBoardDTO(
+                Board.getId(),
+                Board.getBoardTitle(),
+                Board.getBoardUpdate()
+        )).collect(Collectors.toList());
     }
 }

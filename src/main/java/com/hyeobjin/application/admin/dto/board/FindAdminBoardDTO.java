@@ -19,4 +19,10 @@ public class FindAdminBoardDTO {
     private String boardType;
     private String boardYN;
     private String writer; // Users = name
+
+    public FindAdminBoardDTO(Long boardId, String boardTitle, LocalDateTime boardUpdate) {
+        this.boardId = boardId;
+        this.boardTitle = boardTitle;
+        this.boardUpdate = boardUpdate;
+    }
 }

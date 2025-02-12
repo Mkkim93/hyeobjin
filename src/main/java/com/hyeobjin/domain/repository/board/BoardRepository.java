@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 public interface BoardRepository extends JpaRepository<Board, Long> {
 
     Board findByBoardTitle(String boardTitle);
@@ -29,4 +31,6 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 
     @EntityGraph(attributePaths = {"users"})
     Page<Board> findByBoardTitleContaining(Pageable pageable, String searchKeyword);
+
+    List<Board> findTop2ByOrderByBoardUpdateDesc();
 }

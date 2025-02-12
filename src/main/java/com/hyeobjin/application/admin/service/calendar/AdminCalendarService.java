@@ -44,9 +44,9 @@ public class AdminCalendarService {
 
     }
 
-    public List<AdminFindCalendarDTO> findDetail(LocalDateTime startTime, LocalDateTime endTime) {
+    public List<AdminFindCalendarDTO> findDetail(LocalDateTime startTime) {
 
-        List<Calendar> result = calendarJpaRepository.findByStartTimeBetween(startTime, endTime);
+        List<Calendar> result = calendarJpaRepository.findEventsByDateJPQL(startTime);
 
         return new AdminFindCalendarDTO().toDto(result);
     }
@@ -57,7 +57,7 @@ public class AdminCalendarService {
     public void update(UpdateCalendarDTO updateCalendarDTO) {
 
         calendarJpaRepository.findById(
-                updateCalendarDTO.getCalenderId())
+                updateCalendarDTO.getCalendarId())
                 .orElseThrow(() -> new EntityNotFoundException("일정이 존재 하지 않습니다."));
 
         calendarRepositoryImpl.updateCalendar(updateCalendarDTO);

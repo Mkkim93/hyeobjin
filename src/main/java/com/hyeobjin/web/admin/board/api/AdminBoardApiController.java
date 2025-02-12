@@ -38,8 +38,8 @@ public class AdminBoardApiController {
 
     @Operation(summary = "관리자 게시글 조회", description = "관리자가 모든 게시글 목록을 조회하기 위한 API 입니다.")
     @GetMapping
-    public ResponseEntity<Page<FindAdminBoardDTO>> findAll(@RequestParam(name = "page", defaultValue = "0") int page,
-                                                           @RequestParam(name = "size", defaultValue = "10") int size,
+    public ResponseEntity<Page<FindAdminBoardDTO>> findAll(@RequestParam(name = "page", defaultValue = "0", required = false) int page,
+                                                           @RequestParam(name = "size", defaultValue = "10", required = false) int size,
                                                            @RequestParam(value = "searchKeyword", required = false) String searchKeyword) {
 
         Page<FindAdminBoardDTO> list = null;
@@ -132,5 +132,11 @@ public class AdminBoardApiController {
     @GetMapping("/detail/{boardId}")
     public ResponseEntity<DetailAdminBoardDTO> detail(@PathVariable("boardId") Long boardId) {
        return ResponseEntity.ok(adminBoardService.findDetailBoard(boardId));
+    }
+
+    @Operation(summary = "관리자 홈에서 게시글 단순 조회", description = "관리자가 메인 폼에서 게시글을 단순 조회 하기 위한 API 입니다.")
+    @GetMapping("/simple")
+    public ResponseEntity<List<FindAdminBoardDTO>> findSimple() {
+        return ResponseEntity.ok(adminBoardService.findBySimpleList());
     }
 }

@@ -15,29 +15,40 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 public class AdminFindCalendarDTO {
 
-    private Long calenderId;
+    private Long calendarId;
     private String title;
-    private String description;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
+    private String description;
     private LocalDateTime createAt;
     private LocalDateTime updateAt;
     private String location;
     private String calendarYN;
     private Long usersId;
     private String writer;
+    private String holiday;
 
-    public AdminFindCalendarDTO(Long calenderId, String title, LocalDateTime endTime, LocalDateTime startTime, String description) {
-        this.calenderId = calenderId;
+    public AdminFindCalendarDTO(Long calendarId, String title, LocalDateTime startTime,
+                                LocalDateTime endTime, String description, LocalDateTime createAt,
+                                LocalDateTime updateAt, String location,String holiday, String calendarYN,
+                                Long usersId, String writer ) {
+        this.calendarId = calendarId;
         this.title = title;
-        this.endTime = endTime;
         this.startTime = startTime;
+        this.endTime = endTime;
         this.description = description;
+        this.createAt = createAt;
+        this.updateAt = updateAt;
+        this.location = location;
+        this.holiday = holiday;
+        this.calendarYN = calendarYN;
+        this.usersId = usersId;
+        this.writer = writer;
     }
 
     public List<AdminFindCalendarDTO> toDto(List<Calendar> calendars) {
         return calendars.stream()
-                .map(this::convertToDto) // ✅ 개별 변환 메서드 호출
+                .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
 
@@ -47,8 +58,14 @@ public class AdminFindCalendarDTO {
                 calendar.getTitle(),
                 calendar.getStartTime(),
                 calendar.getEndTime(),
-                calendar.getDescription()
+                calendar.getDescription(),
+                calendar.getCreateAt(),
+                calendar.getUpdateAt(),
+                calendar.getLocation(),
+                calendar.getHolidays(),
+                calendar.getCalenderYN(),
+                calendar.getUsers().getId(),
+                calendar.getUsers().getName()
         );
     }
-
 }

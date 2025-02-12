@@ -54,6 +54,10 @@ public class CalendarRepositoryImpl extends QuerydslRepositorySupport implements
             updateClause.set(calendar.location, updateCalendarDTO.getLocation());
         }
 
+        if (updateCalendarDTO.getHoliday() != null) {
+            updateClause.set(calendar.holidays, updateCalendarDTO.getHoliday());
+        }
+
         if (updateCalendarDTO.getCalendarYN() != null) {
             updateClause.set(calendar.calenderYN, updateCalendarDTO.getCalendarYN());
         }
@@ -68,7 +72,7 @@ public class CalendarRepositoryImpl extends QuerydslRepositorySupport implements
 
         updateClause.set(calendar.updateAt, LocalDateTime.now());
 
-        updateClause.where(calendar.id.eq(updateCalendarDTO.getCalenderId()));
+        updateClause.where(calendar.id.eq(updateCalendarDTO.getCalendarId()));
 
         updateClause.execute();
     }

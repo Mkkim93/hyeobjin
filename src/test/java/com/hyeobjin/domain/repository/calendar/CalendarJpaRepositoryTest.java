@@ -37,7 +37,7 @@ class CalendarJpaRepositoryTest {
     @DisplayName("관리자 일정 리스트 간단 조회")
     void findAllAdmin() {
 //        List<AdminFindCalendarDTO> result = calendarJpaRepository.findByAllAdmin();
-//
+
 //        result.stream().forEach(System.out::println);
     }
 
@@ -45,13 +45,13 @@ class CalendarJpaRepositoryTest {
     @DisplayName("일정 범위 조회")
     void startTimeBetween() {
 
-        LocalDate today = LocalDate.now();
-        LocalDateTime startOfDay = today.atStartOfDay(); // 오늘 00:00:00
-        LocalDateTime endOfDay = today.atTime(23, 59, 59); // 오늘 23:59:59
+        LocalDateTime start = LocalDateTime.of(2025, 2, 4, 0,0,0);// 오늘 00:00:00
 
-        List<Calendar> events = calendarJpaRepository.findByStartTimeBetween(startOfDay, endOfDay);
+        log.info("start={}", start);
 
-        System.out.println(events.get(0));
+        List<Calendar> events = calendarJpaRepository.findEventsByDateJPQL(start);
+
+        events.stream().forEach(System.out::println);
 
     }
 }

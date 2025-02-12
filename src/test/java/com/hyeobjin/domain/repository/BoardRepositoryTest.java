@@ -94,4 +94,12 @@ class BoardRepositoryTest {
 
         System.out.println("result = " + result);
     }
+
+    @Test
+    @DisplayName("관리자 폼 메인에서 상위 2개의 최근 게시글만 가지고 오는 쿼리")
+    void findTop2TitleByUpdate() {
+        List<Board> result = boardRepository.findTop2ByOrderByBoardUpdateDesc();
+
+        result.stream().forEach(System.out::println);
+    }
 }

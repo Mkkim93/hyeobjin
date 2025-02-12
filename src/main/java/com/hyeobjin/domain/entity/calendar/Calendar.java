@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.apache.commons.lang3.EnumUtils;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -17,6 +18,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Table(name = "calendar")
+@ToString(exclude = {"users"})
 @EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor
 public class Calendar {
@@ -104,7 +106,6 @@ public class Calendar {
                 ", scheduleStatus=" + scheduleStatus +
                 ", calenderYN='" + calenderYN + '\'' +
                 ", holidays='" + holidays + '\'' +
-                ", users=" + users +
                 '}';
     }
 }

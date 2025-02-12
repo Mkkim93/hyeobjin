@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class UpdateCalendarDTO {
 
-    private Long calenderId;
+    private Long calendarId;
     private String title;
     private String description;
     private LocalDateTime startTime;
@@ -21,7 +21,7 @@ public class UpdateCalendarDTO {
     private String location;
     private String calendarYN;
     private String scheduleStatus;
-
+    private String holiday;
     private Long usersId;
 
 }

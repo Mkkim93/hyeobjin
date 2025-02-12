@@ -38,7 +38,6 @@ public class AdminCalendarApiController {
     @Operation(summary = "관리자 일정 목록 조회", description = "관리자가 모든 일정을 조회하기 위한 API 입니다.")
     @GetMapping
     public ResponseEntity<List<AdminCalendarSummaryDTO>> findAll() {
-
         return ResponseEntity.ok(adminCalendarService.findAll());
     }
 
@@ -52,12 +51,9 @@ public class AdminCalendarApiController {
     @GetMapping("/detail")
     public ResponseEntity<List<AdminFindCalendarDTO>> findDetail(
             @Parameter(description = "조회 시작 시간 (예: 2025-02-11T00:00:00)", example = "2025-02-11T00:00:00")
-            @RequestParam("startTime") @Schema(type = "string", format = "date-time") LocalDateTime startTime,
-
-            @Parameter(description = "조회 종료 시간 (예: 2025-02-11T23:59:59)", example = "2025-02-11T23:59:59")
-            @RequestParam("endTime") @Schema(type = "string", format = "date-time") LocalDateTime endTime
+            @RequestParam("startTime") @Schema(type = "string", format = "date-time") LocalDateTime startTime
     ) {
-        return ResponseEntity.ok(adminCalendarService.findDetail(startTime, endTime));
+        return ResponseEntity.ok(adminCalendarService.findDetail(startTime));
     }
 
     /**
@@ -102,10 +98,8 @@ public class AdminCalendarApiController {
      */
     @Operation(summary = "관리자 일정 삭제", description = "관리자가 Calendar PK 를 기준으로 일정을 삭제하기 위한 API 입니다.")
     @DeleteMapping
-    public ResponseEntity<?> delete(@RequestParam("calendarId") Long calendarId) {
-
+    public ResponseEntity<String> delete(@RequestParam("calendarId") Long calendarId) {
         adminCalendarService.delete(calendarId);
-    
-        return ResponseEntity.ok("delete success");
+        return ResponseEntity.ok("일정이 삭제 되었습니다.");
     }
 }

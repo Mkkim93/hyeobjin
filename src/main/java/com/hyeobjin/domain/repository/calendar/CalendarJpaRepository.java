@@ -21,6 +21,6 @@ public interface CalendarJpaRepository extends JpaRepository<Calendar, Long> {
             " from Calendar c")
     List<AdminCalendarSummaryDTO> findByAllAdmin();
 
-    List<Calendar> findByStartTimeBetween(LocalDateTime startTime, LocalDateTime endTime);
-
+    @Query("SELECT c FROM Calendar c WHERE function('DATE', c.startTime) <= :date AND function('DATE', c.endTime) >= :date")
+    List<Calendar> findEventsByDateJPQL(@Param("date") LocalDateTime date);
 }

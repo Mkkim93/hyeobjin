@@ -13,9 +13,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @Slf4j
 @SpringBootTest
@@ -42,7 +39,7 @@ class AdminCalendarServiceTest {
 
         Calendar calendar = calendarJpaRepository.findById(calendarId).get();
 
-        List<AdminFindCalendarDTO> result = adminCalendarService.findDetail(calendar.getStartTime(), calendar.getEndTime());
+        List<AdminFindCalendarDTO> result = adminCalendarService.findDetail(calendar.getStartTime());
 
         result.stream().forEach(System.out::println);
     }
@@ -52,14 +49,14 @@ class AdminCalendarServiceTest {
     void updateCalendar() {
 
         UpdateCalendarDTO updateCalendarDTO = new UpdateCalendarDTO();
-        updateCalendarDTO.setCalenderId(1L);
+        updateCalendarDTO.setCalendarId(1L);
         updateCalendarDTO.setTitle("다시 일정 수정");
         updateCalendarDTO.setCalendarYN("Y");
         updateCalendarDTO.setUsersId(1L); // 마지막으로 수정한 관리자 PK
 
         adminCalendarService.update(updateCalendarDTO);
 
-        List<AdminFindCalendarDTO> detail = adminCalendarService.findDetail(updateCalendarDTO.getStartTime(), updateCalendarDTO.getEndTime());
+        List<AdminFindCalendarDTO> detail = adminCalendarService.findDetail(updateCalendarDTO.getStartTime());
         System.out.println(detail);
     }
 
