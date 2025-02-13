@@ -115,9 +115,7 @@ public class AdminItemApiController {
     public ResponseEntity<?> update(@RequestPart("updateItemDTO") UpdateItemDTO updateItemDTO,
                                     @RequestPart(value = "mainFile", required = false) MultipartFile mainFile
                                     ) throws IOException {
-
         adminItemService.update(updateItemDTO, mainFile);
-
         return ResponseEntity.ok("file update success");
     }
 

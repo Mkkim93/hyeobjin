@@ -1,6 +1,7 @@
 package com.hyeobjin.domain.entity.file;
 
 import com.hyeobjin.domain.entity.board.Board;
+import com.hyeobjin.domain.entity.inquiry.Inquiry;
 import com.hyeobjin.domain.entity.item.Item;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -56,10 +57,14 @@ public class FileBox {
     @JoinColumn(name = "board_id")
     private Board board;
 
+    @ManyToOne(fetch = LAZY, optional = false)
+    @JoinColumn(name = "inquiry_id")
+    private Inquiry inquiry;
+
     @Builder
     public FileBox(Long id, String fileOrgName, String fileName,
                    String filePath, String fileType, Long fileSize, Boolean isMain, LocalDateTime fileRegDate,
-                   Item itemId, Board boardId) {
+                   Item itemId, Board boardId, Inquiry inquiryId) {
         this.id = id;
         this.fileOrgName = fileOrgName;
         this.fileName = fileName;
@@ -70,16 +75,11 @@ public class FileBox {
         this.fileRegDate = fileRegDate;
         this.item = itemId;
         this.board = boardId;
+        this.inquiry = inquiryId;
     }
 
-    public void setUpdateNewFileItemIdAndFileBoxId(Long fileBoxId, Long itemId) {
+    public void setUpdateFileBoxItemId(Long fileBoxId,  Long itemId) {
         this.id = fileBoxId;
-        this.item = Item.builder()
-                .itemId(itemId)
-                .build();
-    }
-
-    public void setUpdateFileBoxItemId(Long itemId) {
         this.item = Item.builder()
                 .itemId(itemId)
                 .build();

@@ -93,7 +93,7 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList(
                 "http://localhost:3000",
-                "https://d92b-118-217-209-89.ngrok-free.app" // ngrok 임시 활성화
+                "https://b27b-125-186-22-14.ngrok-free.app" // ngrok 임시 활성화
         ));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "X-Requested-With")); // 허용할 헤더
         configuration.setExposedHeaders(Arrays.asList("Authorization"));

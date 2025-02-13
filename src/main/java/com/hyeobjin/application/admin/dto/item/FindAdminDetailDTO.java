@@ -28,7 +28,7 @@ public class FindAdminDetailDTO {
     private String freeContent;
     private String itemType;
     private String glassSize;
-    private List<FindAdminFileBoxDTO> fileBoxes;
+    private FindAdminFileBoxDTO fileBoxes;
 
     @QueryProjection
     public FindAdminDetailDTO(Long itemId,
@@ -47,7 +47,7 @@ public class FindAdminDetailDTO {
                               String manuName,
                               String itemType,
                               String glassSize,
-                              List<FindAdminFileBoxDTO> fileBoxes) {
+                              FindAdminFileBoxDTO fileBoxes) {
         this.itemId = itemId;
         this.itemName = itemName;
         this.itemNum = itemNum;

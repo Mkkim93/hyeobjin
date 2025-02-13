@@ -1,6 +1,5 @@
 package com.hyeobjin.application.common.dto.calendar;
 
-import com.hyeobjin.domain.entity.calendar.enums.ScheduleStatus;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,23 +9,21 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class FindCalendarDTO {
 
-    private Long calenderId;
+    private Long calendarId;
     private String findTitle;
     private LocalDateTime findStartTime;
     private LocalDateTime findEndTime;
     private LocalDateTime findCreateAt;
-    private ScheduleStatus findScheduleStatus;
-    private String calenderYN;
+    private String calendarYN;
 
-    public FindCalendarDTO(Long calenderId, String findTitle,
+    public FindCalendarDTO(Long calendarId, String findTitle,
                            LocalDateTime findStartTime, LocalDateTime findEndTime,
-                           LocalDateTime findCreateAt, ScheduleStatus findScheduleStatus
+                           LocalDateTime findCreateAt
                           ) {
-        this.calenderId = calenderId;
+        this.calendarId = calendarId;
         this.findTitle = findTitle;
         this.findStartTime = findStartTime;
         this.findEndTime = findEndTime;
         this.findCreateAt = findCreateAt;
-        this.findScheduleStatus = findScheduleStatus;
     }
 }

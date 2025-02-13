@@ -13,6 +13,7 @@ import com.hyeobjin.domain.entity.item.QItem;
 import com.hyeobjin.domain.entity.item.Item;
 import com.hyeobjin.domain.entity.item.QItemType;
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.querydsl.jpa.impl.JPAUpdateClause;
@@ -49,22 +50,31 @@ public class ItemRepositoryImpl extends QuerydslRepositorySupport implements Ite
         QItem item = QItem.item;
         QFileBox fileBox = QFileBox.fileBox;
 
-        List<FindAdminFileBoxDTO> fileBoxes = jpaQueryFactory
-                .selectFrom(fileBox)
-                .join(fileBox.item, item).fetchJoin()
+//        jpaQueryFactory
+//                .selectFrom(fileBox)
+//                .join(fileBox.item, item).fetchJoin()
+//
+//                .join(item.manufacturer, manufacturer).fetchJoin()
+//                .where(
+//                        item.id.eq(itemId)
+//                ).orderBy(fileBox.id.asc())
+//                .fetch()
+//                // TODO 파일과 함께 조회 시 불필요한 데이터 제거
+//                .stream().map(FindAdminFileBoxDTO::new);
 
-                .join(item.manufacturer, manufacturer).fetchJoin()
-                .where(
-                        item.id.eq(itemId)
-                ).orderBy(fileBox.id.asc())
-                .fetch()
-                // TODO 파일과 함께 조회 시 불필요한 데이터 제거
-                .stream().map(FindAdminFileBoxDTO::new)
-                .collect(Collectors.toList());
+        FindAdminFileBoxDTO findAdminFileBoxDTO = jpaQueryFactory.select(Projections.constructor(
+                        FindAdminFileBoxDTO.class,
+                        fileBox.id, fileBox.fileName, fileBox.fileOrgName,
+                        fileBox.fileSize, fileBox.fileType, fileBox.filePath, fileBox.isMain
+                )).from(fileBox)
+                .join(fileBox.item, item) // DTO 를 조회할 떄는 fetchJoin 를 사용하면 안된다
 
-        // 정규화의 문제점
-        // itemType, glassSpec 을 item 테이블에 구현했으나 클라이언트 요청으로 별도로 분리하게됨
-        // 별도로 분리한 이후 join 연산이 2번 발생함
+                .where(item.id.eq(itemId))
+                .orderBy(fileBox.id.asc()).fetchFirst();
+
+
+        // 테이블 분리 : ItemType, GlassSpec
+        // Join 2 추가
         // TODO 향후 어떻게 최적화 해야 할지 고민
         Item selectItem = jpaQueryFactory
                 .selectFrom(item)
@@ -91,8 +101,7 @@ public class ItemRepositoryImpl extends QuerydslRepositorySupport implements Ite
                 selectItem.getManufacturer().getManuName(),
                 selectItem.getItemType().getTypeName(),
                 selectItem.getGlassSize().getGlassSpec(),
-                fileBoxes
-
+                findAdminFileBoxDTO
         );
     }
 
@@ -135,8 +144,8 @@ public class ItemRepositoryImpl extends QuerydslRepositorySupport implements Ite
                 .leftJoin(item.manufacturer, manufacturer).fetchJoin()
                 .where(
                         item.id.eq(itemId),
-                                (item.manufacturer.id.eq(manuId)),
-                                (item.itemYN.eq(true))
+                        (item.manufacturer.id.eq(manuId)),
+                        (item.itemYN.eq(true))
                 )
                 .fetch()
                 // TODO 파일과 함께 조회 시 불필요한 데이터 제거
@@ -148,7 +157,9 @@ public class ItemRepositoryImpl extends QuerydslRepositorySupport implements Ite
                 .leftJoin(item.manufacturer, manufacturer)
                 .leftJoin(item.itemType, QItemType.itemType)
                 .leftJoin(item.glassSize, QGlassSpec.glassSpec1)
-                .where(item.id.eq(itemId))
+                .where(
+                        item.id.eq(itemId),
+                        item.itemYN.eq(true))
                 .fetchOne();
 
         return new FindByItemDTO(

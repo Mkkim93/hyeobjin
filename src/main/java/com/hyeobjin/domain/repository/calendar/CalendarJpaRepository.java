@@ -12,7 +12,7 @@ import java.util.List;
 
 public interface CalendarJpaRepository extends JpaRepository<Calendar, Long> {
 
-    @Query("select new com.hyeobjin.application.common.dto.calendar.FindCalendarDTO(c.id, c.title, c.startTime, c.endTime, c.createAt, c.scheduleStatus) " +
+    @Query("select new com.hyeobjin.application.common.dto.calendar.FindCalendarDTO(c.id, c.title, c.startTime, c.endTime, c.createAt) " +
             " from Calendar c " +
             " where c.calenderYN = 'Y'")
     List<FindCalendarDTO> findByAllCommon();
@@ -21,6 +21,6 @@ public interface CalendarJpaRepository extends JpaRepository<Calendar, Long> {
             " from Calendar c")
     List<AdminCalendarSummaryDTO> findByAllAdmin();
 
-    @Query("SELECT c FROM Calendar c WHERE function('DATE', c.startTime) <= :date AND function('DATE', c.endTime) >= :date")
+    @Query("select c from Calendar c where function('DATE', c.startTime) <= :date and function('DATE', c.endTime) >= :date")
     List<Calendar> findEventsByDateJPQL(@Param("date") LocalDateTime date);
 }

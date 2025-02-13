@@ -2,7 +2,6 @@ package com.hyeobjin.application.admin.service.file;
 
 import com.hyeobjin.application.admin.dto.file.UpdateItemFileDTO;
 import com.hyeobjin.application.admin.dto.item.UpdateItemDTO;
-import com.hyeobjin.application.common.dto.file.FileBoxItemDTO;
 import com.hyeobjin.domain.entity.file.FileBox;
 import com.hyeobjin.domain.entity.item.Item;
 import com.hyeobjin.domain.repository.file.FileBoxRepository;
@@ -23,7 +22,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -154,16 +152,17 @@ public class AdminItemFileService {
         log.info("file ={}", file);
         log.info("file.getAbsolutePath ={}", file.getAbsoluteFile());
 
-        if (file.exists()) {
-            boolean fileDeleted = file.delete();
-
-            if (!fileDeleted) {
-                throw new RuntimeException("파일 삭제 오류");
-            }
-            log.info("파일이 성공적으로 삭제되었습니다.");
-        } else {
+        if (!file.exists()) {
             log.warn("파일이 존재하지 않아 삭제할 수 없습니다.");
+            return false; // 파일이 없으면 false 반환
         }
+
+        boolean fileDeleted = file.delete();
+        if (!fileDeleted) {
+            throw new RuntimeException("파일 삭제 오류");
+        }
+
+        log.info("파일이 성공적으로 삭제되었습니다.");
         return true;
     }
 
@@ -223,35 +222,23 @@ public class AdminItemFileService {
             log.info("파일 삭제 중 오류 발생");
             return;
         }
-
         fileBoxRepository.delete(fileBox);
     }
 
-    // TODO
     public String findFileBoxIds(UpdateItemDTO updateItemDTO, MultipartFile mainFile) throws IOException {
 
-        if (updateItemDTO.getFileBoxId() == null) {
-            FileBox fileBox = new FileBox();
-            fileBox.setUpdateFileBoxItemId(updateItemDTO.getItemId());
-            updateNewMainFile(fileBox, mainFile);
-        } else {
+        FileBox fileBox = fileBoxRepository.findById(updateItemDTO.getFileBoxId()).orElseThrow(() -> new EntityNotFoundException("파일을 찾는 도중 오류가 발생 하였습니다."));
 
-            FileBox fileBox = fileBoxRepository.findById(updateItemDTO.getFileBoxId()).get();
+        deleteFile(fileBox.getId());
 
-            CompletableFuture<Boolean> hasDeleted = CompletableFuture.supplyAsync(() -> { // 기존 file 정적파일 삭제
-                return deleteFile(fileBox.getId());
-            });
+        fileBox.setUpdateFileBoxItemId(fileBox.getId(), updateItemDTO.getItemId());
+        updateMainFile(fileBox, mainFile);
 
-            hasDeleted.join();
-
-            fileBox.setUpdateNewFileItemIdAndFileBoxId(updateItemDTO.getFileBoxId(), updateItemDTO.getItemId());
-
-            updateMainFile(fileBox, mainFile);
-        }
         return "성공";
     }
 
-    private void updateNewMainFile(FileBox mainFileEntity, MultipartFile mainFile) throws IOException {
+    // TODO 파일 간헐적으로 업데이트 안되거나 경로 NULL 값 나옴 안쓸듯
+    private void updateNewMainFile(FileBox fileBox, MultipartFile mainFile) throws IOException {
 
         String filePath = fileDir;
 
@@ -265,24 +252,22 @@ public class AdminItemFileService {
         FileBox savedFile = FileBox.builder()
                 .fileOrgName(mainFile.getOriginalFilename())
                 .fileName(fileName)
-                .filePath(mainFileEntity.getFilePath() + fileName)
+                .filePath(filePath + fileName)
                 .fileSize(mainFile.getSize())
                 .fileType(mainFile.getContentType())
-                .isMain(true) // 인덱스에 따라 isMain 설정
+                .isMain(true)
                 .fileRegDate(LocalDateTime.now())
                 .itemId(Item.builder()
-                        .itemId(mainFileEntity.getItem().getId())
+                        .itemId(fileBox.getItem().getId())
                         .build())
                 .build();
 
         fileBoxRepository.save(savedFile);
-
     }
 
     private void updateMainFile(FileBox fileBox, MultipartFile mainFile) throws IOException {
 
         String filePath = fileDir;
-        String filePathSub = fileDirSub; // TODO 저장할 경로 나눠야될듯
 
         UUID uuid = UUID.randomUUID();
         String fileName = uuid + "_" + mainFile.getOriginalFilename();
@@ -290,9 +275,7 @@ public class AdminItemFileService {
         // 첫 번째 파일 (인덱스 0)은 isMain = TRUE, 나머지 파일은 isMain = FALSE
         boolean isMain = (fileBox.getIsMain()); // i가 0이면 isMain = TRUE, 그렇지 않으면 FALSE
 
-        String targetPath = isMain ? filePath : filePathSub; // 저장할 경로 선택
-
-        File saveFile = new File(targetPath, fileName);
+        File saveFile = new File(filePath, fileName);
 
         mainFile.transferTo(saveFile);
 
@@ -300,7 +283,7 @@ public class AdminItemFileService {
                 .id(fileBox.getId())
                 .fileOrgName(mainFile.getOriginalFilename())
                 .fileName(fileName)
-                .filePath(targetPath + fileName)
+                .filePath(filePath + fileName)
                 .fileSize(mainFile.getSize())
                 .fileType(mainFile.getContentType())
                 .isMain(isMain) // 인덱스에 따라 isMain 설정

@@ -11,8 +11,8 @@ import java.util.List;
 public interface ItemTypeRepository extends JpaRepository<ItemType, Long> {
 
     @Query("select new com.hyeobjin.application.common.dto.item.type.FindItemTypeDTO(t.id, t.typeName, i.id, i.itemName) " +
-            "from ItemType t, Item i where t.id = i.itemType.id " +
-            "and i.itemType.id = :itemTypeId and i.manufacturer.id = :manuId")
+            "from ItemType t left join Item i on t.id = i.itemType.id where " +
+            "i.itemType.id = :itemTypeId and i.manufacturer.id = :manuId and i.itemYN = true")
     List<FindItemTypeDTO> findByItemNameList(@Param("itemTypeId") Long itemTypeId, @Param("manuId") Long manuId);
 
     @Query("SELECT DISTINCT new com.hyeobjin.application.common.dto.item.type.FindItemTypeDTO(t.id, t.typeName, i.id, i.itemName) " +
