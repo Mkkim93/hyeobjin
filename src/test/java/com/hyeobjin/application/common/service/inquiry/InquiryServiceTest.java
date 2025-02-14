@@ -12,7 +12,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.ArrayList;
 import java.util.List;
 
-
 @ExtendWith(MockitoExtension.class)
 class InquiryServiceTest {
 
@@ -29,7 +28,7 @@ class InquiryServiceTest {
         createInquiryDTO.setTitle("문의 제목");
         createInquiryDTO.setContent("문의 내용");
         createInquiryDTO.setManuId(1L);
-        createInquiryDTO.setItemTypeId(1L);
+        createInquiryDTO.setTypeId(1L);
         createInquiryDTO.setItemId(1L);
 
         // 파일 리스트 생성

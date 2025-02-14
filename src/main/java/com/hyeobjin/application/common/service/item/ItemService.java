@@ -1,6 +1,7 @@
 package com.hyeobjin.application.common.service.item;
 
 import com.hyeobjin.application.common.dto.item.FindByItemDTO;
+import com.hyeobjin.application.common.dto.item.FindItemNumDTO;
 import com.hyeobjin.domain.entity.item.Item;
 import com.hyeobjin.domain.repository.item.ItemRepository;
 import com.hyeobjin.domain.repository.item.ItemRepositoryImpl;
@@ -48,5 +49,9 @@ public class ItemService {
      */
     public List<FindByItemDTO> findAllItemNumList(Long manuId) {
         return itemRepository.findAllItemId(manuId);
+    }
+
+    public List<FindItemNumDTO> findByItemNum(Long manuId, Long typeId) {
+        return itemRepository.findItemNum(manuId, typeId);
     }
 }

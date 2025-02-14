@@ -3,10 +3,12 @@ package com.hyeobjin.domain.repository;
 import com.hyeobjin.application.admin.dto.item.CreateItemDTO;
 import com.hyeobjin.application.admin.dto.item.FindAdminDetailDTO;
 import com.hyeobjin.application.common.dto.item.FindByItemDTO;
+import com.hyeobjin.application.common.dto.item.FindItemNumDTO;
 import com.hyeobjin.domain.entity.item.Item;
 import com.hyeobjin.domain.repository.item.ItemRepository;
 import com.hyeobjin.domain.repository.item.ItemRepositoryImpl;
 import lombok.extern.slf4j.Slf4j;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -99,5 +101,17 @@ class ItemRepositoryTest {
         Long updateCount = itemRepository.updateYN(itemId, Boolean.parseBoolean(itemYN));
     }
 
+    @Test
+    @DisplayName("제조사와 제품 타입에 해당하는 제품의 품번 조회")
+    void findItemNum() {
+
+        Long manuId = 1L;
+        Long typeId = 1L;
+
+        List<FindItemNumDTO> itemNum = itemRepository.findItemNum(manuId, typeId);
+
+        Assertions.assertThat(itemNum).isNotNull();
+
+    }
 
 }

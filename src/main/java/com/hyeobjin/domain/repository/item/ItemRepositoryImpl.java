@@ -50,25 +50,13 @@ public class ItemRepositoryImpl extends QuerydslRepositorySupport implements Ite
         QItem item = QItem.item;
         QFileBox fileBox = QFileBox.fileBox;
 
-//        jpaQueryFactory
-//                .selectFrom(fileBox)
-//                .join(fileBox.item, item).fetchJoin()
-//
-//                .join(item.manufacturer, manufacturer).fetchJoin()
-//                .where(
-//                        item.id.eq(itemId)
-//                ).orderBy(fileBox.id.asc())
-//                .fetch()
-//                // TODO 파일과 함께 조회 시 불필요한 데이터 제거
-//                .stream().map(FindAdminFileBoxDTO::new);
-
-        FindAdminFileBoxDTO findAdminFileBoxDTO = jpaQueryFactory.select(Projections.constructor(
+        FindAdminFileBoxDTO findAdminFileBoxDTO =
+                jpaQueryFactory.select(Projections.constructor(
                         FindAdminFileBoxDTO.class,
                         fileBox.id, fileBox.fileName, fileBox.fileOrgName,
                         fileBox.fileSize, fileBox.fileType, fileBox.filePath, fileBox.isMain
                 )).from(fileBox)
                 .join(fileBox.item, item) // DTO 를 조회할 떄는 fetchJoin 를 사용하면 안된다
-
                 .where(item.id.eq(itemId))
                 .orderBy(fileBox.id.asc()).fetchFirst();
 
