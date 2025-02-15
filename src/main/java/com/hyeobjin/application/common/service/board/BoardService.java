@@ -51,9 +51,9 @@ public class BoardService {
      * @param pageable
      * @return
      */
-    public Page<BoardListDTO> findAll(Pageable pageable) {
+    public Page<BoardListDTO> findAll(Pageable pageable, String boardType) {
 
-        Page<Board> boardList = boardRepository.findByAllBoardList(pageable);
+        Page<Board> boardList = boardRepository.findByAllBoardList(pageable, boardType);
 
         return boardList.map(board -> {
             return new BoardListDTO(

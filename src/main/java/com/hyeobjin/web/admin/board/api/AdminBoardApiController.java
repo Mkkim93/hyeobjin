@@ -1,5 +1,6 @@
 package com.hyeobjin.web.admin.board.api;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.hyeobjin.application.admin.dto.board.DetailAdminBoardDTO;
 import com.hyeobjin.application.admin.dto.board.FindAdminBoardDTO;
 import com.hyeobjin.application.admin.service.board.AdminBoardReplyService;

@@ -39,6 +39,7 @@ public class FindAdminInquiryDetailDTO {
     private Long fileBoxId;
     private String filePath;
     private String fileOrgName;
+    private String fileName;
 
     @QueryProjection
     public FindAdminInquiryDetailDTO(Long inquiryId, String title, String content,

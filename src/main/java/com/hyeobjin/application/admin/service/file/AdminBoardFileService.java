@@ -22,7 +22,7 @@ public class AdminBoardFileService {
 
     private final FileBoxRepository fileBoxRepository;
 
-    public synchronized boolean deleteByStaticFiles(List<Long> boardIds) {
+    public boolean deleteByStaticFiles(List<Long> boardIds) {
 
         List<Long> deleteFileBoxIds = fileBoxRepository.findFileBoxIdsByBoardIdIn(boardIds);
 

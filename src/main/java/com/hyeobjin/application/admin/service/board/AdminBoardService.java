@@ -140,10 +140,11 @@ public class AdminBoardService {
     public List<FindAdminBoardDTO> findBySimpleList() {
         List<Board> orderByBoardList = boardRepository.findTop2ByOrderByBoardUpdateDesc();
 
-        return orderByBoardList.stream().map(Board -> new FindAdminBoardDTO(
-                Board.getId(),
-                Board.getBoardTitle(),
-                Board.getBoardUpdate()
+        return orderByBoardList.stream().map(board -> new FindAdminBoardDTO(
+                board.getId(),
+                board.getBoardTitle(),
+                board.getUsers().getName(),
+                board.getBoardUpdate()
         )).collect(Collectors.toList());
     }
 }

@@ -38,15 +38,16 @@ public class BoardApiController {
     @GetMapping
     public ResponseEntity<Page<BoardListDTO>> findAll(@RequestParam(value = "page", defaultValue = "0") int page,
                                                       @RequestParam(value = "size", defaultValue = "10") int size,
-                                                      @RequestParam(value = "searchKeyword", required = false) String searchKeyword) {
+                                                      @RequestParam(value = "searchKeyword", required = false) String searchKeyword,
+                                                      @RequestParam(value = "boardType") String boardType) {
         PageRequest pageRequest = PageRequest.of(page, size);
 
         Page<BoardListDTO> boardList = null;
 
         if (searchKeyword != null) {
-            boardList = boardReplyService.searchKeywordList(searchKeyword, pageRequest);
+            boardList = boardReplyService.searchKeywordList(searchKeyword, pageRequest, boardType);
         } else {
-            boardList = boardService.findAll(pageRequest);
+            boardList = boardService.findAll(pageRequest, boardType);
         }
         return ResponseEntity.ok(boardList);
     }

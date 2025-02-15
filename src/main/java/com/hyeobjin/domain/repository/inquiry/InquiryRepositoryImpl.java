@@ -39,7 +39,7 @@ public class InquiryRepositoryImpl extends QuerydslRepositorySupport implements 
 
         List<AdminInquiryFileDTO> fileList = jpaQueryFactory.select(Projections.constructor(
                         AdminInquiryFileDTO.class,
-                        fileBox.id, fileBox.filePath, fileBox.fileOrgName
+                        fileBox.id, fileBox.filePath, fileBox.fileOrgName, fileBox.fileName
                 )).from(fileBox)
                 .join(fileBox.inquiry, inquiry)
                 .where(fileBox.inquiry.id.eq(inquiryId)).fetch();

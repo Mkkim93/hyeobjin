@@ -45,7 +45,8 @@ class BoardRepositoryTest {
     @DisplayName("사용자 게시글 검색 조회 (페이징) boardYN = Y 만 조회")
     void findSearchKeywordAll() {
         PageRequest pageRequest = PageRequest.of(0, 10);
-        Page<Board> result = boardRepository.findByBoardYNAndBoardTitleContaining("Y", "07", pageRequest);
+        String boardType = "NOTICE";
+        Page<Board> result = boardRepository.findByBoardYNAndBoardTitleContainingAndBoardType("Y", "07", boardType, pageRequest);
 
         result.stream().forEach(System.out::println);
 

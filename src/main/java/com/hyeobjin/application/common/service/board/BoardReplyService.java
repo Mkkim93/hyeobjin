@@ -18,11 +18,11 @@ public class BoardReplyService {
 
     private final BoardRepository boardRepository;
 
-    public Page<BoardListDTO> searchKeywordList(String searchKeyword, Pageable pageable) {
+    public Page<BoardListDTO> searchKeywordList(String searchKeyword, Pageable pageable, String boardType) {
 
         String boardYN = "Y";
 
-        Page<Board> keyWordList = boardRepository.findByBoardYNAndBoardTitleContaining(boardYN, searchKeyword, pageable);
+        Page<Board> keyWordList = boardRepository.findByBoardYNAndBoardTitleContainingAndBoardType(boardYN, searchKeyword, boardType, pageable);
 
         return keyWordList.map(board -> new BoardListDTO(
                 board.getId(),

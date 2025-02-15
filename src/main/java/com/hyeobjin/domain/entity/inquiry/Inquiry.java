@@ -91,4 +91,14 @@ public class Inquiry {
                 .itemId(itemId)
                 .build();
     }
+
+    @Override
+    public String toString() {
+        return "Inquiry{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                ", writer='" + writer + '\'' +
+                '}';
+    }
 }

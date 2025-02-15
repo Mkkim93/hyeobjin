@@ -15,14 +15,16 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 
     Board findByBoardTitle(String boardTitle);
 
-    @Query("select b from Board b where b.boardYN = 'Y' order by b.boardRegDate desc ")
-    Page<Board> findByAllBoardList(Pageable pageable);
+    @Query("select b from Board b where b.boardYN = 'Y' and b.boardType = :boardType order by b.boardRegDate desc ")
+    Page<Board> findByAllBoardList(Pageable pageable, @Param("boardType") String boardType);
 
     @Modifying
     @Query("update Board b set b.boardYN = 'Y' where b.id = :boardId")
     Integer deleteBoard(@Param("boardId") Long boardId);
 
-    Page<Board> findByBoardYNAndBoardTitleContaining(String boardYN, String searchKeyWord, Pageable pageable);
+    Page<Board> findByBoardYNAndBoardTitleContainingAndBoardType(
+            String boardYN, String searchKeyWord, String boardType, Pageable pageable);
+
 
     // admin
     @EntityGraph(attributePaths = {"users"})

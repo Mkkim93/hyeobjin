@@ -40,8 +40,9 @@ class BoardServiceTest {
     @Test
     @DisplayName("게시글 목록 조회")
     void findAll() {
+        String boardType = "NOTICE";
         PageRequest pageable = PageRequest.of(0, 10);
-        Page<BoardListDTO> boardList = boardService.findAll(pageable);
+        Page<BoardListDTO> boardList = boardService.findAll(pageable, boardType);
 
         boardList.stream().forEach(System.out::println);
     }

@@ -40,4 +40,6 @@ public interface FileBoxRepository extends JpaRepository<FileBox, Long> {
 
     @Query("SELECT f FROM FileBox f WHERE f.id IN :subFileIds and f.isMain = FALSE")
     List<FileBox> findByIdSubFiles(@Param("subFileIds") List<Long> subFileIds);
+
+    List<FileBox> findAllByInquiryId(Long inquiryId);
 }
