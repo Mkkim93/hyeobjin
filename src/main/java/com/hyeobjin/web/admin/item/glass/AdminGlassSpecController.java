@@ -1,7 +1,6 @@
 package com.hyeobjin.web.admin.item.glass;
 
 import com.hyeobjin.application.admin.dto.item.glass.GlassSpecDTO;
-import com.hyeobjin.application.admin.dto.item.glass.UpdateGlassSpecDTO;
 import com.hyeobjin.application.admin.service.item.GlassSpecService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

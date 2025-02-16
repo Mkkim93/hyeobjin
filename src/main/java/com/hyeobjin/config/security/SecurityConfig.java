@@ -1,6 +1,7 @@
 package com.hyeobjin.config.security;
 
 import com.hyeobjin.application.common.service.redis.RedisService;
+import com.hyeobjin.jwt.CustomLogoutFilter;
 import com.hyeobjin.jwt.JwtFilter;
 import com.hyeobjin.jwt.JwtUtil;
 import com.hyeobjin.jwt.LoginFilter;
@@ -14,6 +15,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -65,14 +67,14 @@ public class SecurityConfig {
                 // 중요!! : Spring Security 가 로그인 처리를 담당할 url, 프론트의 비동기 처리 할 url 과 매핑 (컨트롤러 필요없음)
                 // 여기서 설정하는 url 경로는 클라이언트의 웹사이트의 경로가 아니라 서버 restcontroller 의 rest api 경로 기준이다
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/login","/auth", "/**",
-                                "/manufacturers/**", "/boards/**", "/items/**",
-                                "/swagger-ui/**", "/calendar/**", "/swagger-ui.html", "/v3/api-docs",
-                                "/swagger-resources/**", "/webjars/**", "/v3/api-docs/swagger-config",
-                                "/swagger-ui/index.html#/ADMIN_CALENDAR/**", "/admin/calendar/**").permitAll()
+                        .requestMatchers("/auth", "/**", "/manufacturers/**", "/boards/**", "/items/**",
+                                "/swagger-ui/**", "/calendar/**", "/error").permitAll()
 
                         .requestMatchers("/admins", "/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated());
+
+        http
+                .addFilterBefore(new CustomLogoutFilter(jwtUtil, redisService), LogoutFilter.class);
 
         http
                 .addFilterBefore(new JwtFilter(jwtUtil), LoginFilter.class);
@@ -84,6 +86,7 @@ public class SecurityConfig {
         http
                 .sessionManagement((session) -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
 
         return http.build();
     }

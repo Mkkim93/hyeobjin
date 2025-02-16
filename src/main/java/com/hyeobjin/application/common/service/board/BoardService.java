@@ -2,12 +2,9 @@ package com.hyeobjin.application.common.service.board;
 
 import com.hyeobjin.application.common.dto.board.BoardDetailDTO;
 import com.hyeobjin.application.common.dto.board.BoardListDTO;
-import com.hyeobjin.application.common.dto.board.CreateBoardDTO;
-import com.hyeobjin.application.common.dto.board.UpdateBoardDTO;
 import com.hyeobjin.domain.entity.board.Board;
 import com.hyeobjin.domain.repository.board.BoardRepository;
 import com.hyeobjin.domain.repository.board.BoardRepositoryImpl;
-import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,10 +13,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
-import java.util.List;
 
 /*
  파일 데이터와 연관 관계를 갖지 않는 서비스

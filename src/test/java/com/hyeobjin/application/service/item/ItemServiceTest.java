@@ -68,13 +68,13 @@ class ItemServiceTest {
     @DisplayName("제품 품번 조회")
     void findOneItemByItemNum() {
 
-        FindByItemDTO findByItemDTO = new FindByItemDTO();
-        findByItemDTO.setItemNum("K101");
+        Long itemId = 1L;
 
-        itemService.findByItemOne(findByItemDTO);
-//        System.out.println("findOneItem = " + findOneItem);
+        FindByItemDTO byItemOne = itemService.findByItemOne(itemId);
 
-//        assertThat(findOneItem.getItemNum()).isEqualTo(findByItemDTO.getItemNum());
+        log.info("byItemOne={}", byItemOne);
+
+        assertThat(byItemOne.getItemNum()).isEqualTo(byItemOne.getItemNum());
     }
 
     @Test

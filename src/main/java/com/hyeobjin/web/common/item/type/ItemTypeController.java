@@ -1,6 +1,5 @@
 package com.hyeobjin.web.common.item.type;
 
-import com.hyeobjin.application.admin.service.item.AdminItemTypeService;
 import com.hyeobjin.application.common.dto.item.type.FindItemTypeDTO;
 import com.hyeobjin.application.common.dto.item.type.ItemTypeDTO;
 import com.hyeobjin.application.common.service.item.type.ItemTypeService;

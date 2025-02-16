@@ -63,7 +63,8 @@ public class AdminInquiryService {
             log.info("문의 내용이 존재 하지 않습니다.");
             return;
         }
-            Inquiry inquiry = inquiryRepository.findById(inquiryId).orElseThrow(() -> new EntityNotFoundException("해당 문의 내용을 찾는 도중 오류가 발생 하였습니다."));
+            Inquiry inquiry = inquiryRepository.findById(inquiryId).orElseThrow(
+                    () -> new EntityNotFoundException("해당 문의 내용을 찾는 도중 오류가 발생 하였습니다."));
 
             adminInquiryFileService.deleteStaticFiles(inquiry.getId());
 

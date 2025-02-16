@@ -13,7 +13,6 @@ public class FindAdminItemDTO {
     private Long itemId;
     private String itemName;
     private String itemNum;
-    private String itemType; // 중요
     private LocalDateTime itemRegDate;
     private LocalDateTime itemUpdate;
     private Boolean itemYN;
@@ -27,7 +26,6 @@ public class FindAdminItemDTO {
         this.itemId = itemId;
         this.itemNum = itemNum;
         this.itemName = itemName;
-
         this.itemRegDate = itemRegDate;
         this.itemUpdate = itemUpdate;
         this.itemYN = itemYN;

@@ -1,7 +1,6 @@
 package com.hyeobjin.application.admin.service.item;
 
 import com.hyeobjin.application.admin.dto.item.glass.GlassSpecDTO;
-import com.hyeobjin.application.admin.dto.item.glass.UpdateGlassSpecDTO;
 import com.hyeobjin.domain.entity.item.GlassSpec;
 import com.hyeobjin.domain.repository.item.GlassSpecRepository;
 import jakarta.persistence.EntityNotFoundException;

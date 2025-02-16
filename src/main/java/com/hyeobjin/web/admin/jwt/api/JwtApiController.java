@@ -28,6 +28,11 @@ public class JwtApiController {
         String refresh = null;
 
         Cookie[] cookies = request.getCookies();
+
+        if (cookies == null) {
+            return new ResponseEntity<>("cookie is empty", HttpStatus.UNAUTHORIZED);
+        }
+
         for (Cookie cookie : cookies) {
 
             // 클라이언트에 존재하는 쿠키에 있는 리플래시 토큰을 꺼냄

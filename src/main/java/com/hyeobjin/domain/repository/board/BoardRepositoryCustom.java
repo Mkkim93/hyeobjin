@@ -9,7 +9,6 @@ public interface BoardRepositoryCustom {
 
     BoardDetailDTO findByBoardDetail(Long boardId);
 
-    // admin
     Board updateBoard(UpdateBoardDTO updateBoardDTO);
 
     DetailAdminBoardDTO findByBoardDetailAdmin(Long boardId);

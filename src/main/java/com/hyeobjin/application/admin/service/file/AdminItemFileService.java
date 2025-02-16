@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
@@ -237,34 +236,6 @@ public class AdminItemFileService {
         return "성공";
     }
 
-    // TODO 파일 간헐적으로 업데이트 안되거나 경로 NULL 값 나옴 안쓸듯
-    private void updateNewMainFile(FileBox fileBox, MultipartFile mainFile) throws IOException {
-
-        String filePath = fileDir;
-
-        UUID uuid = UUID.randomUUID();
-        String fileName = uuid + "_" + mainFile.getOriginalFilename();
-
-        File saveFile = new File(filePath, fileName);
-
-        mainFile.transferTo(saveFile);
-
-        FileBox savedFile = FileBox.builder()
-                .fileOrgName(mainFile.getOriginalFilename())
-                .fileName(fileName)
-                .filePath(filePath + fileName)
-                .fileSize(mainFile.getSize())
-                .fileType(mainFile.getContentType())
-                .isMain(true)
-                .fileRegDate(LocalDateTime.now())
-                .itemId(Item.builder()
-                        .itemId(fileBox.getItem().getId())
-                        .build())
-                .build();
-
-        fileBoxRepository.save(savedFile);
-    }
-
     private void updateMainFile(FileBox fileBox, MultipartFile mainFile) throws IOException {
 
         String filePath = fileDir;
@@ -272,8 +243,7 @@ public class AdminItemFileService {
         UUID uuid = UUID.randomUUID();
         String fileName = uuid + "_" + mainFile.getOriginalFilename();
 
-        // 첫 번째 파일 (인덱스 0)은 isMain = TRUE, 나머지 파일은 isMain = FALSE
-        boolean isMain = (fileBox.getIsMain()); // i가 0이면 isMain = TRUE, 그렇지 않으면 FALSE
+        boolean isMain = (fileBox.getIsMain());
 
         File saveFile = new File(filePath, fileName);
 
@@ -286,7 +256,7 @@ public class AdminItemFileService {
                 .filePath(filePath + fileName)
                 .fileSize(mainFile.getSize())
                 .fileType(mainFile.getContentType())
-                .isMain(isMain) // 인덱스에 따라 isMain 설정
+                .isMain(isMain)
                 .fileRegDate(LocalDateTime.now())
                 .itemId(Item.builder()
                         .itemId(fileBox.getItem().getId())

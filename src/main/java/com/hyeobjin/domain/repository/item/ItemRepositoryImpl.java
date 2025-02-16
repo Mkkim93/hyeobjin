@@ -136,7 +136,6 @@ public class ItemRepositoryImpl extends QuerydslRepositorySupport implements Ite
                         (item.itemYN.eq(true))
                 )
                 .fetch()
-                // TODO 파일과 함께 조회 시 불필요한 데이터 제거
                 .stream().map(FindFileBoxDTO::new)
                 .collect(Collectors.toList());
 
@@ -165,7 +164,7 @@ public class ItemRepositoryImpl extends QuerydslRepositorySupport implements Ite
                 selectItem.getManufacturer().getId(),
                 selectItem.getManufacturer().getManuName(),
                 fileBoxes
-                );
+        );
     }
 
     @Override

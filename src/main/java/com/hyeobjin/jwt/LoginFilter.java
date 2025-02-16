@@ -87,7 +87,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         log.info("refresh value ={}", refresh.toString());
 
         // redis 에 최초 발급된 refresh token 저장
-        redisService.save("refresh", refresh, 36000000L);
+        redisService.save("refresh:" + username, refresh, 36000000L);
 
         // 응답 설정
         response.setHeader("Authorization", access); // 여기에서 넣은 토큰 키값을 doFilterInter~() 에서 getHeader 로 읽는다 키값 일치화 시켜야됨

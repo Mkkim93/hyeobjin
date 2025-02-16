@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -16,7 +15,6 @@ import java.util.List;
 public class FindAdminInquiryDetailDTO {
 
     private Long inquiryId;
-
     private String title;
     private String content;
     private String writer;
@@ -36,10 +34,11 @@ public class FindAdminInquiryDetailDTO {
     private String itemName;
 
     private List<AdminInquiryFileDTO> inquiryFiles;
-    private Long fileBoxId;
-    private String filePath;
-    private String fileOrgName;
-    private String fileName;
+
+//    private Long fileBoxId;
+//    private String filePath;
+//    private String fileOrgName;
+//    private String fileName;
 
     @QueryProjection
     public FindAdminInquiryDetailDTO(Long inquiryId, String title, String content,
@@ -60,24 +59,5 @@ public class FindAdminInquiryDetailDTO {
         this.itemTypeName = itemTypeName;
         this.itemName = itemName;
         this.inquiryFiles = inquiryFiles;
-    }
-
-    @Override
-    public String toString() {
-        return "FindAdminInquiryDetailDTO{" +
-                "InquiryId=" + inquiryId +
-                ", title='" + title + '\'' +
-                ", content='" + content + '\'' +
-                ", writer='" + writer + '\'' +
-                ", tel='" + tel + '\'' +
-                ", email='" + email + '\'' +
-                ", addr='" + addr + '\'' +
-                ", detailAddr='" + detailAddr + '\'' +
-                ", createAt=" + createAt +
-                ", manuName='" + manuName + '\'' +
-                ", itemTypeName='" + itemTypeName + '\'' +
-                ", itemName='" + itemName + '\'' +
-                ", inquiryFiles=" + inquiryFiles +
-                '}';
     }
 }

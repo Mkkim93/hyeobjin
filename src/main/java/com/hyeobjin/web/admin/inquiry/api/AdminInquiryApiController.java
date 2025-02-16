@@ -3,22 +3,15 @@ package com.hyeobjin.web.admin.inquiry.api;
 import com.hyeobjin.application.admin.dto.inquiry.FindAdminInquiryDTO;
 import com.hyeobjin.application.admin.dto.inquiry.FindAdminInquiryDetailDTO;
 import com.hyeobjin.application.admin.service.inquiry.AdminInquiryService;
-import com.hyeobjin.domain.entity.file.FileBox;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriUtils;
 
-import java.net.MalformedURLException;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @Slf4j

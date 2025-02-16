@@ -14,4 +14,6 @@ public interface UsersRepository extends JpaRepository<Users, Long> {
 
     @Query("select u.id from Users u where u.username = :username")
     Long findByIdByUsername(@Param("username") String username);  // 제대로 된 메서드 이름
+
+
 }

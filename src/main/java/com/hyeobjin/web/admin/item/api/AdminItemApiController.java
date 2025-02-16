@@ -1,12 +1,10 @@
 package com.hyeobjin.web.admin.item.api;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hyeobjin.application.admin.dto.item.CreateItemDTO;
 import com.hyeobjin.application.admin.dto.item.FindAdminDetailDTO;
 import com.hyeobjin.application.admin.dto.item.FindAdminItemDTO;
 import com.hyeobjin.application.admin.dto.item.UpdateItemDTO;
 import com.hyeobjin.application.admin.service.item.AdminItemService;
-import com.hyeobjin.application.common.dto.file.FileBoxItemDTO;
 import com.hyeobjin.application.common.dto.item.FindByItemDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

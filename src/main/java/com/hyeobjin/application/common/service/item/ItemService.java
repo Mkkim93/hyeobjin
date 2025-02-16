@@ -30,8 +30,8 @@ public class ItemService {
     /**
      * 제품 카테고리별 품번으로 검색
      */
-    public FindByItemDTO findByItemOne(FindByItemDTO findByItemDTO) {
-        Item item = itemRepository.findById(findByItemDTO.getItemId()).orElseThrow(() -> new EntityNotFoundException("제품의 아이디가 존재하지 않습니다."));
+    public FindByItemDTO findByItemOne(Long itemId) {
+        Item item = itemRepository.findById(itemId).orElseThrow(() -> new EntityNotFoundException("제품의 아이디가 존재하지 않습니다."));
 
         FindByItemDTO result = new FindByItemDTO();
         try {
@@ -39,7 +39,8 @@ public class ItemService {
         } catch (TypeNotPresentException e) {
             e.getMessage();
         }
-        log.info("@@@@@@@@@@@@@@@@@@@@@@@result ={}", result.getItemName());
+        log.info("result.getItemName={}", result.getItemName());
+
         return result;
     }
 

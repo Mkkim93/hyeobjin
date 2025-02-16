@@ -1,6 +1,5 @@
 package com.hyeobjin.web.admin.board.api;
 
-import com.fasterxml.jackson.annotation.JsonView;
 import com.hyeobjin.application.admin.dto.board.DetailAdminBoardDTO;
 import com.hyeobjin.application.admin.dto.board.FindAdminBoardDTO;
 import com.hyeobjin.application.admin.service.board.AdminBoardReplyService;
@@ -18,7 +17,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 

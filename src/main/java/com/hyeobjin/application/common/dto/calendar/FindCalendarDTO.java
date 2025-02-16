@@ -14,7 +14,6 @@ public class FindCalendarDTO {
     private LocalDateTime findStartTime;
     private LocalDateTime findEndTime;
     private LocalDateTime findCreateAt;
-    private String calendarYN;
 
     public FindCalendarDTO(Long calendarId, String findTitle,
                            LocalDateTime findStartTime, LocalDateTime findEndTime,

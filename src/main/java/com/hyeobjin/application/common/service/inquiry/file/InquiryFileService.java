@@ -1,6 +1,5 @@
 package com.hyeobjin.application.common.service.inquiry.file;
 
-import com.hyeobjin.domain.entity.board.Board;
 import com.hyeobjin.domain.entity.file.FileBox;
 import com.hyeobjin.domain.entity.inquiry.Inquiry;
 import com.hyeobjin.domain.repository.file.FileBoxRepository;
