@@ -21,7 +21,7 @@ public class UpdateCalendarDTO {
     private String location;
     private String calendarYN;
     private String scheduleStatus;
-    private String holiday;
+    private Boolean holidays;
     private Long usersId;
 
 }

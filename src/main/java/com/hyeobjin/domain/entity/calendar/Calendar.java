@@ -57,7 +57,7 @@ public class Calendar {
     private String calenderYN;
 
     @Column(name = "holidays")
-    private String holidays; // 휴무일 CRUD 구현
+    private Boolean holidays; // 휴무일 CRUD 구현
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "users_id")
@@ -65,7 +65,7 @@ public class Calendar {
 
     @Builder
     public Calendar(String title, String description, LocalDateTime startTime, LocalDateTime endTime,
-                     String location, ScheduleStatus scheduleStatus, String calenderYN, Long usersId) {
+                     String location, ScheduleStatus scheduleStatus, String calenderYN, Boolean holidays, Long usersId) {
         this.title = title;
         this.description = description;
         this.startTime = startTime;
@@ -73,6 +73,7 @@ public class Calendar {
         this.location = location;
         this.scheduleStatus = scheduleStatus;
         this.calenderYN = calenderYN;
+        this.holidays = holidays;
         this.users = Users.builder()
                 .userId(usersId)
                 .build();
@@ -90,22 +91,5 @@ public class Calendar {
         this.users = Users.builder()
                 .userId(updateCalendarDTO.getUsersId())
                 .build();
-    }
-
-    @Override
-    public String toString() {
-        return "Calendar{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", startTime=" + startTime +
-                ", endTime=" + endTime +
-                ", createAt=" + createAt +
-                ", updateAt=" + updateAt +
-                ", location='" + location + '\'' +
-                ", scheduleStatus=" + scheduleStatus +
-                ", calenderYN='" + calenderYN + '\'' +
-                ", holidays='" + holidays + '\'' +
-                '}';
     }
 }

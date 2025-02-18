@@ -47,7 +47,7 @@ public class BoardRepositoryImpl extends QuerydslRepositorySupport implements Bo
         QUsers users = QUsers.users;
 
         Board boardEntity = jpaQueryFactory.selectFrom(board)
-                .leftJoin(board.users, users)
+                .leftJoin(board.users, users).fetchJoin()
                 .where(board.id.eq(boardId))
                 .fetchOne();
 
@@ -61,7 +61,9 @@ public class BoardRepositoryImpl extends QuerydslRepositorySupport implements Bo
         List<BoardFileDTO> boardFiles = jpaQueryFactory
                 .select(new QBoardFileDTO(
                         fileBox.id,
+                        fileBox.fileName,
                         fileBox.fileOrgName,
+                        fileBox.fileSize,
                         fileBox.fileType,
                         fileBox.filePath,
                         fileBox.fileRegDate,
@@ -94,6 +96,9 @@ public class BoardRepositoryImpl extends QuerydslRepositorySupport implements Bo
         }
         if (updateBoardDTO.getBoardContent() != null) {
             updateClause.set(board.boardContent, updateBoardDTO.getBoardContent());
+        }
+        if (updateBoardDTO.getBoardYN() != null) {
+            updateClause.set(board.boardYN, updateBoardDTO.getBoardYN());
         }
         updateClause.set(board.boardUpdate, LocalDateTime.now()); // 게시글 수정 시 현재 시간으로 업데이트
 

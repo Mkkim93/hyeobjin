@@ -14,6 +14,7 @@ public class UpdateBoardDTO {
     private Long boardId;
     private String boardTitle;
     private String boardContent;
+    private String boardYN;
 
     private List<FileBoxBoardDTO> boardFiles;
 }

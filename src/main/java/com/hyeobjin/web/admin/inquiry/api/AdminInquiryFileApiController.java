@@ -34,7 +34,7 @@ public class AdminInquiryFileApiController {
     private final AdminInquiryFileService adminInquiryFileService;
 
 
-    @PostMapping("/download/{fileBoxId}")
+    @GetMapping("/download/{fileBoxId}")
     @Operation(summary = "파일 다운로드", description = "fileBoxId 를 조회하여 해당 파일을 다운로드 하는 API 입니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "파일 다운로드 성공", content = @Content(mediaType = "application/octet-stream")),

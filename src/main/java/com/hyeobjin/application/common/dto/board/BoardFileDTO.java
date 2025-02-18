@@ -27,11 +27,13 @@ public class BoardFileDTO {
     private Long userId;
 
     @QueryProjection
-    public BoardFileDTO(Long fileBoxId, String fileOrgName,
-                        String fileType, String filePath,
+    public BoardFileDTO(Long fileBoxId,  String fileName ,String fileOrgName,
+                        Long fileSize, String fileType, String filePath,
                         LocalDateTime fileRegDate, Long boardId) {
         this.fileBoxId = fileBoxId;
-        this.fileName = fileOrgName;
+        this.fileName = fileName;
+        this.fileOrgName = fileOrgName;
+        this.fileSize = fileSize;
         this.fileType = fileType;
         this.filePath = filePath;
         this.fileRegDate = fileRegDate;

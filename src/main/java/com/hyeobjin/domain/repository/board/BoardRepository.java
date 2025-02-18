@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -35,4 +36,8 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     Page<Board> findByBoardTitleContaining(Pageable pageable, String searchKeyword);
 
     List<Board> findTop2ByOrderByBoardUpdateDesc();
+
+    @Modifying
+    @Query("update Board b set b.boardViewCount = b.boardViewCount + 1 where b.id = :boardId")
+    int updateBoardViewCount(@Param("boardId") Long boardId);
 }

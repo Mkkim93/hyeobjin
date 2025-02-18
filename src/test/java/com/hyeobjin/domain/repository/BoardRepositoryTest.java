@@ -103,4 +103,11 @@ class BoardRepositoryTest {
 
         result.stream().forEach(System.out::println);
     }
+
+    @Test
+    @DisplayName("게시글 조회수 증가")
+    void updateBoardViewCount() {
+        Long boardId = 1L;
+        boardRepository.updateBoardViewCount(boardId);
+    }
 }

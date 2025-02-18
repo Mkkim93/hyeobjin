@@ -84,4 +84,10 @@ public class FileBox {
                 .itemId(itemId)
                 .build();
     }
+
+    public void setItemId(Long itemId) {
+        this.item = Item.builder()
+                .itemId(itemId)
+                .build();
+    }
 }

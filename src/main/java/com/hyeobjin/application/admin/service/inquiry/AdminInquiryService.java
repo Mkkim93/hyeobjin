@@ -10,7 +10,9 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,7 +30,15 @@ public class AdminInquiryService {
 
     public Page<FindAdminInquiryDTO> findAll(Pageable pageable) {
 
-        Page<Inquiry> inquiryPage = inquiryRepository.findAll(pageable);
+        Pageable sortedByDate = PageRequest.of(
+                pageable.getPageNumber(),
+                pageable.getPageSize(),
+                Sort.by(Sort.Direction.DESC, "createAt")
+        );
+
+
+        Page<Inquiry> inquiryPage = inquiryRepository.findAll(sortedByDate);
+
 
         return inquiryPage.map(inquiry -> new FindAdminInquiryDTO(
                 inquiry.getId(),
@@ -37,6 +47,7 @@ public class AdminInquiryService {
                 inquiry.getCreateAt()
         ));
     }
+
 
     public FindAdminInquiryDetailDTO findDetailWithFiles(Long inquiryId) {
         return inquiryRepositoryImpl.findDetail(inquiryId);

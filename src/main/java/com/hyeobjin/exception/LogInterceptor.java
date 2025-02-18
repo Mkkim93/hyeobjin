@@ -10,7 +10,7 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.UUID;
 
 @Slf4j
-@Component
+//@Component
 public class LogInterceptor implements HandlerInterceptor {
 
     public static final String LOG_ID = "logId";

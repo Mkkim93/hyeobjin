@@ -14,9 +14,10 @@ public class CreateCalendarDTO {
 
     private String title;
     private String description;
-    private String location; // 일정 위치 (작업 장소)
+    private String location;
     private String scheduleStatus;
     private String calendarYN;
+    private Boolean holidays;
 
     private LocalDateTime createAt; // 일정 등록일
 
@@ -34,6 +35,7 @@ public class CreateCalendarDTO {
                 .location(createCalendarDTO.getLocation())
                 .scheduleStatus(EnumUtils.getEnum(ScheduleStatus.class, createCalendarDTO.getScheduleStatus()))
                 .calenderYN(createCalendarDTO.getCalendarYN())
+               .holidays(createCalendarDTO.getHolidays())
                 .usersId(createCalendarDTO.getUsersId())
                 .build();
     }

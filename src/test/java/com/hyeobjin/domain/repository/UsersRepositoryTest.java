@@ -65,4 +65,12 @@ class UsersRepositoryTest {
         Long usersId = usersRepository.findByIdByUsername("king00314@naver.com");
         assertThat(usersId).isEqualTo(1L);
     }
+
+    @Test
+    @DisplayName("모든 관리자의 이메일 조회")
+    void findByAllUsersEmail() {
+        List<String> allByUserMail = usersRepository.findAllByUserMail();
+
+        System.out.println("allByUserMail = " + allByUserMail);
+    }
 }

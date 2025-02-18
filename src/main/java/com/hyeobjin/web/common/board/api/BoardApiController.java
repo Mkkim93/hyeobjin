@@ -59,9 +59,9 @@ public class BoardApiController {
      * @return
      */
     @Operation(summary = "게시글 상세 조회", description = "게시글 상세 조회를 위한 API 입니다.")
-    @GetMapping("/detail")
-    public ResponseEntity<BoardDetailDTO> detail(@RequestParam("boardId") Long boardId) {
-
+    @GetMapping("/detail/{boardId}")
+    public ResponseEntity<BoardDetailDTO> detail(@PathVariable("boardId") Long boardId) {
+        boardService.updateViewCount(boardId);
         return ResponseEntity.ok(boardService.findDetail(boardId));
     }
 }

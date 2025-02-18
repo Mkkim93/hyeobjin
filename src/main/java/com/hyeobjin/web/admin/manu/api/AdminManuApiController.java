@@ -87,4 +87,11 @@ public class AdminManuApiController {
         adminManuService.delete(manuId);
         return ResponseEntity.ok("삭제 성공");
     }
+
+    @GetMapping("/list")
+    @Operation(summary = "제품 목록에서 제조사를 필터링", description = "제품 목록에서 제조사별로 필터링 하기 위한 API 입니다.")
+    public ResponseEntity<List<FindManufacturerDTO>> findSelect() {
+        return ResponseEntity.ok(adminManuService.findAll());
+
+    }
 }

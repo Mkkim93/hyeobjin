@@ -54,8 +54,8 @@ public class CalendarRepositoryImpl extends QuerydslRepositorySupport implements
             updateClause.set(calendar.location, updateCalendarDTO.getLocation());
         }
 
-        if (updateCalendarDTO.getHoliday() != null) {
-            updateClause.set(calendar.holidays, updateCalendarDTO.getHoliday());
+        if (updateCalendarDTO.getHolidays() != null) {
+            updateClause.set(calendar.holidays, updateCalendarDTO.getHolidays());
         }
 
         if (updateCalendarDTO.getCalendarYN() != null) {

@@ -132,7 +132,7 @@ public class AdminItemService {
 
         // 파일이 존재 시 update 로직 수행
         if (mainFile != null && !mainFile.isEmpty()) {
-            adminItemFileService.findFileBoxIds(updateItemDTO, mainFile); // mainFile 와 subFiles 의 pk 를 찾기 위한 메서드
+            adminItemFileService.findFileBoxIds(updateItemDTO, mainFile);
         }
     }
 

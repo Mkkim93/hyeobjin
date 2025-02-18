@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Slf4j
@@ -21,7 +22,6 @@ public class ManufacturerService {
      * # 관리자가 삭제한 제조사 (manuYN = N) 제외
      */
     public List<ManufactureDTO> findAll() {
-
         List<Manufacturer> manufacturerList = manufacturerRepository.findAll();
 
         return manufacturerList.stream()
@@ -30,6 +30,7 @@ public class ManufacturerService {
                         manufacturer.getManuName(),
                         manufacturer.getManuYN()))
                 .filter(manufactureDTO -> "Y".equals(manufactureDTO.getManuYN()))
+                .sorted(Comparator.comparing(ManufactureDTO::getManuId)) // ✅ ID 기준 내림차순 정렬
                 .toList();
     }
 }

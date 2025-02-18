@@ -3,6 +3,7 @@ package com.hyeobjin.web.common.inquiry.api;
 import com.hyeobjin.application.common.dto.inquriy.CreateInquiryDTO;
 import com.hyeobjin.application.common.service.inquiry.InquiryService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,7 @@ public class InquiryApiController {
 
     @PostMapping
     public ResponseEntity<?> save(@ModelAttribute CreateInquiryDTO createInquiryDTO,
-                                  @RequestPart(value = "files", required = false) List<MultipartFile> files) {
+                                  @RequestPart(value = "files", required = false) List<MultipartFile> files) throws MessagingException {
 
         inquiryService.save(createInquiryDTO, files);
 

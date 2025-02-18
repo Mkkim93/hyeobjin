@@ -113,7 +113,7 @@ public class AdminItemFileService {
             String targetPath = isMain ? filePath : filePathSub; // 저장할 경로 선택
 
             File saveFile = new File(targetPath, fileName);
-        
+
             file.transferTo(saveFile);
 
             FileBox savedFiles = FileBox.builder()
@@ -224,17 +224,30 @@ public class AdminItemFileService {
         fileBoxRepository.delete(fileBox);
     }
 
+    @Transactional
     public String findFileBoxIds(UpdateItemDTO updateItemDTO, MultipartFile mainFile) throws IOException {
+        // ✅ 1. 파일 박스 ID가 없는 경우 새로운 파일 박스 생성 후 저장
+        if (updateItemDTO.getFileBoxId() == null) {
+            FileBox newFileBox = new FileBox();
+            newFileBox.setItemId(updateItemDTO.getItemId());
+            // ✅ 새로운 파일 저장 후 즉시 반환
+            updateNewMainFile(newFileBox, mainFile);
+            return "새로운 파일 저장 완료";
+        }
 
-        FileBox fileBox = fileBoxRepository.findById(updateItemDTO.getFileBoxId()).orElseThrow(() -> new EntityNotFoundException("파일을 찾는 도중 오류가 발생 하였습니다."));
+        // ✅ 2. 기존 파일이 존재하는 경우 파일을 삭제 후 업데이트
+        FileBox fileBox = fileBoxRepository.findById(updateItemDTO.getFileBoxId())
+                .orElseThrow(() -> new EntityNotFoundException("파일 찾는 도중 오류 발생"));
 
+        // ✅ 기존 파일 삭제
         deleteFile(fileBox.getId());
 
-        fileBox.setUpdateFileBoxItemId(fileBox.getId(), updateItemDTO.getItemId());
+        // ✅ 기존 FileBox 객체에 새로운 파일 정보 업데이트
         updateMainFile(fileBox, mainFile);
 
-        return "성공";
+        return "기존 파일 업데이트 완료";
     }
+
 
     private void updateMainFile(FileBox fileBox, MultipartFile mainFile) throws IOException {
 
@@ -243,7 +256,6 @@ public class AdminItemFileService {
         UUID uuid = UUID.randomUUID();
         String fileName = uuid + "_" + mainFile.getOriginalFilename();
 
-        boolean isMain = (fileBox.getIsMain());
 
         File saveFile = new File(filePath, fileName);
 
@@ -256,7 +268,35 @@ public class AdminItemFileService {
                 .filePath(filePath + fileName)
                 .fileSize(mainFile.getSize())
                 .fileType(mainFile.getContentType())
-                .isMain(isMain)
+                .isMain(true)
+                .fileRegDate(LocalDateTime.now())
+                .itemId(Item.builder()
+                        .itemId(fileBox.getItem().getId())
+                        .build())
+                .build();
+
+        fileBoxRepository.save(savedFile);
+    }
+
+    private void updateNewMainFile(FileBox fileBox, MultipartFile mainFile) throws IOException {
+
+        String filePath = fileDir;
+
+        UUID uuid = UUID.randomUUID();
+        String fileName = uuid + "_" + mainFile.getOriginalFilename();
+
+
+        File saveFile = new File(filePath, fileName);
+
+        mainFile.transferTo(saveFile);
+
+        FileBox savedFile = FileBox.builder()
+                .fileOrgName(mainFile.getOriginalFilename())
+                .fileName(fileName)
+                .filePath(filePath + fileName)
+                .fileSize(mainFile.getSize())
+                .fileType(mainFile.getContentType())
+                .isMain(true)
                 .fileRegDate(LocalDateTime.now())
                 .itemId(Item.builder()
                         .itemId(fileBox.getItem().getId())

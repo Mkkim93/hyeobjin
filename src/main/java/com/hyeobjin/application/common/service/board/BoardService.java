@@ -5,6 +5,7 @@ import com.hyeobjin.application.common.dto.board.BoardListDTO;
 import com.hyeobjin.domain.entity.board.Board;
 import com.hyeobjin.domain.repository.board.BoardRepository;
 import com.hyeobjin.domain.repository.board.BoardRepositoryImpl;
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,10 +22,10 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Slf4j
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class BoardService {
 
+    private final EntityManager entityManager;
     private final BoardRepository boardRepository;
     private final BoardRepositoryImpl boardRepositoryImpl;
 
@@ -66,24 +67,12 @@ public class BoardService {
      * @return
      */
     public BoardDetailDTO findDetail(Long boardId) {
-
-        Board board = boardRepository.findById(boardId)
-                .orElseThrow(() -> new EntityNotFoundException("해당 게시글번호가 존재하지 않습니다."));
-
-        updateViewCount(board.getId());
-        String name = SecurityContextHolder.getContext().getAuthentication().getName();
-        log.info("name={}", name); // 현재 로그인한 사용자의 정보 호출
-        System.out.println("name = " + name);
-
-        // TODO 게시글의 작성자(관리자)가 아니면 해당 게시글 조회수 증가
-//        if (board.getUsers().getId() != ) {
-//        }
-
         return boardRepositoryImpl.findByBoardDetail(boardId);
     }
 
-    // TODO 조회수
-    private void updateViewCount(Long id) {
+    @Transactional
+    public void updateViewCount(Long boardId) {
+        boardRepository.updateBoardViewCount(boardId);
     }
 
 
@@ -91,7 +80,6 @@ public class BoardService {
     /**
      * 게시글 삭제
      * test code : O
-     * // TODO 안쓸 듯
      * @param boardId 사용자가 삭제할 게시글 번호을 전송하면 해당 게시글번호의 존재여부 검증 성공 시 게시글을 삭제한다.
      */
     public void delete(Long boardId) {

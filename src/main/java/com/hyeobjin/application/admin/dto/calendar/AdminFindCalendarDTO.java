@@ -26,11 +26,11 @@ public class AdminFindCalendarDTO {
     private String calendarYN;
     private Long usersId;
     private String writer;
-    private String holiday;
+    private Boolean holidays;
 
     public AdminFindCalendarDTO(Long calendarId, String title, LocalDateTime startTime,
                                 LocalDateTime endTime, String description, LocalDateTime createAt,
-                                LocalDateTime updateAt, String location,String holiday, String calendarYN,
+                                LocalDateTime updateAt, String location,Boolean holidays, String calendarYN,
                                 Long usersId, String writer ) {
         this.calendarId = calendarId;
         this.title = title;
@@ -40,7 +40,7 @@ public class AdminFindCalendarDTO {
         this.createAt = createAt;
         this.updateAt = updateAt;
         this.location = location;
-        this.holiday = holiday;
+        this.holidays = holidays;
         this.calendarYN = calendarYN;
         this.usersId = usersId;
         this.writer = writer;
