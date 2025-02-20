@@ -8,7 +8,10 @@ import com.hyeobjin.application.admin.service.file.AdminFileService;
 import com.hyeobjin.application.admin.service.file.AdminItemFileService;
 import com.hyeobjin.application.admin.service.fix.AdminItemManuService;
 import com.hyeobjin.application.common.dto.item.FindByItemDTO;
+import com.hyeobjin.application.common.service.item.type.ItemTypeService;
+import com.hyeobjin.domain.entity.item.GlassSpec;
 import com.hyeobjin.domain.entity.item.Item;
+import com.hyeobjin.domain.entity.item.ItemType;
 import com.hyeobjin.domain.entity.manufacturer.Manufacturer;
 import com.hyeobjin.domain.repository.item.ItemRepository;
 import com.hyeobjin.domain.repository.item.ItemRepositoryImpl;
@@ -28,7 +31,6 @@ import java.util.concurrent.CompletableFuture;
 
 @Slf4j
 @Service
-@Transactional
 public class AdminItemService {
 
     private final AdminItemFileService adminItemFileService;
@@ -36,18 +38,25 @@ public class AdminItemService {
     private final AdminItemManuService adminItemManuService;
     private final ItemRepository itemRepository;
     private final ItemRepositoryImpl itemRepositoryImpl;
+    private final GlassSpecService glassSpecService;
+    private final AdminItemTypeService adminItemTypeService;
 
     @Autowired
     public AdminItemService(AdminItemFileService adminItemFileService,
                             AdminFileService adminFileService,
                             AdminItemManuService adminItemManuService,
                             ItemRepository itemRepository,
-                            ItemRepositoryImpl itemRepositoryImpl) {
+                            ItemRepositoryImpl itemRepositoryImpl,
+                            GlassSpecService glassSpecService,
+                            AdminItemTypeService adminItemTypeService)
+                             {
         this.adminItemFileService = adminItemFileService;
         this.adminFileService = adminFileService;
         this.adminItemManuService = adminItemManuService;
         this.itemRepository = itemRepository;
         this.itemRepositoryImpl = itemRepositoryImpl;
+        this.glassSpecService = glassSpecService;
+        this.adminItemTypeService = adminItemTypeService;
     }
 
     public void deleteItemIds(List<Long> itemIds) {
@@ -105,17 +114,20 @@ public class AdminItemService {
      * @param files 제품 이미지 & 파일
      * @throws IOException
      */
+    @Transactional
     public void saveItem(CreateItemDTO createItemDTO, List<MultipartFile> files) throws IOException {
 
         Manufacturer manufacturer = adminItemManuService.findIdByManuName(createItemDTO.getManuName());
 
-        Item item = createItemDTO.toEntity(createItemDTO);
-        item.setManufacturerByCreateItem(manufacturer.getId());
+        ItemType itemType = adminItemTypeService.findById(createItemDTO.getItemTypeId());
+        GlassSpec glassSpec = glassSpecService.findById(createItemDTO.getGlassSpecId());
 
-        Item savedItem = itemRepository.save(item);
+        createItemDTO.toEntity(createItemDTO, glassSpec, itemType, manufacturer);
+
+        Item item = itemRepository.save(createItemDTO.toEntity(createItemDTO, glassSpec, itemType, manufacturer));
 
         if (files != null && !files.isEmpty()) {
-            adminItemFileService.saveFilesForItem(savedItem, files);
+            adminItemFileService.saveFilesForItem(item, files);
         }
     }
 
@@ -154,10 +166,8 @@ public class AdminItemService {
 
     public Boolean updateItemYN(Long itemId, String itemYN) {
 
-
         itemRepository.updateYN(itemId, Boolean.parseBoolean(itemYN));
 
         return null;
-
     }
 }

@@ -92,9 +92,8 @@ public class AdminItemApiController {
      */
     @Operation(summary = "제품 등록", description = "제품의 모든 정보 등록하는 API 입니다.")
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> save(@ModelAttribute CreateItemDTO createItemDTO,
+    public ResponseEntity<?> save(@RequestPart(value = "createItemDTO") CreateItemDTO createItemDTO,
                                   @RequestPart(value = "files", required = false) List<MultipartFile> itemFiles) throws IOException {
-        log.info("files ={}", itemFiles);
         adminItemService.saveItem(createItemDTO, itemFiles);
         return ResponseEntity.ok("제품이 성공적으로 등록 되었습니다.");
     }
@@ -117,6 +116,7 @@ public class AdminItemApiController {
         return ResponseEntity.ok("file update success");
     }
 
+    // TODO
     @Operation(summary = "제품 등록/미등록 수정", description = "관리자가 제품 리스트에서 등록 여부만 간단하게 수정하는 API 입니다.")
     @PostMapping("/updateYN")
     public String updateItemYN(@RequestParam("itemId") Long itemId,

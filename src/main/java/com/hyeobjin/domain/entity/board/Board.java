@@ -70,12 +70,4 @@ public class Board {
                 .userId(userId)
                 .build();
     }
-
-    @Override
-    public String toString() {
-        return "Board{" +
-                "id=" + id +
-                ", boardTitle='" + boardTitle + '\'' +
-                '}';
-    }
 }

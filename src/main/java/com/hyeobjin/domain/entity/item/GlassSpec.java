@@ -22,7 +22,6 @@ public class GlassSpec {
     }
 
     public void updateGlassSpec(String glassSpec) {
-
         this.glassSpec = glassSpec;
     }
 

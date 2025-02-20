@@ -6,7 +6,6 @@ import com.hyeobjin.application.common.dto.manu.ManufactureDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,10 +17,13 @@ import java.util.List;
 @Tag(name = "ADMIN_MANUFACTURER", description = "관리자 권한으로 제품이 등록될 제조사의 CRUD 를 위한 REST API 입니다.")
 @RestController
 @RequestMapping("/admin/manu")
-@RequiredArgsConstructor
 public class AdminManuApiController {
 
     private final AdminManuService adminManuService;
+
+    public AdminManuApiController(AdminManuService adminManuService) {
+        this.adminManuService = adminManuService;
+    }
 
     /**
      * # 모든 제조사 조회 (해당 제조사에 등록된 제품 수 포함)

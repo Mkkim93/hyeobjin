@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Slf4j
@@ -19,11 +20,17 @@ public class ItemTypeService {
     private final ItemTypeQueryRepository itemTypeQueryRepository;
 
     public List<ItemTypeDTO> findAll(Long manuId) {
-       return itemTypeQueryRepository.findByCategoryByManuId(manuId);
+       return itemTypeQueryRepository.findByCategoryByManuId(manuId)
+               .stream()
+               .sorted(Comparator.comparing(ItemTypeDTO::getItemTypeId))
+               .toList();
     }
 
     public List<FindItemTypeDTO> itemTypeSelectList(Long itemTypeId, Long manuId) {
 
-        return itemTypeRepository.findByItemNameList(itemTypeId, manuId);
+        return itemTypeRepository.findByItemNameList(itemTypeId, manuId)
+                .stream()
+                .sorted(Comparator.comparing(FindItemTypeDTO::getItemTypeId))
+                .toList();
     }
 }

@@ -9,6 +9,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,6 +25,7 @@ import java.util.Iterator;
 
 @Slf4j
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
+
 
     private final RedisService redisService;
 
@@ -57,7 +59,6 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
             UsernamePasswordAuthenticationToken authToken =
                     new UsernamePasswordAuthenticationToken(username, password, null);
 
-            log.info("AuthToken={}", authToken);
             log.info("로그인 시각 ={}", LocalDateTime.now());
 
             return authenticationManager.authenticate(authToken);
@@ -80,16 +81,15 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         String role = auth.getAuthority();
 
         // access 토큰 생성
-        String access = jwtUtil.createJwt("access", username, role, 36000000L); // TODO 원래 10 min 인데 일단 늘려놓음
+        String access = jwtUtil.createJwt("access", username, role, 3600000L); // TODO 원래 10 min 인데 일단 늘려놓음
 
         // refresh 토큰 생성
         String refresh = jwtUtil.createJwt("refresh", username, role, 36000000L);// 24 hours
-        log.info("refresh value ={}", refresh.toString());
 
         // redis 에 최초 발급된 refresh token 저장
         redisService.save("refresh:" + username, refresh, 36000000L);
 
-        // 응답 설정
+
         response.setHeader("Authorization", access); // 여기에서 넣은 토큰 키값을 doFilterInter~() 에서 getHeader 로 읽는다 키값 일치화 시켜야됨
         response.addCookie(createCookie("refresh", refresh));
         response.setStatus(HttpStatus.OK.value());

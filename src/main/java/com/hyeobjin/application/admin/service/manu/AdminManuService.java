@@ -9,6 +9,7 @@ import com.hyeobjin.domain.repository.manu.ManufacturerRepository;
 import com.hyeobjin.exception.DuplicateManufacturerException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,6 +22,7 @@ public class AdminManuService {
     private final ManufacturerRepository manufacturerRepository;
     private final AdminItemService adminItemService;
 
+    @Autowired
     public AdminManuService(ManuFactJpaRepository manuFactJpaRepository,
                             ManufacturerRepository manufacturerRepository,
                             AdminItemService adminItemService) {
@@ -76,7 +78,6 @@ public class AdminManuService {
         Boolean exists = manufacturerRepository.existsByManuName(manufactureDTO.getManuName());
 
         if (exists) {
-            // TODO alert()
             log.info("이미 존재하는 제조사 입니다.");
             throw new DuplicateManufacturerException("이미 존재하는 제조사명입니다.");
         }

@@ -36,7 +36,7 @@ public class CreateBoardDTO {
                 .boardTitle(createBoardDTO.getBoardTitle())
                 .boardContent(createBoardDTO.getBoardContent())
                 .boardYN(createBoardDTO.getBoardYN())
-                .boardType("NOTICE")
+                .boardType(createBoardDTO.getBoardType())
                 .userId(userId)
                 .build();
     }

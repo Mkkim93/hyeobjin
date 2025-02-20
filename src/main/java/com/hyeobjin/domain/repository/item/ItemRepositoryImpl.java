@@ -1,17 +1,12 @@
 package com.hyeobjin.domain.repository.item;
 
 import com.hyeobjin.application.admin.dto.file.FindAdminFileBoxDTO;
-import com.hyeobjin.application.admin.dto.item.FindAdminDetailDTO;
-import com.hyeobjin.application.admin.dto.item.FindAdminItemDTO;
-import com.hyeobjin.application.admin.dto.item.QFindAdminItemDTO;
-import com.hyeobjin.application.admin.dto.item.UpdateItemDTO;
+import com.hyeobjin.application.admin.dto.item.*;
 import com.hyeobjin.application.common.dto.file.FindFileBoxDTO;
 import com.hyeobjin.application.common.dto.item.FindByItemDTO;
 import com.hyeobjin.domain.entity.file.QFileBox;
-import com.hyeobjin.domain.entity.item.QGlassSpec;
-import com.hyeobjin.domain.entity.item.QItem;
-import com.hyeobjin.domain.entity.item.Item;
-import com.hyeobjin.domain.entity.item.QItemType;
+import com.hyeobjin.domain.entity.item.*;
+import com.hyeobjin.domain.entity.manufacturer.Manufacturer;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -31,17 +26,30 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.hyeobjin.domain.entity.item.QItem.item;
+import static com.hyeobjin.domain.entity.item.QItemType.*;
 import static com.hyeobjin.domain.entity.manufacturer.QManufacturer.manufacturer;
 
 @Repository
 @Transactional
 public class ItemRepositoryImpl extends QuerydslRepositorySupport implements ItemRepositoryCustom {
 
+    private final EntityManager entityManager;
     private final JPAQueryFactory jpaQueryFactory;
 
-    public ItemRepositoryImpl(EntityManager em) {
+    public ItemRepositoryImpl(EntityManager entityManager) {
         super(Item.class);
-        jpaQueryFactory = new JPAQueryFactory(em);
+        this.entityManager = entityManager;
+        this.jpaQueryFactory = new JPAQueryFactory(entityManager);
+    }
+
+    public Item saveDoor(CreateItemDTO createItemDTO, ItemType ItemType, Manufacturer manufacturer) {
+
+        Item item = createItemDTO.toEntity(createItemDTO, null, ItemType, manufacturer);
+
+        entityManager.persist(item);
+        entityManager.flush();
+
+        return item;
     }
 
     @Override
@@ -56,7 +64,7 @@ public class ItemRepositoryImpl extends QuerydslRepositorySupport implements Ite
                         fileBox.id, fileBox.fileName, fileBox.fileOrgName,
                         fileBox.fileSize, fileBox.fileType, fileBox.filePath, fileBox.isMain
                 )).from(fileBox)
-                .join(fileBox.item, item) // DTO 를 조회할 떄는 fetchJoin 를 사용하면 안된다
+                .leftJoin(fileBox.item, item) // DTO 를 조회할 떄는 fetchJoin 를 사용하면 안된다
                 .where(item.id.eq(itemId))
                 .orderBy(fileBox.id.asc()).fetchFirst();
 
@@ -66,9 +74,9 @@ public class ItemRepositoryImpl extends QuerydslRepositorySupport implements Ite
         // TODO 향후 어떻게 최적화 해야 할지 고민
         Item selectItem = jpaQueryFactory
                 .selectFrom(item)
-                .join(item.manufacturer, manufacturer)
-                .join(QItem.item.itemType, QItemType.itemType)
-                .join(QItem.item.glassSize, QGlassSpec.glassSpec1)
+                .leftJoin(item.manufacturer, manufacturer)
+                .leftJoin(QItem.item.itemType, itemType)
+                .leftJoin(QItem.item.glassSize, QGlassSpec.glassSpec1)
                 .where(item.id.eq(itemId))
                 .fetchOne();
 
@@ -104,10 +112,11 @@ public class ItemRepositoryImpl extends QuerydslRepositorySupport implements Ite
 
         List<FindAdminItemDTO> results = jpaQueryFactory.select(new QFindAdminItemDTO(
                         item.id, item.itemNum, item.itemName,
-                        item.itemRegDate, item.itemUpdate, item.itemYN,
+                        item.itemRegDate, item.itemUpdate, item.itemYN, itemType.typeName,
                         manufacturer.id, manufacturer.manuName))
                 .from(item)
                 .leftJoin(item.manufacturer, manufacturer)
+                .leftJoin(item.itemType, itemType)
                 .where(builder)
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize()).fetch();
@@ -115,6 +124,7 @@ public class ItemRepositoryImpl extends QuerydslRepositorySupport implements Ite
         JPAQuery<Long> count = jpaQueryFactory.select(item.count())
                 .from(item)
                 .leftJoin(item.manufacturer, manufacturer)
+                .leftJoin(item.itemType, itemType)
                 .where(builder);
 
         return PageableExecutionUtils.getPage(results, pageable, () -> count.fetchCount());
@@ -142,7 +152,7 @@ public class ItemRepositoryImpl extends QuerydslRepositorySupport implements Ite
         Item selectItem = jpaQueryFactory
                 .selectFrom(item)
                 .leftJoin(item.manufacturer, manufacturer)
-                .leftJoin(item.itemType, QItemType.itemType)
+                .leftJoin(item.itemType, itemType)
                 .leftJoin(item.glassSize, QGlassSpec.glassSpec1)
                 .where(
                         item.id.eq(itemId),

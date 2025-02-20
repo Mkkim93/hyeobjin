@@ -1,6 +1,5 @@
 package com.hyeobjin.web.admin.board.api;
 
-import com.amazonaws.services.ec2.util.S3UploadPolicy;
 import com.hyeobjin.application.common.service.board.BoardFileService;
 import com.hyeobjin.domain.entity.file.FileBox;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,7 +11,6 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.web.util.UrlUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriUtils;
@@ -38,7 +36,6 @@ public class AdminFileBoardApiController {
      * 기존 파일 삭제 : deleteFile()
      * # postman api : O
      */
-    // TODO 게시글 상세 페이지에서 자신이 작성한 파일을 수정
     @Operation(summary = "게시글 파일 추가", description = "게시글 상세 페이지에서 파일 게시물을 추가하는 API 입니다.")
     @PostMapping
     public ResponseEntity<String> addFile(@RequestParam("boardId") Long boardId,

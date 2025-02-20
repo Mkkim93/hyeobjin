@@ -62,8 +62,8 @@ public class Item {
     @JoinColumn(name = "manu_id")
     private Manufacturer manufacturer;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "glass_size")
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    @JoinColumn(name = "glass_size", nullable = true)
     private GlassSpec glassSize;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -75,7 +75,7 @@ public class Item {
                 String itemUse, String itemInColor, String itemOutColor, String itemFrameWidth,
                  String itemDescription, Boolean itemYN,
                 LocalDateTime itemRegDate, LocalDateTime itemUpdate, String freeContent,
-                Long manufacturerId, Long glassSpecId, Long itemTypeId) {
+                Manufacturer manufacturer, GlassSpec glassSpec, ItemType itemType) {
         this.id = itemId;
         this.itemNum = itemNum;
         this.itemName = itemName;
@@ -88,23 +88,8 @@ public class Item {
         this.itemRegDate = itemRegDate;
         this.itemUpdate = itemUpdate;
         this.freeContent = freeContent;
-
-        this.manufacturer = Manufacturer.builder()
-                .manuId(manufacturerId)
-                .build();
-
-        this.glassSize = GlassSpec.builder()
-                .id(glassSpecId)
-                .build();
-
-        this.itemType = ItemType.builder()
-                .id(itemTypeId)
-                .build();
-    }
-
-    public void setManufacturerByCreateItem(Long manufacturerId) {
-        this.manufacturer = Manufacturer.builder()
-                .manuId(manufacturerId)
-                .build();
+        this.manufacturer = manufacturer;
+        this.glassSize = glassSpec;
+        this.itemType = itemType;
     }
 }

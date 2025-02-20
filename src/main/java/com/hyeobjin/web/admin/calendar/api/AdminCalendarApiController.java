@@ -6,6 +6,7 @@ import com.hyeobjin.application.admin.dto.calendar.CreateCalendarDTO;
 import com.hyeobjin.application.admin.dto.calendar.UpdateCalendarDTO;
 import com.hyeobjin.application.admin.service.calendar.AdminCalendarService;
 import com.hyeobjin.application.admin.service.calendar.CalendarAuthService;
+import com.hyeobjin.jwt.JwtUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -27,6 +28,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AdminCalendarApiController {
 
+    private final JwtUtil jwtUtil;
     private final AdminCalendarService adminCalendarService;
     private final CalendarAuthService calendarAuthService;
 
@@ -65,9 +67,10 @@ public class AdminCalendarApiController {
     @Operation(summary = "관리자 일정 등록", description = "관리자가 일정을 등록하기 위한 API 입니다.")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<?> save(@RequestBody CreateCalendarDTO createCalenderDTO) {
+    public ResponseEntity<String> save(@RequestBody CreateCalendarDTO createCalenderDTO) {
 
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
+
         Long userId = calendarAuthService.findUserId(name);
 
         createCalenderDTO.setUsersId(userId);

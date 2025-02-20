@@ -13,6 +13,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -62,8 +63,9 @@ class UsersRepositoryTest {
     @DisplayName("회원의 아이디를 입력하여 해당 회원의 pk 를 조회")
     void findByIdUsername() {
 
-        Long usersId = usersRepository.findByIdByUsername("king00314@naver.com");
-        assertThat(usersId).isEqualTo(1L);
+        Optional<Long> idByUsername = usersRepository.findIdByUsername("king00314@naver.com");
+
+        assertThat(idByUsername.get()).isEqualTo(1L);
     }
 
     @Test

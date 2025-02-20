@@ -1,12 +1,10 @@
 package com.hyeobjin.config.web;
 
 import com.hyeobjin.exception.LogFilter;
-import com.hyeobjin.exception.LogInterceptor;
 import jakarta.servlet.DispatcherType;
 import jakarta.servlet.Filter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration

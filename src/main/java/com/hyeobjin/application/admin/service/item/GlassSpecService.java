@@ -52,4 +52,7 @@ public class GlassSpecService {
         glassSpecRepository.deleteById(glassSpecId);
     }
 
+    public GlassSpec findById(Long glassId) {
+        return glassSpecRepository.findById(glassId).orElseThrow(() -> new EntityNotFoundException("해당 스펙 조회 도중 오류가 발생 했습니다."));
+    }
 }

@@ -55,5 +55,9 @@ public class AdminItemTypeService {
         itemTypeRepository.deleteById(itemTypeId);
     }
 
+    public ItemType findById(Long itemTypeId) {
+        return itemTypeRepository.findById(itemTypeId).orElseThrow(() -> new EntityNotFoundException("타입 조회 중 오류 발생"));
+    }
+
 
 }

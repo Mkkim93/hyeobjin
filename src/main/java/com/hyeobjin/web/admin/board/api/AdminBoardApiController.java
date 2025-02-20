@@ -68,8 +68,11 @@ public class AdminBoardApiController {
     public ResponseEntity<Long> save(@RequestPart(value = "createBoardDTO") CreateBoardDTO createBoardDTO,
                                      @RequestPart(value = "files", required = false) List<MultipartFile> files,
                                      HttpServletRequest request) throws IOException {
+
         String authToken = request.getHeader("Authorization");
+
         Long userId = boardAuthService.findByUserId(authToken);
+
         Long boardId = adminBoardService.saveBoard(createBoardDTO, files, userId);
         log.info("boardId={}", boardId);
         return ResponseEntity.ok(boardId);

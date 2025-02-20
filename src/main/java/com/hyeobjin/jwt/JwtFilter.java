@@ -39,12 +39,8 @@ public class JwtFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 
-        log.info("doFilterInternal 실행");
-
         // 헤더에서 access 키에 담긴 토큰을 꺼냄
         String accessToken = request.getHeader("Authorization"); // LoginFilter 에서 넣는 헤더 키값과 일치시켜야됨
-
-        log.info("access ={}", accessToken);
 
         // 토큰이 없다면 다음 필터로 넘김
         if (accessToken == null) {
@@ -78,9 +74,8 @@ public class JwtFilter extends OncePerRequestFilter {
             return;
         }
 
-        String username = jwtUtil.getUsername(accessToken);
+        String username = jwtUtil.getUsername(accessToken); // 여기서 토큰 없어지나?
         String role = jwtUtil.getRole(accessToken).toUpperCase();
-        log.info("jwtFilter role ={}", role);
         Users users = new Users();
 
         users.setCreateJwtData(username, RoleType.valueOf(role));
@@ -92,6 +87,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
         SecurityContextHolder.getContext().setAuthentication(authToken);
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
+
         log.info("로그인한 사용자 정보 ={}", name);
 
         filterChain.doFilter(request, response);

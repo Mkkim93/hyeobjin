@@ -5,6 +5,7 @@ import com.hyeobjin.jwt.CustomLogoutFilter;
 import com.hyeobjin.jwt.JwtFilter;
 import com.hyeobjin.jwt.JwtUtil;
 import com.hyeobjin.jwt.LoginFilter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -32,6 +33,7 @@ public class SecurityConfig {
     private final RedisService redisService;
     private final JwtUtil jwtUtil;
     private final AuthenticationConfiguration authenticationConfiguration;
+
 
     public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JwtUtil jwtUtil, RedisService redisService) {
         this.authenticationConfiguration = authenticationConfiguration;
@@ -67,10 +69,18 @@ public class SecurityConfig {
                 // 중요!! : Spring Security 가 로그인 처리를 담당할 url, 프론트의 비동기 처리 할 url 과 매핑 (컨트롤러 필요없음)
                 // 여기서 설정하는 url 경로는 클라이언트의 웹사이트의 경로가 아니라 서버 restcontroller 의 rest api 경로 기준이다
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/auth", "/**", "/manufacturers/**", "/boards/**", "/items/**",
-                                "/swagger-ui/**", "/calendar/**", "/error").permitAll()
+                        .requestMatchers("/auth", "/boards/**", "/boardFiles/**", "/**",
+                                "/calendar/**", "/files/**", "/inquiry/**",
+                                "/manufacturers/**","/items/**", "/type/**", "/error",
+                                "/swagger-ui/**", "/v3/api-docs/**",  "/swagger-ui.html/**",
+                                "/swagger-resources/**", "/webjars/**", "/image/**",
+                                "/v3/api-docs/swagger-config", "/login").permitAll()
 
-                        .requestMatchers("/admins", "/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/admins", "/admin/inquiry/**", "/admin/items/**", "/admin/calendar/**",
+                                "/admin/boards/**", "/admin/info/**"
+                                ).hasAnyRole("USER", "ADMIN")
+
+                        .requestMatchers("/admin/users/**").hasRole("ADMIN")
                         .anyRequest().authenticated());
 
         http
@@ -80,7 +90,8 @@ public class SecurityConfig {
                 .addFilterBefore(new JwtFilter(jwtUtil), LoginFilter.class);
 
         http
-                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, redisService),
+                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration),
+                                jwtUtil, redisService),
                         UsernamePasswordAuthenticationFilter.class);
 
         http
@@ -96,15 +107,15 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList(
                 "http://localhost:3000",
-                "https://b27b-125-186-22-14.ngrok-free.app" // ngrok 임시 활성화
+                "https://8137-118-217-209-89.ngrok-free.app/"
         ));
-        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "X-Requested-With")); // 허용할 헤더
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "X-Requested-With"));
         configuration.setExposedHeaders(Arrays.asList("Authorization"));
-        configuration.setAllowCredentials(true); // 쿠키 허용 여부
+        configuration.setAllowCredentials(true);
         configuration.setMaxAge(3600L);
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "DELETE", "OPTIONS"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "DELETE", "PATCH", "OPTIONS"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**",  configuration); // 모든 경로에 대해 CORS 설정 적용
+        source.registerCorsConfiguration("/**",  configuration);
         return source;
     }
 }

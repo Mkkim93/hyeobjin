@@ -51,7 +51,6 @@ public class Users {
         this.role = role;
     }
 
-    // 관리자 등록
     public Users registerData(RegisterDTO registerDTO, String password) {
         this.username = registerDTO.getUsername();
         this.password = password;
