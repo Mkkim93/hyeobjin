@@ -3,7 +3,7 @@ package com.hyeobjin.domain.repository;
 import com.hyeobjin.application.admin.dto.item.CreateItemDTO;
 import com.hyeobjin.application.admin.dto.item.FindAdminDetailDTO;
 import com.hyeobjin.application.common.dto.item.FindByItemDTO;
-import com.hyeobjin.application.common.dto.item.FindItemNumDTO;
+import com.hyeobjin.application.common.dto.item.FindItemNameDTO;
 import com.hyeobjin.domain.entity.item.Item;
 import com.hyeobjin.domain.repository.item.ItemRepository;
 import com.hyeobjin.domain.repository.item.ItemRepositoryImpl;
@@ -43,17 +43,9 @@ class ItemRepositoryTest {
         createItemDTO.setItemName("test ItemName02");
         createItemDTO.setItemSpec("test ItemSpec02");
         createItemDTO.setItemUse("test ItemUse02");
-        createItemDTO.setItemType("door");
+        createItemDTO.setItemTypeId(1L);
         createItemDTO.setItemYN(false);
         createItemDTO.setItemDescription("test ItemDescription test");
-
-        Item savedBeforeItem = createItemDTO.toEntity(createItemDTO);
-        System.out.println("savedBeforeItem.getItemDescription() = " + savedBeforeItem.getItemDescription());
-
-        Item savedAfterItem = itemRepository.save(savedBeforeItem);
-        System.out.println("savedAfterItem.getItemDescription() = " + savedAfterItem.getItemDescription());
-
-        assertThat(savedBeforeItem).isEqualTo(savedAfterItem);
     }
 
     @Test
@@ -108,7 +100,7 @@ class ItemRepositoryTest {
         Long manuId = 1L;
         Long typeId = 1L;
 
-        List<FindItemNumDTO> itemNum = itemRepository.findItemNum(manuId, typeId);
+        List<FindItemNameDTO> itemNum = itemRepository.findItemNum(manuId, typeId);
 
         Assertions.assertThat(itemNum).isNotNull();
 

@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
@@ -49,5 +50,20 @@ public class RedisService {
             return true;
         }
         return false;
+    }
+
+    public Map<String, String> expiredRefreshToken(Map<String, String> userMap) {
+
+        Object userToken = redisTemplate.opsForValue().get("refresh:" + userMap);
+
+        if (userToken == null) {
+            return userMap;
+        }
+
+        String parseToken = userToken.toString();
+
+        userMap.put("username", parseToken);
+
+        return userMap;
     }
 }

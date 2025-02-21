@@ -19,9 +19,9 @@ public class CreateInquiryDTO {
     private String addr;
     private String detailAddr;
 
-    private Long typeId;
-    private Long manuId;
-    private Long itemId;
+    private String itemTypeName;
+    private String manuName;
+    private String itemName;
 
     public Inquiry toEntity(CreateInquiryDTO createInquiryDTO) {
 
@@ -34,9 +34,9 @@ public class CreateInquiryDTO {
                 .email(createInquiryDTO.getEmail())
                 .addr(createInquiryDTO.getAddr())
                 .detailAddr(createInquiryDTO.getDetailAddr())
-                .typeId(createInquiryDTO.getTypeId())
-                .manuId(createInquiryDTO.getManuId())
-                .itemId(createInquiryDTO.getItemId())
+                .itemTypeName(createInquiryDTO.getItemTypeName())
+                .manuName(createInquiryDTO.getManuName())
+                .itemName(createInquiryDTO.getItemName())
                 .build();
     }
 }

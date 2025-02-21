@@ -47,6 +47,6 @@ public class AdminInquiryApiController {
     @Operation(summary = "관리자 문의 내용 삭제", description = "관리자가 특정 문의 글을 삭제하면 해당 파일도 모두 삭제하기 위한 API 입니다.")
     public ResponseEntity<String> delete(@RequestParam("inquiryId") Long inquiryId) {
         adminInquiryService.delete(inquiryId);
-        return ResponseEntity.ok("파일 삭제 성공");
+        return ResponseEntity.ok("문의 내용이 정상적으로 삭제 되었습니다.");
     }
 }

@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -54,22 +55,24 @@ class AdminItemTypeServiceTest {
 
         UpdateItemTypeDTO updateItemTypeDTO = new UpdateItemTypeDTO();
         updateItemTypeDTO.setItemTypeId(1L);
-        updateItemTypeDTO.setUpdateItemTypeName("단창");
+        updateItemTypeDTO.setItemTypeName("단창");
 
-        adminItemTypeService.updateItemType(updateItemTypeDTO.getItemTypeId(), updateItemTypeDTO);
+        adminItemTypeService.updateItemType(updateItemTypeDTO);
 
         ItemType itemType = itemTypeRepository.findById(updateItemTypeDTO.getItemTypeId()).get();
 
-        Assertions.assertThat(itemType.getTypeName()).isEqualTo(updateItemTypeDTO.getUpdateItemTypeName());
+        Assertions.assertThat(itemType.getTypeName()).isEqualTo(updateItemTypeDTO.getItemTypeName());
     }
 
     @Test
     @DisplayName("제품 타입 삭제")
     void deletedType() {
 
-        Long deleteId = 1L;
+        List<Long> deletedIds = new ArrayList<>();
+        deletedIds.add(1L);
+        deletedIds.add(2L);
 
-        adminItemTypeService.deleteItemType(deleteId);
+        adminItemTypeService.deleteItemType(deletedIds);
 
         Optional<ItemType> deleteById = itemTypeRepository.findById(1L);
 

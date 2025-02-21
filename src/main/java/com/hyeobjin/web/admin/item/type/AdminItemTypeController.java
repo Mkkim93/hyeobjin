@@ -35,17 +35,22 @@ public class AdminItemTypeController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PostMapping("/update/{itemTypeId}")
+    @PostMapping("/update")
     @Operation(summary = "관리자 제품 타입 수정 API", description = "관리자가 기존 제품의 타입을 수정하기 위한 API 입니다.")
-    public ResponseEntity<Void> update(@PathVariable("itemTypeId") Long itemTypeId, @RequestBody UpdateItemTypeDTO updateItemTypeDTO) {
-        adminItemTypeService.updateItemType(itemTypeId, updateItemTypeDTO);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<String> update(@RequestBody UpdateItemTypeDTO updateItemTypeDTO) {
+        adminItemTypeService.updateItemType(updateItemTypeDTO);
+        return ResponseEntity.ok("제품 타입이 수정되었습니다.");
     }
 
     @DeleteMapping
     @Operation(summary = "관리자 제품 타입 삭제 API", description = "관리자가 기존 제품의 타입을 삭제하기 위한 API 입니다.")
-    public ResponseEntity<Void> delete(@RequestParam("itemTypeId") Long itemTypeId) {
+    public ResponseEntity<String> delete(@RequestParam("itemTypeIds") List<Long> itemTypeId) {
+
+        if (itemTypeId == null || itemTypeId.isEmpty()) {
+            return ResponseEntity.badRequest().body("삭제할 항목이 없습니다");
+        }
+
         adminItemTypeService.deleteItemType(itemTypeId);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok("성공적으로 삭제 되었습니다.");
     }
 }

@@ -1,6 +1,7 @@
 package com.hyeobjin.web.admin.item.glass;
 
 import com.hyeobjin.application.admin.dto.item.glass.GlassSpecDTO;
+import com.hyeobjin.application.admin.dto.item.glass.UpdateGlassSpecDTO;
 import com.hyeobjin.application.admin.service.item.GlassSpecService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -34,18 +35,23 @@ public class AdminGlassSpecController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PostMapping("/update/{glassSpecId}")
+    @PostMapping("/update")
     @Operation(summary = "관리자 유리 스펙 수정 API", description = "관리자가 기존의 유리 스펙을 수정하기 위한 API 입니다.")
-    public ResponseEntity<?> update(@PathVariable("glassSpecId") Long glassSpecId,
-                                    @RequestBody String glassSpecSize) {
-        glassSpecService.update(glassSpecId, glassSpecSize);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<String> update(@RequestBody UpdateGlassSpecDTO updateGlassSpecDTO) {
+        glassSpecService.update(updateGlassSpecDTO);
+        return ResponseEntity.ok("수정이 완료 되었습니다.");
     }
 
     @DeleteMapping
     @Operation(summary = "관리자 유리 스펙 삭제 API", description = "관리자가 기존의 유리 스펙 정보를 삭제하기 위한 API 입니다.")
-    public ResponseEntity<?> delete(@RequestParam("glassSpecId") Long glassSpecId) {
-        glassSpecService.delete(glassSpecId);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<String> delete(@RequestParam("deletedIds") List<Long> glassSpecIds) {
+
+        if (glassSpecIds == null || glassSpecIds.isEmpty()) {
+            return ResponseEntity.badRequest().body("삭제할 항목이 없습니다.");
+        }
+
+        glassSpecService.delete(glassSpecIds);
+        return ResponseEntity.ok("성공적으로 삭제 되었습니다.");
     }
 }
+

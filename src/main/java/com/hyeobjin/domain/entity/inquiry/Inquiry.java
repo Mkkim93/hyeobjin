@@ -52,23 +52,20 @@ public class Inquiry {
     @Column(name = "update_at")
     private LocalDateTime updateAt;
 
-    @ManyToOne
-    @JoinColumn(name = "manu_id")
-    private Manufacturer manufacturer;
+    @Column(name = "manu_name")
+    private String manuName;
 
-    @ManyToOne
-    @JoinColumn(name = "type_id")
-    private ItemType itemType;
+    @Column(name = "item_type_name")
+    private String itemTypeName;
 
-    @ManyToOne
-    @JoinColumn(name = "item_id")
-    private Item item;
+    @Column(name = "item_name")
+    private String itemName;
 
     @Builder
     public Inquiry(Long id, String title, String content,
                    String writer, String tel, String email,
                    String addr, String detailAddr, LocalDateTime createAt,
-                   Long manuId, Long typeId, Long itemId) {
+                   String manuName, String itemTypeName, String itemName) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -79,26 +76,8 @@ public class Inquiry {
         this.detailAddr = detailAddr;
         this.createAt = createAt;
         this.updateAt = LocalDateTime.now();
-        this.manufacturer = Manufacturer.builder()
-                .manuId(manuId)
-                .build();
-
-        this.itemType = ItemType.builder()
-                .id(typeId)
-                .build();
-
-        this.item = Item.builder()
-                .itemId(itemId)
-                .build();
-    }
-
-    @Override
-    public String toString() {
-        return "Inquiry{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", content='" + content + '\'' +
-                ", writer='" + writer + '\'' +
-                '}';
+        this.manuName = manuName;
+        this.itemTypeName = itemTypeName;
+        this.itemName = itemName;
     }
 }

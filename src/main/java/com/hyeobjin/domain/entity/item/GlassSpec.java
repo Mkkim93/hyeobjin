@@ -4,10 +4,12 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "item_glass_spec")
 @Getter
+@Setter
 @NoArgsConstructor
 public class GlassSpec {
 
@@ -21,7 +23,8 @@ public class GlassSpec {
         this.glassSpec = glassSpec;
     }
 
-    public void updateGlassSpec(String glassSpec) {
+    public void updateGlassSpec(Long glassSpecId, String glassSpec) {
+        this.id = glassSpecId;
         this.glassSpec = glassSpec;
     }
 

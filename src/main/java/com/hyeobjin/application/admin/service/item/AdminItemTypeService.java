@@ -21,7 +21,8 @@ public class AdminItemTypeService {
 
     public void save(String newItemTypeName) {
 
-        ItemType itemType = new ItemType(newItemTypeName);
+        ItemType itemType = new ItemType();
+        itemType.setTypeName(newItemTypeName);
 
         itemTypeRepository.save(itemType);
     }
@@ -37,22 +38,17 @@ public class AdminItemTypeService {
     }
 
 
-    public void updateItemType(Long itemTypeId, UpdateItemTypeDTO updateItemTypeDTO) {
+    public void updateItemType(UpdateItemTypeDTO updateItemTypeDTO) {
 
         ItemType itemType = itemTypeRepository.findById(
-                        itemTypeId)
+                        updateItemTypeDTO.getItemTypeId())
                 .orElseThrow(() -> new EntityNotFoundException("해당 제품 타입이 존재 하지 않습니다."));
 
-        itemType.updateTypeName(updateItemTypeDTO.getUpdateItemTypeName());
+        itemType.updateTypeName(itemType.getId(), updateItemTypeDTO.getItemTypeName());
     }
 
-    public void deleteItemType(Long itemTypeId) {
-
-        if (!itemTypeRepository.existsById(itemTypeId)) {
-            throw new EntityNotFoundException("삭제할 제품 타입이 존재하지 않습니다: " + itemTypeId);
-        }
-
-        itemTypeRepository.deleteById(itemTypeId);
+    public void deleteItemType(List<Long> itemTypeId) {
+        itemTypeRepository.deleteAllById(itemTypeId);
     }
 
     public ItemType findById(Long itemTypeId) {

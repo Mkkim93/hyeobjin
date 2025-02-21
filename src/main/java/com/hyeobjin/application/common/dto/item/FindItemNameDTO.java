@@ -5,13 +5,13 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class FindItemNumDTO {
+public class FindItemNameDTO {
 
     private Long itemId;
-    private String itemNum;
+    private String itemName;
 
-    public FindItemNumDTO(Long itemId, String itemNum) {
+    public FindItemNameDTO(Long itemId, String itemName) {
         this.itemId = itemId;
-        this.itemNum = itemNum;
+        this.itemName = itemName;
     }
 }

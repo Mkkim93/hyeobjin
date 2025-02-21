@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 public class UpdateItemTypeDTO {
 
     private Long itemTypeId;
-    private String updateItemTypeName;
+    private String itemTypeName;
 }

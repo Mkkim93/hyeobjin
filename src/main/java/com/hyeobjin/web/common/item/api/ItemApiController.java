@@ -2,7 +2,7 @@ package com.hyeobjin.web.common.item.api;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.hyeobjin.application.common.dto.item.FindByItemDTO;
-import com.hyeobjin.application.common.dto.item.FindItemNumDTO;
+import com.hyeobjin.application.common.dto.item.FindItemNameDTO;
 import com.hyeobjin.application.common.service.item.ItemService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -47,10 +47,10 @@ public class ItemApiController {
         return ResponseEntity.ok(itemService.findAllItemNumList(manuId));
     }
 
-    @GetMapping("/itemNum")
+    @GetMapping("/itemname")
     @Operation(summary = "제조사와 타입 별 제품의 품번 조회", description = "1:1문의 창에서 제품의 품번을 제조사, 제품 타입에 해당하는 품번을 조회하는 API 입니다.")
-    public ResponseEntity<List<FindItemNumDTO>> findByItemNum(@RequestParam("manuId") Long manuId,
-                                                              @RequestParam("typeId") Long typeId) {
+    public ResponseEntity<List<FindItemNameDTO>> findByItemNum(@RequestParam("manuId") Long manuId,
+                                                               @RequestParam("typeId") Long typeId) {
        return ResponseEntity.ok(itemService.findByItemNum(manuId, typeId));
     }
 }

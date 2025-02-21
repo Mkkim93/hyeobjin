@@ -1,6 +1,7 @@
 package com.hyeobjin.application.admin.service.item;
 
 import com.hyeobjin.application.admin.dto.item.glass.GlassSpecDTO;
+import com.hyeobjin.application.admin.dto.item.glass.UpdateGlassSpecDTO;
 import com.hyeobjin.domain.entity.item.GlassSpec;
 import com.hyeobjin.domain.repository.item.GlassSpecRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -22,7 +23,8 @@ public class GlassSpecService {
 
     public void save(String newGlassSpec) {
 
-        GlassSpec glassSpec = new GlassSpec(newGlassSpec);
+        GlassSpec glassSpec = new GlassSpec();
+        glassSpec.setGlassSpec(newGlassSpec);
 
         glassSpecRepository.save(glassSpec);
     }
@@ -37,19 +39,15 @@ public class GlassSpecService {
         )).collect(Collectors.toList());
     }
 
-    public void update(Long glassSpecId, String glassSpecSize) {
+    public void update(UpdateGlassSpecDTO updateGlassSpecDTO) {
 
-        GlassSpec glassSpec = glassSpecRepository.findById(glassSpecId).orElseThrow(() -> new EntityNotFoundException("no entity"));
+        GlassSpec glassSpec = glassSpecRepository.findById(updateGlassSpecDTO.getGlassSpecId()).orElseThrow(() -> new EntityNotFoundException("no entity"));
 
-        glassSpec.updateGlassSpec(glassSpecSize);
+        glassSpec.updateGlassSpec(glassSpec.getId(), updateGlassSpecDTO.getUpdateGlassSize());
     }
 
-    public void delete(Long glassSpecId) {
-
-        if(!glassSpecRepository.existsById(glassSpecId)) {
-            throw new EntityNotFoundException("삭제할 제품 유리 스펙 존재하지 않습니다: " + glassSpecId);
-        }
-        glassSpecRepository.deleteById(glassSpecId);
+    public void delete(List<Long> glassSpecId) {
+        glassSpecRepository.deleteAllById(glassSpecId);
     }
 
     public GlassSpec findById(Long glassId) {

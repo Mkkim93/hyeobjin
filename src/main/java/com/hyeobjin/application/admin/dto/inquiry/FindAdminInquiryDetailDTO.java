@@ -11,7 +11,6 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class FindAdminInquiryDetailDTO {
 
     private Long inquiryId;
@@ -23,22 +22,11 @@ public class FindAdminInquiryDetailDTO {
     private String addr;
     private String detailAddr;
     private LocalDateTime createAt;
-
-    private Long manuId;
     private String manuName;
-
-    private Long itemTypeId;
     private String itemTypeName;
-
-    private Long itemId;
     private String itemName;
 
     private List<AdminInquiryFileDTO> inquiryFiles;
-
-//    private Long fileBoxId;
-//    private String filePath;
-//    private String fileOrgName;
-//    private String fileName;
 
     @QueryProjection
     public FindAdminInquiryDetailDTO(Long inquiryId, String title, String content,

@@ -19,7 +19,7 @@ public class ItemTypeQueryRepository {
     public List<ItemTypeDTO> findByCategoryByManuId(Long manuId) {
 
         return em.createQuery("select distinct t.id, t.typeName from ItemType t " +
-                "left join Item i on t.id = i.itemType.id " +
+                "join Item i on t.id = i.itemType.id " +
                 "where i.manufacturer.id = : manuId", ItemTypeDTO.class)
                 .setParameter("manuId", manuId).getResultList();
     }

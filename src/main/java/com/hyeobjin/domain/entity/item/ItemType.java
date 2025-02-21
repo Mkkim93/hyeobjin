@@ -4,10 +4,12 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "item_type")
 @Getter
+@Setter
 @NoArgsConstructor
 public class ItemType {
 
@@ -21,7 +23,8 @@ public class ItemType {
         this.typeName = typeName;
     }
 
-    public void updateTypeName(String typeName) {
+    public void updateTypeName(Long itemTypeId, String typeName) {
+        this.id = itemTypeId;
         this.typeName = typeName;
     }
 

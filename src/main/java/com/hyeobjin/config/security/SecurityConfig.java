@@ -80,7 +80,7 @@ public class SecurityConfig {
                                 "/admin/boards/**", "/admin/info/**"
                                 ).hasAnyRole("USER", "ADMIN")
 
-                        .requestMatchers("/admin/users/**").hasRole("ADMIN")
+                        .requestMatchers("/admin/users/**", "/admin/type/**", "/admin/glass/**").hasRole("ADMIN")
                         .anyRequest().authenticated());
 
         http

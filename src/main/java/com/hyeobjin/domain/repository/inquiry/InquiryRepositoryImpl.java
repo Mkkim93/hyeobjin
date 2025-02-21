@@ -32,9 +32,6 @@ public class InquiryRepositoryImpl extends QuerydslRepositorySupport implements 
     public FindAdminInquiryDetailDTO findDetail(Long inquiryId) {
 
         QInquiry inquiry = QInquiry.inquiry;
-        QItem item = QItem.item;
-        QManufacturer manufacturer = QManufacturer.manufacturer;
-        QItemType itemType = QItemType.itemType;
         QFileBox fileBox = QFileBox.fileBox;
 
         List<AdminInquiryFileDTO> fileList = jpaQueryFactory.select(Projections.constructor(
@@ -45,9 +42,6 @@ public class InquiryRepositoryImpl extends QuerydslRepositorySupport implements 
                 .where(fileBox.inquiry.id.eq(inquiryId)).fetch();
 
         Inquiry selectInquiry = jpaQueryFactory.selectFrom(inquiry)
-                .join(inquiry.manufacturer, manufacturer)
-                .join(inquiry.itemType, itemType)
-                .join(inquiry.item, item)
                 .where(inquiry.id.eq(inquiryId))
                 .fetchOne();
 
@@ -61,9 +55,9 @@ public class InquiryRepositoryImpl extends QuerydslRepositorySupport implements 
                 selectInquiry.getAddr(),
                 selectInquiry.getDetailAddr(),
                 selectInquiry.getCreateAt(),
-                selectInquiry.getManufacturer().getManuName(),
-                selectInquiry.getItemType().getTypeName(),
-                selectInquiry.getItem().getItemName(),
+                selectInquiry.getManuName(),
+                selectInquiry.getItemTypeName(),
+                selectInquiry.getItemName(),
                 fileList);
     }
 }

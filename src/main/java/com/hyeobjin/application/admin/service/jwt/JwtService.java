@@ -1,9 +1,11 @@
 package com.hyeobjin.application.admin.service.jwt;
 
+import com.hyeobjin.application.common.service.redis.RedisService;
 import com.hyeobjin.jwt.JwtUtil;
 import jakarta.servlet.http.Cookie;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -22,8 +24,8 @@ public class JwtService {
         String refreshToken = null;
 
         if (cookies == null) {
-         reissueMap.put("checkReissue", "cookie is empty");
-         return reissueMap;
+            reissueMap.put("checkReissue", "cookie is empty");
+            return reissueMap;
         }
 
         for (Cookie cookie : cookies) {
