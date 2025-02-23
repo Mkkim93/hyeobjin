@@ -28,8 +28,8 @@ public class MailConfig {
         Properties props = mailSender.getJavaMailProperties();
         props.put("mail.transport.protocol", "smtp");
         props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.ssl.enable", "true"); // ✅ SSL 활성화
-        props.put("mail.smtp.starttls.enable", "false"); // ❌ STARTTLS 비활성화 (465번 포트에서는 필요 없음)
+        props.put("mail.smtp.ssl.enable", "true"); // SSL 활성화
+        props.put("mail.smtp.starttls.enable", "false"); // STARTTLS 비활성화 (465번 포트에서는 필요 없음)
         props.put("mail.smtp.ssl.trust", "smtp.naver.com");
         props.put("mail.smtp.ssl.protocols", "TLSv1.2");
         props.put("mail.debug", "true"); // 디버깅 로그 활성화

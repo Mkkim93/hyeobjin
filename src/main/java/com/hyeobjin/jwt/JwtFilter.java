@@ -38,10 +38,10 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
-
+        log.info("doFilterInternal 실행");
         // 헤더에서 access 키에 담긴 토큰을 꺼냄
         String accessToken = request.getHeader("Authorization"); // LoginFilter 에서 넣는 헤더 키값과 일치시켜야됨
-
+        log.info("accessToke ={}", accessToken);
         // 토큰이 없다면 다음 필터로 넘김
         if (accessToken == null) {
 

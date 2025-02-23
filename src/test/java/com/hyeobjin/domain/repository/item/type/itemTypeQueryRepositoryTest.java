@@ -7,6 +7,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -14,10 +15,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @Slf4j
 @SpringBootTest
+@DisplayName("제품 타입 테스트")
 class itemTypeQueryRepositoryTest {
 
     @Autowired
-    ItemTypeQueryRepository itemTypeQueryRepository;
+    private ItemTypeQueryRepository itemTypeQueryRepository;
 
     @Test
     @DisplayName("메인 폼에서 제조사 클릭 시 제품 타입 조회")

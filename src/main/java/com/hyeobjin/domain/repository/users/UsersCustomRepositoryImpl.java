@@ -19,9 +19,10 @@ public class UsersCustomRepositoryImpl extends QuerydslRepositorySupport impleme
 
     private final JPAQueryFactory jpaQueryFactory;
 
-    public UsersCustomRepositoryImpl(EntityManager em) {
+    public UsersCustomRepositoryImpl(EntityManager entityManager) {
         super(Users.class);
-        jpaQueryFactory = new JPAQueryFactory(em);
+        jpaQueryFactory = new JPAQueryFactory(entityManager);
+
     }
 
     @Override

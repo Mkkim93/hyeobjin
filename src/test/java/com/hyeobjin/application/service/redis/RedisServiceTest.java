@@ -28,16 +28,4 @@ class RedisServiceTest {
         redisService.delete(key);
         assertThat(redisService.find(key)).isNull();
     }
-
-    @Test
-    @DisplayName("현재 redis 에 refresh 토큰 존재 여부 확인")
-    void existRefresh() {
-        String refresh = "refresh";
-
-    }
-
-    @Test
-    @DisplayName("리플래시 토큰 삭제")
-    void deleteRefreshToken() {
-    }
 }

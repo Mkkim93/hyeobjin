@@ -18,10 +18,17 @@ class AdminUsersServiceTest {
     AdminUsersService adminUsersService;
 
     @Test
-    @DisplayName("관리자 정보 상세 조회")
+    @DisplayName("조회 : 관리자 정보 상세 조회")
     void findByUserDetail() {
+
+        // given
         Long userId = 1L;
+
+        // when
         FindUsersDTO result = adminUsersService.detail(userId);
+
+        // then
+        Assertions.assertThat(result.getUsersId()).isEqualTo(userId);
 
         System.out.println("result.getUsersId = " + result.getUsersId());
         System.out.println("result.getName = " + result.getName());
@@ -30,6 +37,6 @@ class AdminUsersServiceTest {
         System.out.println("result.getUserMail = " + result.getUserMail());
         System.out.println("result.getUserTel() = " + result.getUserTel());
 
-        Assertions.assertThat(result.getUsersId()).isEqualTo(userId);
+
     }
 }

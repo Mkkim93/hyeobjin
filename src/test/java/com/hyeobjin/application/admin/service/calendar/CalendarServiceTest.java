@@ -6,10 +6,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
 @Slf4j
+@Transactional
+@DisplayName("관리자 캘린더 등록 테스트")
 @SpringBootTest
 class CalendarServiceTest {
 

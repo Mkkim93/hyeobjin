@@ -69,7 +69,7 @@ public class SecurityConfig {
                 // 중요!! : Spring Security 가 로그인 처리를 담당할 url, 프론트의 비동기 처리 할 url 과 매핑 (컨트롤러 필요없음)
                 // 여기서 설정하는 url 경로는 클라이언트의 웹사이트의 경로가 아니라 서버 restcontroller 의 rest api 경로 기준이다
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/auth", "/boards/**", "/boardFiles/**", "/**",
+                        .requestMatchers("/auth", "/boards/**", "/boardFiles/**",
                                 "/calendar/**", "/files/**", "/inquiry/**",
                                 "/manufacturers/**","/items/**", "/type/**", "/error",
                                 "/swagger-ui/**", "/v3/api-docs/**",  "/swagger-ui.html/**",
@@ -107,7 +107,7 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList(
                 "http://localhost:3000",
-                "https://8137-118-217-209-89.ngrok-free.app/"
+                "https://db63-125-186-22-14.ngrok-free.app/"
         ));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "X-Requested-With"));
         configuration.setExposedHeaders(Arrays.asList("Authorization"));

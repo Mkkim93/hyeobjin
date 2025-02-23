@@ -23,8 +23,4 @@ public class UpdateItemFileDTO {
     private String filePath;
     private Boolean isMain;
     private Long itemId;
-
-    public UpdateItemFileDTO(Long itemId) {
-        this.itemId = itemId;
-    }
 }

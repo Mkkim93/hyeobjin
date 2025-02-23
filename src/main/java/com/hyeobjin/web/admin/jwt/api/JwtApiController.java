@@ -34,17 +34,19 @@ public class JwtApiController {
 
         Cookie[] cookies = request.getCookies();
 
-        Map<String, String> checkAuth = jwtService.jwtTokenReissue(cookies);
+        String accessToken = request.getHeader("Authorization");
 
+        Map<String, String> checkAuth = jwtService.jwtTokenReissue(cookies, accessToken);
         String reissue = checkAuth.get("checkReissue");
 
-        if (reissue.equals("cookie is empty")) {
-            return new ResponseEntity<>(reissue, HttpStatus.UNAUTHORIZED);
-        } else {
+        log.info("checkAuth value={}", reissue);
 
-            response.setHeader("Authorization", reissue);
-
-            return new ResponseEntity<>(HttpStatus.OK);
+        // reissue가 null인 경우 401 UNAUTHORIZED 응답 반환
+        if (reissue == null || reissue.equals("cookie is empty")) {
+            return new ResponseEntity<>("Invalid refresh token", HttpStatus.UNAUTHORIZED);
         }
+
+        response.setHeader("Authorization", reissue);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

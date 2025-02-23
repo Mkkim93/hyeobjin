@@ -16,14 +16,6 @@ public interface FileBoxRepository extends JpaRepository<FileBox, Long> {
 
     FileBox findByBoardIdAndId(Long boardId, Long id);
 
-    @EntityGraph(attributePaths = {"item"})
-    @Query("select f.isMain from FileBox f where f.item.id = :itemId and f.isMain = TRUE")
-    Boolean existsByIsMain(@Param("itemId") Long itemId);
-
-    @EntityGraph(attributePaths = {"item"})
-    @Query("select f.id from FileBox f where f.item.id = :itemId and f.isMain = TRUE")
-    Long findByDeleteFileBoxId(@Param("itemId") Long itemId);
-
     @Query("SELECT f.id FROM FileBox f WHERE f.item.id IN :itemIds")
     List<Long> findFileBoxIdsByItemIdIn(@Param("itemIds") List<Long> itemIds);
 
@@ -31,15 +23,6 @@ public interface FileBoxRepository extends JpaRepository<FileBox, Long> {
     List<Long> findFileBoxIdsByBoardIdIn(@Param("boardIds") List<Long> boardIds);
 
     FileBox findByFileOrgName(String fileName);
-
-    @Query("select f.id from FileBox f where f.item.id = :itemId and f.isMain = TRUE")
-    Long findByIdForMainFile(@Param("itemId") Long itemId);
-
-    @Query("select f.id from FileBox f where f.item.id = :itemId and f.isMain = FALSE")
-    List<Long> findByIdForSubFile(@Param("itemId") Long itemId);
-
-    @Query("SELECT f FROM FileBox f WHERE f.id IN :subFileIds and f.isMain = FALSE")
-    List<FileBox> findByIdSubFiles(@Param("subFileIds") List<Long> subFileIds);
 
     List<FileBox> findAllByInquiryId(Long inquiryId);
 }

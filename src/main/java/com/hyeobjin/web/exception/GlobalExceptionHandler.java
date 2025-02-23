@@ -1,13 +1,12 @@
 package com.hyeobjin.web.exception;
 
+import com.hyeobjin.exception.ErrorResponse;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -17,46 +16,46 @@ import java.io.IOException;
 //@RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    private ResponseEntity<ErrorResponse> buildErrorResponse(HttpStatus status, String message, Exception e) {
+        log.info("글로벌 컨트롤러 어드바이저 로그 확인");
+        log.error("[{}] : {}", status.getReasonPhrase(), e.getMessage());
+        return ResponseEntity.status(status).body(new ErrorResponse(status, message));
+    }
+
     @ExceptionHandler(EntityNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ResponseEntity<String> handleEntityNotFoundException(EntityNotFoundException e) {
-        log.error("[EntityNotFoundException] : {}", e.getMessage());
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+    public ResponseEntity<ErrorResponse> handleEntityNotFoundException(EntityNotFoundException e) {
+        return buildErrorResponse(HttpStatus.NOT_FOUND, "데이터를 찾을 수 없습니다.", e);
     }
 
     @ExceptionHandler(IOException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ResponseEntity<String> handleIOException(IOException e) {
-        log.error("[IOException] : {}", e.getMessage());
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("파일 저장 오류");
+    public ResponseEntity<ErrorResponse> handleIOException(IOException e) {
+        return buildErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, "파일 저장 도중 오류가 발생했습니다.", e);
     }
 
     @ExceptionHandler(RuntimeException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ResponseEntity<String> handleRuntimeException(RuntimeException e) {
-        log.error("[RuntimeException] : {}", e.getMessage());
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 내부 오류");
+    public ResponseEntity<ErrorResponse> handleRuntimeException(RuntimeException e) {
+        return buildErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, "서버 내부 오류가 발생했습니다.", e);
     }
 
     @ExceptionHandler(AuthenticationException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public ResponseEntity<String> handleAuthException(AuthenticationException e) {
-        log.error("[Unauthorized] : {}", e.getMessage());
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요한 서비스 입니다.");
+    public ResponseEntity<ErrorResponse> handleAuthException(AuthenticationException e) {
+        return buildErrorResponse(HttpStatus.UNAUTHORIZED, "로그인이 필요한 서비스 입니다.", e);
     }
 
     @ExceptionHandler(AccessDeniedException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
-    public ResponseEntity<String> handleDeniedException(AccessDeniedException e) {
-        log.error("[Forbidden] : {}", e.getMessage());
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("접근 권한 오류");
+    public ResponseEntity<ErrorResponse> handleDeniedException(AccessDeniedException e) {
+        return buildErrorResponse(HttpStatus.FORBIDDEN, "접근 권한이 없습니다.", e);
     }
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ResponseEntity<String> handleException(Exception e) {
-        log.error("[Exception] : {}", e.getMessage());
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("알 수 없는 오류 발생");
+    public ResponseEntity<ErrorResponse> handleException(Exception e) {
+        return buildErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, "알 수 없는 오류가 발생 했습니다.", e);
     }
 }
 

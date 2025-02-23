@@ -137,6 +137,7 @@ public class AdminBoardService {
         return boardRepositoryImpl.findByBoardDetailAdmin(findBoardId.getId());
     }
 
+
     public List<FindAdminBoardDTO> findBySimpleList() {
         List<Board> orderByBoardList = boardRepository.findTop2ByOrderByBoardUpdateDesc();
 

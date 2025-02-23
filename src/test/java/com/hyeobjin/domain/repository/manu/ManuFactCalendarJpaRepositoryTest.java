@@ -7,22 +7,28 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @Slf4j
 @SpringBootTest
-class ManuFactCalendarJpaRepositoryTest {
+@DisplayName("제조사/제품 테스트")
+class ManuFactJpaRepositoryTest {
 
-    @Autowired ManuFactJpaRepository manuFactJpaRepository;
+    @Autowired
+    private ManuFactJpaRepository manuFactJpaRepository;
 
     @Test
-    @DisplayName("제조사에 해당하는 제품의 pk 여러개 조회")
+    @DisplayName("조회 : 제조사에 해당하는 모든 제품의 PK 조회")
     void findSearchItemId() {
-        List<Long> list = manuFactJpaRepository.selectItemId(5L);
 
+        // given
+        Long manuId = 3L;
+
+        // when
+        List<Long> list = manuFactJpaRepository.selectItemId(manuId);
+
+        // then
         System.out.println("list = " + list);
-
     }
 }

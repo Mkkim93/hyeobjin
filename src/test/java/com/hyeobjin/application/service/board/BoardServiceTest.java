@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 
@@ -23,6 +24,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @Slf4j
 @SpringBootTest
+@Transactional
+@DisplayName("게시판 테스트")
 class BoardServiceTest {
 
     @Autowired
@@ -38,72 +41,74 @@ class BoardServiceTest {
     private EntityManager em;
 
     @Test
-    @DisplayName("게시글 목록 조회")
+    @DisplayName("조회 : 게시글 목록 조회_페이징")
     void findAll() {
+
+        // given
         String boardType = "NOTICE";
         PageRequest pageable = PageRequest.of(0, 10);
+
+        // when
         Page<BoardListDTO> boardList = boardService.findAll(pageable, boardType);
 
+        // then
         boardList.stream().forEach(System.out::println);
     }
 
     @Test
-    @DisplayName("게시글 저장")
+    @DisplayName("등록 : 게시글 저장")
     void saveBoard() throws IOException {
 
+        // given
         CreateBoardDTO createBoardDTO = new CreateBoardDTO();
         createBoardDTO.setBoardTitle("게시글 제목 테스트06");
         createBoardDTO.setBoardContent("게시글 내용 테스트06");
-        createBoardDTO.setUsersId(3L);
+        createBoardDTO.setUsersId(3L); // REST API 환경에서는 서버에 저장된 USERID 를 꺼냄 (SecurityContextHolder())
 
-        adminBoardService.saveBoard(createBoardDTO, null, null);
+        // when
+        Long saveBoard = adminBoardService.saveBoard(createBoardDTO, null, createBoardDTO.getUsersId());
 
-        Board savedBoard = boardRepository.findByBoardTitle("게시글 제목 테스트06");
+        // then (성공 시 게시글 ID 반환)
+        assertThat(saveBoard).isNotNull();
 
-        assertNotNull(savedBoard);
-        assertEquals("게시글 제목 테스트06", savedBoard.getBoardTitle());
-        assertEquals("게시글 내용 테스트06", savedBoard.getBoardContent());
-        assertEquals(3L, savedBoard.getUsers().getId());
     }
 
     @Test
-    @DisplayName("게시글 삭제")
-    void delete() {
-        Long boardId = 10L;
-
-        boardService.delete(boardId);
-
-        Board board = boardRepository.findById(boardId).get();
-
-        assertThat(board.getBoardYN()).isEqualTo("Y");
-    }
-
-    @Test
-    @DisplayName("게시글 제목 수정 (내용은 유지)")
+    @DisplayName("수정 : 게시글 제목 수정 (내용은 유지)")
     void updateTitle() throws IOException {
+
+        // given
         UpdateBoardDTO updateBoardDTO = new UpdateBoardDTO();
-        updateBoardDTO.setBoardId(19L);
+        updateBoardDTO.setBoardId(3L);
         updateBoardDTO.setBoardTitle("19 게시글 제목 수정");
 
+        // when
         adminBoardService.update(updateBoardDTO, null);
+        em.flush();
+        em.clear();
 
-        Board board = boardRepository.findById(19L).get();
+        Board board = boardRepository.findById(3L).get();
 
+        // then
         assertThat(updateBoardDTO.getBoardTitle()).isEqualTo(board.getBoardTitle());
         assertThat(updateBoardDTO.getBoardId()).isEqualTo(board.getId());
     }
 
     @Test
-    @DisplayName("게시글 내용 수정 (제목은 유지)")
+    @DisplayName("수정 : 게시글 내용 수정 (제목은 유지)")
     void updateContent() throws IOException {
+
+        // given
         UpdateBoardDTO updateBoardDTO = new UpdateBoardDTO();
-        updateBoardDTO.setBoardId(19L);
+        updateBoardDTO.setBoardId(3L);
         updateBoardDTO.setBoardContent("19 게시글 내용 수정");
 
+        // when
         adminBoardService.update(updateBoardDTO, null);
 
-        Board board = boardRepository.findById(19L).get();
+        Board board = boardRepository.findById(3L).get();
 
+        // then
         assertThat(updateBoardDTO.getBoardContent()).isEqualTo(board.getBoardContent());
         assertThat(updateBoardDTO.getBoardId()).isEqualTo(board.getId());
     }

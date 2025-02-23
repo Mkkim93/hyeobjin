@@ -42,16 +42,6 @@ public class ItemRepositoryImpl extends QuerydslRepositorySupport implements Ite
         this.jpaQueryFactory = new JPAQueryFactory(entityManager);
     }
 
-    public Item saveDoor(CreateItemDTO createItemDTO, ItemType ItemType, Manufacturer manufacturer) {
-
-        Item item = createItemDTO.toEntity(createItemDTO, null, ItemType, manufacturer);
-
-        entityManager.persist(item);
-        entityManager.flush();
-
-        return item;
-    }
-
     @Override
     public FindAdminDetailDTO findItemDetail(Long itemId) {
 

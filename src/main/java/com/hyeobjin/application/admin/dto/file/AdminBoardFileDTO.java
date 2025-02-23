@@ -15,7 +15,7 @@ public class AdminBoardFileDTO {
     private Long fileBoxId;
     private String fileName;
     private String fileOrgName;
-    private Long fileSize; // TODO 지워도 될듯
+    private Long fileSize;
     private String fileType;
     private String filePath;
     private LocalDateTime fileRegDate;

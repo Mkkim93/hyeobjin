@@ -7,40 +7,59 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Slf4j
-@SpringBootTest
+@DataJpaTest
+@DisplayName("캘린터 테스트")
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class CalendarJpaRepositoryTest {
 
     @Autowired
-    CalendarJpaRepository calendarJpaRepository;
+    private CalendarJpaRepository calendarJpaRepository;
 
     @Test
-    @DisplayName("일반 사용자 일정 리스트 조회 (calendarYN = Y)")
+    @DisplayName("조회 : 공개된 모든 일정 조회 (calendarYN = Y)")
     void findAllCommon() {
+
+        // when
         List<FindCalendarDTO> result = calendarJpaRepository.findByAllCommon();
+
+        // then
+        assertThat(result).isNotEmpty();
         result.stream().forEach(System.out::println);
     }
 
     @Test
-    @DisplayName("관리자 일정 리스트 간단 조회")
+    @DisplayName("조회 : 일정 간단 조회")
     void findAllAdmin() {
+
+        // when
         List<AdminCalendarSummaryDTO> result = calendarJpaRepository.findByAllAdmin();
+
+        // then
+        assertThat(result).isNotEmpty();
         result.stream().forEach(System.out::println);
     }
 
     @Test
-    @DisplayName("일정 범위 조회")
+    @DisplayName("조회 : 일정 범위 조회 (사용자가 선택한 일정이 포함된 모든 일정 조회)")
     void startTimeBetween() {
+
+        // given
         LocalDateTime start = LocalDateTime.of(2025, 2, 4, 0,0,0);// 오늘 00:00:00
-        log.info("start={}", start);
+
+        // when
         List<Calendar> events = calendarJpaRepository.findEventsByDateJPQL(start);
+
+        // then
         events.stream().forEach(System.out::println);
     }
 }

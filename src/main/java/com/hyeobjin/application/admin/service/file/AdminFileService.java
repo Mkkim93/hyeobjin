@@ -16,7 +16,7 @@ public class AdminFileService {
 
     private final FileBoxRepository fileBoxRepository;
 
-    public synchronized boolean deleteFiles(List<Long> itemIds) {
+    public boolean deleteFiles(List<Long> itemIds) {
         // fileBoxIds에 해당하는 모든 FileBox 객체를 조회
         List<Long> fileBoxIds = fileBoxRepository.findFileBoxIdsByItemIdIn(itemIds);
 
@@ -24,7 +24,6 @@ public class AdminFileService {
 
         if (fileBoxes.isEmpty()) {
             return false;
-
         }
 
         for (FileBox fileBox : fileBoxes) {

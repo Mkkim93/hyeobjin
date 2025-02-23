@@ -25,7 +25,6 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class BoardService {
 
-    private final EntityManager entityManager;
     private final BoardRepository boardRepository;
     private final BoardRepositoryImpl boardRepositoryImpl;
 
@@ -73,20 +72,5 @@ public class BoardService {
     @Transactional
     public void updateViewCount(Long boardId) {
         boardRepository.updateBoardViewCount(boardId);
-    }
-
-
-
-    /**
-     * 게시글 삭제
-     * test code : O
-     * @param boardId 사용자가 삭제할 게시글 번호을 전송하면 해당 게시글번호의 존재여부 검증 성공 시 게시글을 삭제한다.
-     */
-    public void delete(Long boardId) {
-
-        boardRepository.findById(boardId)
-                .orElseThrow(() -> new EntityNotFoundException("게시물 조회에 실패하였습니다. 해당 게시글이 존재하지 않습니다."));
-
-        boardRepository.deleteBoard(boardId);
     }
 }

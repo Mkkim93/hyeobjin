@@ -123,7 +123,7 @@ public class AdminItemFileService {
                     .filePath(targetPath + fileName)
                     .fileSize(file.getSize())
                     .fileType(file.getContentType())
-                    .isMain(isMain) // 인덱스에 따라 isMain 설정
+                    .isMain(isMain)
                     .fileRegDate(LocalDateTime.now())
                     .itemId(Item.builder()
                             .itemId(updateItemFileDTO.getItemId())
@@ -153,7 +153,7 @@ public class AdminItemFileService {
 
         if (!file.exists()) {
             log.warn("파일이 존재하지 않아 삭제할 수 없습니다.");
-            return false; // 파일이 없으면 false 반환
+            return false;
         }
 
         boolean fileDeleted = file.delete();
@@ -181,7 +181,7 @@ public class AdminItemFileService {
             UUID uuid = UUID.randomUUID();
             String fileName = uuid + "_" + file.getOriginalFilename();
 
-            String targetPath = updateItemFileDTO.getIsMain() ? filePath : filePathSub; // 저장할 경로 선택
+            String targetPath = updateItemFileDTO.getIsMain() ? filePath : filePathSub;
 
             File saveFile = new File(targetPath, fileName);
 
@@ -194,7 +194,7 @@ public class AdminItemFileService {
                     .filePath(targetPath + fileName)
                     .fileSize(file.getSize())
                     .fileType(file.getContentType())
-                    .isMain(updateItemFileDTO.getIsMain()) // 인덱스에 따라 isMain 설정
+                    .isMain(updateItemFileDTO.getIsMain())
                     .fileRegDate(LocalDateTime.now())
                     .itemId(Item.builder()
                             .itemId(updateItemFileDTO.getItemId())
@@ -226,23 +226,21 @@ public class AdminItemFileService {
 
     @Transactional
     public String findFileBoxIds(UpdateItemDTO updateItemDTO, MultipartFile mainFile) throws IOException {
-        // ✅ 1. 파일 박스 ID가 없는 경우 새로운 파일 박스 생성 후 저장
+
         if (updateItemDTO.getFileBoxId() == null) {
+
             FileBox newFileBox = new FileBox();
             newFileBox.setItemId(updateItemDTO.getItemId());
-            // ✅ 새로운 파일 저장 후 즉시 반환
+
             updateNewMainFile(newFileBox, mainFile);
             return "새로운 파일 저장 완료";
         }
 
-        // ✅ 2. 기존 파일이 존재하는 경우 파일을 삭제 후 업데이트
         FileBox fileBox = fileBoxRepository.findById(updateItemDTO.getFileBoxId())
                 .orElseThrow(() -> new EntityNotFoundException("파일 찾는 도중 오류 발생"));
 
-        // ✅ 기존 파일 삭제
         deleteFile(fileBox.getId());
 
-        // ✅ 기존 FileBox 객체에 새로운 파일 정보 업데이트
         updateMainFile(fileBox, mainFile);
 
         return "기존 파일 업데이트 완료";

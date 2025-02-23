@@ -10,37 +10,35 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 @Slf4j
+@Transactional
+@DisplayName("관리자 캘린더 테스트")
 @SpringBootTest
 class AdminCalendarServiceTest {
 
     @Autowired
-    AdminCalendarService adminCalendarService;
+    private AdminCalendarService adminCalendarService;
 
     @Autowired
-    CalendarJpaRepository calendarJpaRepository;
-
-    @Test
-    @DisplayName("관리자 일정 목록 조회")
-    void findAllAdmin() {
-//        List<AdminFindCalendarDTO> result = adminCalendarService.findAll();
-
-//        result.stream().forEach(System.out::println);
-    }
+    private CalendarJpaRepository calendarJpaRepository;
 
     @Test
     @DisplayName("관리자 일정 상세 조회")
     void findDetail() {
+
+        // given
         Long calendarId = 1L;
 
+        // when
         Calendar calendar = calendarJpaRepository.findById(calendarId).get();
 
+        // then
         List<AdminFindCalendarDTO> result = adminCalendarService.findDetail(calendar.getStartTime());
-
         result.stream().forEach(System.out::println);
     }
 
@@ -48,14 +46,17 @@ class AdminCalendarServiceTest {
     @DisplayName("관리자 일정 업데이트")
     void updateCalendar() {
 
+        // given
         UpdateCalendarDTO updateCalendarDTO = new UpdateCalendarDTO();
         updateCalendarDTO.setCalendarId(1L);
         updateCalendarDTO.setTitle("다시 일정 수정");
         updateCalendarDTO.setCalendarYN("Y");
         updateCalendarDTO.setUsersId(1L); // 마지막으로 수정한 관리자 PK
 
+        // when
         adminCalendarService.update(updateCalendarDTO);
 
+        // then
         List<AdminFindCalendarDTO> detail = adminCalendarService.findDetail(updateCalendarDTO.getStartTime());
         System.out.println(detail);
     }
@@ -64,11 +65,15 @@ class AdminCalendarServiceTest {
     @Test
     @DisplayName("관리자 일정 삭제")
     void deleteCalendar() {
+
+        // given
         Long calendarId = 3L;
+
+        // when
         adminCalendarService.delete(calendarId);
 
+        // then
         Optional<Calendar> deletedEntity = calendarJpaRepository.findById(calendarId);
-
         Assertions.assertThat(deletedEntity).isEmpty();
     }
 }
